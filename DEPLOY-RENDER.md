@@ -52,12 +52,16 @@ API URL: `https://YOUR-API.onrender.com/api/portfolio`
 
 ---
 
-## Git
+## Build error: `composer install` / `php init` exit code 1
 
-Hakikisha umepush files zote kwenye GitHub (ikiwa Render inatumia repo):
+Mara nyingi ni kwa sababu **`composer.lock` haikuwa kwenye GitHub** (ilikuwa kwenye `.gitignore`).
 
-- `Dockerfile`
-- `composer.json` + `composer.lock`
-- `frontend/`, `backend/`, `common/`, `vendor/` *(au acha vendor ibuild ndani ya Docker)*
+### Lazima upush hizi kwenye Git:
 
-Push tena, kisha Render itajenga upya.
+```bash
+git add composer.lock Dockerfile .gitignore frontend/web/index.php frontend/web/robots.txt backend/web/index.php backend/web/robots.txt
+git commit -m "Fix Render deploy: composer.lock and Dockerfile"
+git push
+```
+
+Kisha **Manual Deploy** tena kwenye Render.

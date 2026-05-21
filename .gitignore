@@ -25,7 +25,7 @@ Thumbs.db
 
 # composer itself is not needed
 composer.phar
-composer.lock
+# composer.lock — committed for Render/production builds
 
 # Mac DS_Store Files
 .DS_Store
@@ -43,10 +43,6 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 
-# ignore generated files
-/frontend/web/index.php
+# ignore generated files (index.php committed for deployment)
 /frontend/web/index-test.php
-/frontend/web/robots.txt
-/backend/web/index.php
 /backend/web/index-test.php
-/backend/web/robots.txt

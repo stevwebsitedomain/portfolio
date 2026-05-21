@@ -1,14 +1,15 @@
-# Build from repository ROOT on Render:
-#   Docker context: .
-#   Dockerfile path: frontend/Dockerfile
+# Build context = project root (not frontend/ alone)
 
 FROM yiisoftware/yii2-php:8.4-apache
 
-COPY . /app
 WORKDIR /app
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction \
-    && php init --env=Production --overwrite=All
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
+
+COPY . .
+
+RUN php init --env=Production --overwrite=All
 
 RUN sed -i -e 's|/app/web|/app/frontend/web|g' /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite \
