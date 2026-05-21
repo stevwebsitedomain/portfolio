@@ -1,6 +1,5 @@
-# Build from repository ROOT on Render:
-#   Docker context: .
-#   Dockerfile path: frontend/Dockerfile
+# Render / Docker — Yii2 backend API only
+# Build context MUST be the project root.
 
 FROM yiisoftware/yii2-php:8.4-apache
 
@@ -10,11 +9,10 @@ WORKDIR /app
 RUN composer install --no-dev --optimize-autoloader --no-interaction \
     && php init --env=Production --overwrite=All
 
-RUN sed -i -e 's|/app/web|/app/frontend/web|g' /etc/apache2/sites-available/000-default.conf \
+RUN sed -i -e 's|/app/web|/app/backend/web|g' /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite \
     && chown -R www-data:www-data \
         frontend/runtime \
-        frontend/web/assets \
         backend/runtime \
         console/runtime
 

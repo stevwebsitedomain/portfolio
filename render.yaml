@@ -1,0 +1,15 @@
+# Render Blueprint — portfolio frontend
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: portfolio-frontend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: YII_ENV
+        value: prod
+      - key: YII_DEBUG
+        value: "0"

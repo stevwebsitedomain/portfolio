@@ -1,6 +1,5 @@
-# Build from repository ROOT on Render:
-#   Docker context: .
-#   Dockerfile path: frontend/Dockerfile
+# Render / Docker — Portfolio website (Yii2 frontend)
+# Build context MUST be the project root (folder with composer.json).
 
 FROM yiisoftware/yii2-php:8.4-apache
 
