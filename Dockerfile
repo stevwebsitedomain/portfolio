@@ -4,17 +4,16 @@ FROM yiisoftware/yii2-php:8.4-apache
 
 WORKDIR /app
 
-# 1) Dependencies first (better cache)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
-
-# 2) Application code
+# Copy project (composer.lock optional — install works with or without it)
 COPY . .
 
-# 3) Production config + entry scripts
-RUN php init --env=Production --overwrite=All
+RUN if [ -f composer.lock ]; then \
+      composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs; \
+    else \
+      composer update --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs; \
+    fi \
+    && php init --env=Production --overwrite=All
 
-# 4) Apache → frontend/web
 RUN sed -i -e 's|/app/web|/app/frontend/web|g' /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite \
     && chown -R www-data:www-data \
