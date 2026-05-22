@@ -1,5 +1,4 @@
-# Render Blueprint — Yii2 backend API
-# https://render.com/docs/blueprint-spec
+# Render — portfolio API backend (no Yii2)
 
 services:
   - type: web
@@ -10,9 +9,13 @@ services:
     plan: free
     healthCheckPath: /api/portfolio
     envVars:
-      - key: YII_ENV
-        value: prod
-      - key: YII_DEBUG
-        value: "0"
       - key: MAILER_DSN
         sync: false
+      - key: SENDER_EMAIL
+        value: developer.company2026@gmail.com
+      - key: SENDER_NAME
+        value: LEGIT BUSINESS CONSULT LTD
+      - key: CONTACT_EMAIL
+        value: developer.company2026@gmail.com
+      - key: CORS_ORIGINS
+        value: https://portfolio-nu-taupe-017y2cafli.vercel.app,https://portfolio-mbvg.onrender.com

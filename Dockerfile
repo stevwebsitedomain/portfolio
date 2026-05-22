@@ -1,47 +1,29 @@
-# Yii2 Advanced backend — use backend/Dockerfile on Render (see DEPLOY-RENDER.md)
-# This file mirrors backend/Dockerfile when Dockerfile Path is ./Dockerfile
+# Same as backend/Dockerfile — minimal API only (no Yii2)
+# Render: Dockerfile Path = backend/Dockerfile OR ./Dockerfile
 
-FROM composer:2.2 AS vendor
-
+FROM composer:2 AS vendor
 WORKDIR /app
+COPY backend/composer.json ./
+RUN composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-progress
 
-ENV COMPOSER_MEMORY_LIMIT=-1 \
-    COMPOSER_ALLOW_SUPERUSER=1 \
-    COMPOSER_NO_INTERACTION=1 \
-    COMPOSER_CACHE_DIR=/tmp/cache
+FROM php:8.2-apache
+WORKDIR /var/www/html
 
-COPY composer.json composer.lock ./
-
-RUN composer install \
-    --no-dev \
-    --prefer-dist \
-    --optimize-autoloader \
-    --ignore-platform-reqs \
-    --no-scripts \
-    --no-progress \
-    || composer update \
-    --no-dev \
-    --prefer-dist \
-    --optimize-autoloader \
-    --ignore-platform-reqs \
-    --no-scripts \
-    --no-progress
-
-FROM yiisoftware/yii2-php:8.2-apache
-
-WORKDIR /app
-
-COPY --from=vendor /app/vendor /app/vendor
-COPY composer.json composer.lock ./
-COPY common /app/common
-COPY backend /app/backend
-COPY console /app/console
-
-RUN sed -i 's|/app/web|/app/backend/web|g' /etc/apache2/sites-available/000-default.conf \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libzip-dev unzip \
+    && docker-php-ext-install zip \
     && a2enmod rewrite headers \
-    && mkdir -p backend/runtime backend/web/assets console/runtime \
-    && chown -R www-data:www-data backend/runtime backend/web/assets console/runtime
+    && rm -rf /var/lib/apt/lists/*
 
-ENV YII_ENV=prod YII_DEBUG=0
+COPY --from=vendor /app/vendor ./vendor
+COPY backend/config.php ./config.php
+COPY backend/data ./data
+COPY backend/src ./src
+COPY backend/public ./public
+
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri 's!/var/www/!/var/www/html/public/!g' /etc/apache2/apache2.conf
+
 EXPOSE 80
 CMD ["apache2-foreground"]

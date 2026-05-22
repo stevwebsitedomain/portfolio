@@ -20,6 +20,12 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $path = rtrim($path, '/') ?: '/';
 
+// Old Yii2 URLs → home (no login page)
+if (str_starts_with($path, '/site') || $path === '/index.php') {
+    header('Location: /', true, 302);
+    exit;
+}
+
 if ($path === '/' && $method === 'GET') {
     JsonResponse::send(200, [
         'ok' => true,

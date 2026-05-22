@@ -1,49 +1,13 @@
-# yii console commands
-/yii
-/yii_test
-/yii_test.bat
-
-# phpstorm project files
-.idea
-
-# visual studio code project files
-.vscode
-
-# netbeans project files
-nbproject
-
-# zend studio for eclipse project files
-.buildpath
-.project
-.settings
-
-# windows thumbnail cache
-Thumbs.db
-
-# composer vendor dir
+# Dependencies
 /vendor
 /backend/vendor
 
-# composer itself is not needed
-composer.phar
-# composer.lock — committed for Render/production builds
-
-# Mac DS_Store Files
+# OS / IDE
 .DS_Store
+Thumbs.db
+.idea
+.vscode
 
-# node
-/node_modules
-/package.json
-/package-lock.json
-
-# phpunit itself is not needed
-phpunit.phar
-# local phpunit config
-/phpunit.xml
-
-# vagrant runtime
-/.vagrant
-
-# ignore generated files (index.php committed for deployment)
-/frontend/web/index-test.php
-/backend/web/index-test.php
+# Env secrets
+.env
+.env.*
