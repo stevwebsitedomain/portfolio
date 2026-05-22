@@ -5,6 +5,11 @@
         "php": ">=8.2",
         "phpmailer/phpmailer": "^6.9"
     },
+    "autoload": {
+        "psr-4": {
+            "Portfolio\\Api\\": "src/"
+        }
+    },
     "config": {
         "sort-packages": true
     }
