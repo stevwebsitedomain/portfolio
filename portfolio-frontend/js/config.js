@@ -7,6 +7,5 @@ window.PORTFOLIO_CONFIG = {
   endpoints: {
     portfolio: '/api/portfolio',
     contact: '/api/contact',
-    requestPasswordReset: '/api/applicant/request-password-reset',
   },
 };

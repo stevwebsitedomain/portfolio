@@ -1,0 +1,11 @@
+{
+    "name": "portfolio/backend-api",
+    "description": "Minimal portfolio API for Render (no Yii2)",
+    "require": {
+        "php": ">=8.2",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
