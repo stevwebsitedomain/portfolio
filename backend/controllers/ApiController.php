@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace backend\controllers;
 
+use Yii;
+use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
+use yii\filters\Cors;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
 
 /**
- * Public JSON API for portfolio data (frontend / mobile / deployment).
+ * Public JSON API for portfolio data (Vercel frontend / assignment).
+ *
+ * GET https://portfolio-mbvg.onrender.com/api/portfolio
  */
 class ApiController extends Controller
 {
@@ -23,6 +28,31 @@ class ApiController extends Controller
     {
         $behaviors = parent::behaviors();
 
+        $origins = Yii::$app->params['api.corsOrigins'] ?? ['*'];
+
+        $behaviors = [
+            'cors' => [
+                'class' => Cors::class,
+                'cors' => [
+                    'Origin' => $origins,
+                    'Access-Control-Request-Method' => ['GET', 'HEAD', 'OPTIONS'],
+                    'Access-Control-Request-Headers' => ['*'],
+                    'Access-Control-Allow-Credentials' => false,
+                    'Access-Control-Max-Age' => 86400,
+                ],
+            ],
+        ] + $behaviors;
+
+        $behaviors['access'] = [
+            'class' => AccessControl::class,
+            'rules' => [
+                [
+                    'allow' => true,
+                    'roles' => ['?', '@'],
+                ],
+            ],
+        ];
+
         $behaviors['contentNegotiator'] = [
             'class' => ContentNegotiator::class,
             'formats' => [
@@ -33,7 +63,7 @@ class ApiController extends Controller
         $behaviors['verbs'] = [
             'class' => VerbFilter::class,
             'actions' => [
-                'portfolio' => ['GET', 'HEAD'],
+                'portfolio' => ['GET', 'HEAD', 'OPTIONS'],
             ],
         ];
 
@@ -41,80 +71,101 @@ class ApiController extends Controller
     }
 
     /**
-     * Portfolio profile, skills, qualifications, and projects.
+     * Portfolio JSON for static frontend (Vercel).
      *
-     * GET /api/portfolio  or  index.php?r=api/portfolio
+     * GET /api/portfolio
      */
     public function actionPortfolio(): array
     {
         return [
-            'name' => 'Steven Makarious',
-            'title' => 'Full Stack Developer | Website Developer | Systems Developer',
-            'location' => 'Tanzania',
-            'email' => 'stevenabalwambo@gmail.com',
-            'phone' => '+255 715 296 092',
-            'summary' => 'Professional developer focused on web-based management systems, institutional platforms, and business websites.',
-            'skills' => [
-                'technical' => [
-                    'HTML',
-                    'CSS',
-                    'JavaScript',
-                    'Bootstrap',
-                    'PHP',
-                    'Yii2 Framework',
-                    'MySQL',
-                    'Git & GitHub',
-                    'Cloud Deployment',
-                    'API Integration',
-                    'Responsive Design',
-                ],
-                'soft' => [
-                    'Problem Solving',
-                    'Teamwork',
-                    'Communication',
-                    'Creativity',
-                ],
+            'profile' => [
+                'name' => 'Steven Makarious',
+                'title' => 'Full Stack Developer | Website Developer | Systems Developer',
+                'location' => 'Tanzania',
+                'summary' => 'Professional developer focused on web-based management systems, institutional platforms, and business websites.',
             ],
-            'qualification' => 'Web & Management Systems Development',
+            'skills' => [
+                'HTML',
+                'CSS',
+                'JavaScript',
+                'Bootstrap',
+                'PHP',
+                'Yii2',
+                'MySQL',
+                'Git & GitHub',
+                'Cloud Deployment',
+                'API Integration',
+                'Responsive Design',
+                'Problem Solving',
+                'Teamwork',
+                'Communication',
+                'Creativity',
+            ],
             'qualifications' => [
                 'Cloud Computing (Current)',
-                'Website Development Experience',
-                'Backend Development Knowledge',
-                'Frontend Development Experience',
-                'Hosting & Deployment Knowledge',
-                'Database Management Skills',
+                'Website Development',
+                'Backend Development (PHP, Yii2, MySQL, REST APIs)',
+                'Frontend Development (HTML, CSS, JavaScript, Bootstrap)',
+                'Hosting & Deployment (Vercel, Render)',
+                'Database Management',
             ],
             'projects' => [
                 [
                     'name' => 'Tanzania Revenue Authority (TRA)',
                     'year' => '2025 + 2026',
                     'url' => 'https://dda-tra.free.nf',
+                    'description' => 'Web system that scrapes business names online to help TRA identify taxpayers from online businesses.',
+                    'tags' => ['Web Scraping', 'Tax System', 'PHP', 'Database'],
                 ],
                 [
                     'name' => 'Plustax Associates',
                     'year' => '2025 + 2026',
                     'url' => 'https://audit.plustax.co.tz/',
+                    'description' => 'Office management system for document storage and staff communication.',
+                    'tags' => ['Office System', 'Document Management', 'Communication', 'Audit'],
                 ],
                 [
                     'name' => 'Aquinas Secondary School',
                     'year' => '2026',
                     'url' => 'https://aoa.aquinasschool.sc.tz',
+                    'description' => 'Online admission application system for students and parents.',
+                    'tags' => ['Online Application', 'Education', 'Admission System', 'Web App'],
                 ],
                 [
                     'name' => 'Miracle Tech Company',
                     'year' => '2026',
                     'url' => 'https://miracletechgroup.com',
+                    'description' => 'Official company website with modern responsive design.',
+                    'tags' => ['Company Website', 'Web Design', 'Responsive', 'Branding'],
                 ],
                 [
                     'name' => 'White Lake High School',
                     'year' => '2026',
                     'url' => null,
+                    'description' => 'Student results management system for teachers and parents.',
+                    'tags' => ['Results System', 'Education', 'School Management', 'Web App'],
                 ],
                 [
                     'name' => 'EASTC',
                     'year' => '2026',
                     'url' => null,
+                    'description' => 'Web-based institutional management system.',
+                    'tags' => ['Management System', 'Web Development', 'Database', 'Institution'],
                 ],
+                [
+                    'name' => 'Portfolio Website',
+                    'year' => '2026',
+                    'url' => 'https://portfolio-nu-taupe-017y2cafli.vercel.app',
+                    'description' => 'Cloud Computing assignment portfolio — static frontend on Vercel, API on Render.',
+                    'tags' => ['Portfolio', 'Vercel', 'Render', 'REST API'],
+                ],
+            ],
+            'contact' => [
+                'email' => 'stevenabalwambo@gmail.com',
+                'phone' => '+255 715 296 092',
+                'whatsapp' => 'https://wa.me/255715296092',
+                'github' => 'https://github.com/stevwebsitedomain',
+                'linkedin' => 'https://linkedin.com/in/stevenmakarious',
             ],
         ];
     }

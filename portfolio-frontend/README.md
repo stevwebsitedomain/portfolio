@@ -38,11 +38,13 @@ The root `vercel.json` sets `"outputDirectory": "portfolio-frontend"` so you can
 
 ## Backend API (Render)
 
-The Yii2 API on Render is unchanged. Example endpoint:
+JSON endpoint:
 
 `https://portfolio-mbvg.onrender.com/api/portfolio`
 
-This frontend is independent; connect it later with JavaScript `fetch()` if needed for the assignment demo.
+The page loads `js/api-portfolio.js`, which fetches this URL and stores the result on `window.portfolioApiData`. Open DevTools → Console and type `portfolioApiData` to verify after deploy.
+
+Admin login on Render root (`/`) remains separate from the public API.
 
 ## Architecture
 

@@ -42,7 +42,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'api/portfolio' => 'api/portfolio',
+                'GET api/portfolio' => 'api/portfolio',
+                'OPTIONS api/portfolio' => 'api/portfolio',
             ],
         ],
     ],
