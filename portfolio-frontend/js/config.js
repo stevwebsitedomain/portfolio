@@ -1,8 +1,6 @@
 /**
- * Portfolio frontend → Render backend (change apiBaseUrl when you deploy backend).
- *
- * Example after Render deploy:
- *   apiBaseUrl: 'https://your-service.onrender.com'
+ * Portfolio frontend (Vercel) → Backend API (Render).
+ * LIVE backend: https://portfolio-mbvg.onrender.com
  */
 window.PORTFOLIO_CONFIG = {
   apiBaseUrl: 'https://portfolio-mbvg.onrender.com',
