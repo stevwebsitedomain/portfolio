@@ -1,5 +1,4 @@
 .git
-.gitignore
 .github
 .idea
 .vscode
@@ -9,6 +8,11 @@
 node_modules
 _legacy_html
 _yii2_install
-tools/convert-html.php
+tools
+vagrant
+frontend/web/assets/*
+!frontend/web/assets/.gitignore
 *.md
-!README.md
+!DEPLOY-RENDER.md
+.env
+.env.*

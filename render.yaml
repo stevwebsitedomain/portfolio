@@ -1,12 +1,14 @@
-# Render — Yii2 backend (document root: backend/web)
+# Render Blueprint — Yii2 backend API
+# https://render.com/docs/blueprint-spec
 
 services:
   - type: web
     name: portfolio-backend
     runtime: docker
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./backend/Dockerfile
     dockerContext: .
     plan: free
+    healthCheckPath: /api/portfolio
     envVars:
       - key: YII_ENV
         value: prod
