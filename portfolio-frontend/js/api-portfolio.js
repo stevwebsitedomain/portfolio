@@ -5,9 +5,11 @@
 (function () {
   'use strict';
 
+  var cfg = window.PORTFOLIO_CONFIG || {};
+  var base = (cfg.apiBaseUrl || 'https://portfolio-mbvg.onrender.com').replace(/\/$/, '');
+  var path = (cfg.endpoints && cfg.endpoints.portfolio) || '/api/portfolio';
   var API_URL =
-    document.documentElement.getAttribute('data-api-url') ||
-    'https://portfolio-mbvg.onrender.com/api/portfolio';
+    document.documentElement.getAttribute('data-api-url') || base + path;
 
   fetch(API_URL, {
     method: 'GET',

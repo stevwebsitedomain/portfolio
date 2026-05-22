@@ -14,3 +14,5 @@ services:
         value: prod
       - key: YII_DEBUG
         value: "0"
+      - key: MAILER_DSN
+        sync: false

@@ -38,13 +38,34 @@ The root `vercel.json` sets `"outputDirectory": "portfolio-frontend"` so you can
 
 ## Backend API (Render)
 
-JSON endpoint:
+Backend base URL is set in **`js/config.js`**:
 
-`https://portfolio-mbvg.onrender.com/api/portfolio`
+```javascript
+window.PORTFOLIO_CONFIG = {
+  apiBaseUrl: 'https://portfolio-mbvg.onrender.com',
+  endpoints: {
+    portfolio: '/api/portfolio',
+    requestPasswordReset: '/api/applicant/request-password-reset',
+  },
+};
+```
 
-The page loads `js/api-portfolio.js`, which fetches this URL and stores the result on `window.portfolioApiData`. Open DevTools → Console and type `portfolioApiData` to verify after deploy.
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/portfolio` | GET | Portfolio JSON for this site |
+| `/api/applicant/request-password-reset` | POST | Send reset email (`{ "email": "..." }`) |
 
-Admin login on Render root (`/`) remains separate from the public API.
+Vercel serves only static files. All API calls go to Render using `config.js` + `api-portfolio.js`.
+
+Admin login on Render root (`/`) is separate from the public API.
+
+### Password reset email (Render)
+
+Set environment variable on Render:
+
+`MAILER_DSN=smtp://developer.company2026@gmail.com:YOUR_APP_PASSWORD@default`
+
+Emails show sender name **LEGIT BUSINESS CONSULT LTD** (from `common/config/params.php`).
 
 ## Architecture
 

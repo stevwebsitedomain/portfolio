@@ -9,6 +9,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'name' => 'LEGIT BUSINESS CONSULT LTD',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
@@ -44,6 +45,9 @@ return [
             'rules' => [
                 'GET api/portfolio' => 'api/portfolio',
                 'OPTIONS api/portfolio' => 'api/portfolio',
+                'POST api/applicant/request-password-reset' => 'api-applicant-auth/request-password-reset',
+                'OPTIONS api/applicant/request-password-reset' => 'api-applicant-auth/request-password-reset',
+                'site/reset-password' => 'site/reset-password',
             ],
         ],
     ],

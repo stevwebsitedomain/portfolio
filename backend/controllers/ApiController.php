@@ -35,7 +35,7 @@ class ApiController extends Controller
                 'class' => Cors::class,
                 'cors' => [
                     'Origin' => $origins,
-                    'Access-Control-Request-Method' => ['GET', 'HEAD', 'OPTIONS'],
+                    'Access-Control-Request-Method' => ['GET', 'POST', 'HEAD', 'OPTIONS'],
                     'Access-Control-Request-Headers' => ['*'],
                     'Access-Control-Allow-Credentials' => false,
                     'Access-Control-Max-Age' => 86400,
@@ -81,6 +81,7 @@ class ApiController extends Controller
             'profile' => [
                 'name' => 'Steven Makarious',
                 'title' => 'Full Stack Developer | Website Developer | Systems Developer',
+                'organization' => 'LEGIT BUSINESS CONSULT LTD',
                 'location' => 'Tanzania',
                 'summary' => 'Professional developer focused on web-based management systems, institutional platforms, and business websites.',
             ],
