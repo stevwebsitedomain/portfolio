@@ -176,22 +176,22 @@
 .work-done .org-card {
   background: var(--surface-color);
   border-radius: 8px;
-  padding: 28px 24px;
+  padding: 20px 18px;
   height: 100%;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.06);
   transition: 0.3s;
   display: flex;
   flex-direction: column;
 }
 
 .work-done .org-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
 }
 
 .work-done .org-card .org-logo {
   width: 100%;
-  min-height: 100px;
-  margin-bottom: 20px;
+  min-height: 72px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,8 +199,8 @@
 }
 
 .work-done .org-card .org-logo img {
-  max-height: 88px;
-  max-width: 240px;
+  max-height: 68px;
+  max-width: 200px;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -209,17 +209,28 @@
 }
 
 .work-done .org-card .org-year {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--accent-color);
   font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.work-done .org-card h4 {
+  font-size: 17px;
   margin-bottom: 8px;
+}
+
+.work-done .org-card p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 10px;
 }
 
 .work-done .org-card .org-tags span {
   display: inline-block;
-  font-size: 11px;
-  padding: 3px 8px;
-  margin: 3px 3px 0 0;
+  font-size: 10px;
+  padding: 2px 7px;
+  margin: 2px 3px 0 0;
   border-radius: 4px;
   background: color-mix(in srgb, var(--default-color), transparent 92%);
   color: var(--default-color);
@@ -227,7 +238,12 @@
 
 .work-done .org-card .btn-live {
   margin-top: auto;
-  padding-top: 18px;
+  padding-top: 12px;
+}
+
+.work-done .org-card .btn-live .btn-getstarted {
+  font-size: 13px;
+  padding: 7px 16px;
 }
 
 /* Infinite logo marquee */
