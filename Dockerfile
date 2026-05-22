@@ -1,25 +1,23 @@
-# Render — Portfolio (Yii2 frontend). Build context = project root.
+# Render — Yii2 Advanced BACKEND (entry: backend/web)
+# Project must be initialized locally; no php init in Docker.
 
 FROM yiisoftware/yii2-php:8.4-apache
 
 WORKDIR /app
 
-# Copy project (composer.lock optional — install works with or without it)
 COPY . .
 
 RUN if [ -f composer.lock ]; then \
       composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs; \
     else \
       composer update --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs; \
-    fi \
-    && php init --env=Production --overwrite=All
+    fi
 
-RUN sed -i -e 's|/app/web|/app/frontend/web|g' /etc/apache2/sites-available/000-default.conf \
+RUN sed -i -e 's|/app/web|/app/backend/web|g' /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite \
     && chown -R www-data:www-data \
-        frontend/runtime \
-        frontend/web/assets \
         backend/runtime \
+        backend/web/assets \
         console/runtime
 
 ENV YII_ENV=prod

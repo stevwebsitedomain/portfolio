@@ -1,9 +1,8 @@
-# Render Blueprint — portfolio frontend
-# https://render.com/docs/blueprint-spec
+# Render — Yii2 backend (document root: backend/web)
 
 services:
   - type: web
-    name: portfolio-frontend
+    name: portfolio-backend
     runtime: docker
     dockerfilePath: ./Dockerfile
     dockerContext: .
