@@ -11,6 +11,20 @@
     return base + path;
   }
 
+  function parseResponse(response) {
+    return response.text().then(function (text) {
+      var data = {};
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          data = { error: text.substring(0, 200) };
+        }
+      }
+      return { ok: response.ok, data: data, status: response.status };
+    });
+  }
+
   document.querySelectorAll('.php-email-form').forEach(function (form) {
     form.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -19,6 +33,7 @@
       var errorEl = form.querySelector('.error-message');
       var sentEl = form.querySelector('.sent-message');
       var submitBtn = form.querySelector('button[type="submit"]');
+      var url = apiUrl();
 
       var name = ((form.querySelector('[name="name"]') || {}).value || '').trim();
       var email = ((form.querySelector('[name="email"]') || {}).value || '').trim();
@@ -42,8 +57,9 @@
       if (sentEl) sentEl.classList.remove('d-block');
       if (submitBtn) submitBtn.disabled = true;
 
-      fetch(apiUrl(), {
+      fetch(url, {
         method: 'POST',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -55,11 +71,7 @@
           message: message,
         }),
       })
-        .then(function (response) {
-          return response.json().then(function (data) {
-            return { ok: response.ok, data: data };
-          });
-        })
+        .then(parseResponse)
         .then(function (result) {
           if (loading) loading.classList.remove('d-block');
           if (submitBtn) submitBtn.disabled = false;
@@ -73,18 +85,26 @@
           if (errorEl) {
             errorEl.textContent =
               (result.data && result.data.error) ||
-              'Could not send message. Please try again.';
+              'Could not send message (HTTP ' + result.status + ').';
             errorEl.classList.add('d-block');
           }
         })
-        .catch(function () {
+        .catch(function (err) {
           if (loading) loading.classList.remove('d-block');
           if (submitBtn) submitBtn.disabled = false;
           if (errorEl) {
+            var hint =
+              window.location.protocol === 'file:'
+                ? ' Open the site via http://localhost or Vercel, not as a file.'
+                : '';
             errorEl.textContent =
-              'Cannot reach the server. Check your connection or set the correct backend URL in js/config.js.';
+              'Cannot reach API at ' +
+              url +
+              '. Wait for Render to wake up, then try again.' +
+              hint;
             errorEl.classList.add('d-block');
           }
+          console.error('[Contact form]', err);
         });
     });
   });
