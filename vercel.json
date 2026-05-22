@@ -1,15 +1,7 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "frontend/web/index.php",
-      "use": "@vercel/php"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "frontend/web/index.php"
-    }
-  ]
+  "buildCommand": "",
+  "outputDirectory": "portfolio-frontend",
+  "cleanUrls": true,
+  "trailingSlash": false
 }
