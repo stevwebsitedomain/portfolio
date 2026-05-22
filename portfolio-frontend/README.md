@@ -53,9 +53,12 @@ window.PORTFOLIO_CONFIG = {
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
 | `/api/portfolio` | GET | Portfolio JSON for this site |
+| `/api/contact` | POST | Contact form (`{ "name", "email", "subject", "message" }`) → `developer.company2026@gmail.com` |
 | `/api/applicant/request-password-reset` | POST | Send reset email (`{ "email": "..." }`) |
 
-Vercel serves only static files. All API calls go to Render using `config.js` + `api-portfolio.js`.
+Vercel serves only static files. All API calls go to Render using `js/config.js` (set your `apiBaseUrl` after deploy).
+
+**Contact form:** `js/contact-form.js` POSTs to `{apiBaseUrl}/api/contact`. Emails are sent by the backend mailer, not the browser.
 
 Admin login on Render root (`/`) is separate from the public API.
 

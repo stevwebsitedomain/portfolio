@@ -47,6 +47,8 @@ return [
                 'OPTIONS api/portfolio' => 'api/portfolio',
                 'POST api/applicant/request-password-reset' => 'api-applicant-auth/request-password-reset',
                 'OPTIONS api/applicant/request-password-reset' => 'api-applicant-auth/request-password-reset',
+                'POST api/contact' => 'api-contact/send',
+                'OPTIONS api/contact' => 'api-contact/send',
                 'site/reset-password' => 'site/reset-password',
             ],
         ],

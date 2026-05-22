@@ -162,7 +162,7 @@ class ApiController extends Controller
                 ],
             ],
             'contact' => [
-                'email' => 'stevenabalwambo@gmail.com',
+                'email' => 'developer.company2026@gmail.com',
                 'phone' => '+255 715 296 092',
                 'whatsapp' => 'https://wa.me/255715296092',
                 'github' => 'https://github.com/stevwebsitedomain',

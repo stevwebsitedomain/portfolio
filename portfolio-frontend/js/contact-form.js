@@ -1,9 +1,15 @@
 /**
- * Static contact form handler (no PHP).
- * Shows success feedback; opens mail client when available.
+ * Contact form → Render backend API (sends email to contactRecipientEmail).
  */
 (function () {
   'use strict';
+
+  function apiUrl() {
+    var cfg = window.PORTFOLIO_CONFIG || {};
+    var base = (cfg.apiBaseUrl || 'https://portfolio-mbvg.onrender.com').replace(/\/$/, '');
+    var path = (cfg.endpoints && cfg.endpoints.contact) || '/api/contact';
+    return base + path;
+  }
 
   document.querySelectorAll('.php-email-form').forEach(function (form) {
     form.addEventListener('submit', function (event) {
@@ -12,15 +18,12 @@
       var loading = form.querySelector('.loading');
       var errorEl = form.querySelector('.error-message');
       var sentEl = form.querySelector('.sent-message');
-      var name = (form.querySelector('[name="name"]') || {}).value || '';
-      var email = (form.querySelector('[name="email"]') || {}).value || '';
-      var subject = (form.querySelector('[name="subject"]') || {}).value || '';
-      var message = (form.querySelector('[name="message"]') || {}).value || '';
+      var submitBtn = form.querySelector('button[type="submit"]');
 
-      name = name.trim();
-      email = email.trim();
-      subject = subject.trim();
-      message = message.trim();
+      var name = ((form.querySelector('[name="name"]') || {}).value || '').trim();
+      var email = ((form.querySelector('[name="email"]') || {}).value || '').trim();
+      var subject = ((form.querySelector('[name="subject"]') || {}).value || '').trim();
+      var message = ((form.querySelector('[name="message"]') || {}).value || '').trim();
 
       if (!name || !email || !subject || !message) {
         if (errorEl) {
@@ -31,29 +34,58 @@
         return;
       }
 
-      if (errorEl) errorEl.classList.remove('d-block');
+      if (errorEl) {
+        errorEl.classList.remove('d-block');
+        errorEl.textContent = '';
+      }
       if (loading) loading.classList.add('d-block');
       if (sentEl) sentEl.classList.remove('d-block');
+      if (submitBtn) submitBtn.disabled = true;
 
-      window.setTimeout(function () {
-        if (loading) loading.classList.remove('d-block');
-        if (sentEl) sentEl.classList.add('d-block');
-        form.reset();
+      fetch(apiUrl(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          subject: subject,
+          message: message,
+        }),
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          if (loading) loading.classList.remove('d-block');
+          if (submitBtn) submitBtn.disabled = false;
 
-        var body =
-          'Name: ' + name + '\nEmail: ' + email + '\n\n' + message;
-        var mailto =
-          'mailto:stevenabalwambo@gmail.com?subject=' +
-          encodeURIComponent(subject) +
-          '&body=' +
-          encodeURIComponent(body);
+          if (result.ok && result.data && result.data.ok) {
+            if (sentEl) sentEl.classList.add('d-block');
+            form.reset();
+            return;
+          }
 
-        try {
-          window.location.href = mailto;
-        } catch (e) {
-          /* Offline / blocked mailto: success message still shown */
-        }
-      }, 350);
+          if (errorEl) {
+            errorEl.textContent =
+              (result.data && result.data.error) ||
+              'Could not send message. Please try again.';
+            errorEl.classList.add('d-block');
+          }
+        })
+        .catch(function () {
+          if (loading) loading.classList.remove('d-block');
+          if (submitBtn) submitBtn.disabled = false;
+          if (errorEl) {
+            errorEl.textContent =
+              'Cannot reach the server. Check your connection or set the correct backend URL in js/config.js.';
+            errorEl.classList.add('d-block');
+          }
+        });
     });
   });
 })();
