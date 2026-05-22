@@ -11,7 +11,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 $config = require dirname(__DIR__) . '/config.php';
 
-Cors::apply($config['corsOrigins']);
+Cors::apply();
 if (Cors::handlePreflight()) {
     exit;
 }

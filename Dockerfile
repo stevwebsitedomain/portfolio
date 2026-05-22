@@ -23,7 +23,17 @@ COPY backend/public ./public
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri 's!/var/www/!/var/www/html/public/!g' /etc/apache2/apache2.conf
+    && sed -ri 's!/var/www/!/var/www/html/public/!g' /etc/apache2/apache2.conf \
+    && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
+    && printf '%s\n' \
+        '<Directory /var/www/html/public>' \
+        '    Options -Indexes +FollowSymLinks' \
+        '    AllowOverride All' \
+        '    Require all granted' \
+        '    FallbackResource /index.php' \
+        '</Directory>' \
+        > /etc/apache2/conf-available/portfolio-api.conf \
+    && a2enconf portfolio-api
 
 EXPOSE 80
 CMD ["apache2-foreground"]
