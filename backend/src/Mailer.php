@@ -83,8 +83,9 @@ final class Mailer
         $mail->Password = $smtp['pass'];
         $mail->SMTPSecure = $smtp['encryption'];
         $mail->CharSet = PHPMailer::CHARSET_UTF8;
-        $mail->Timeout = 25;
+        $mail->Timeout = 12;
         $mail->SMTPKeepAlive = false;
+        $mail->SMTPAutoTLS = true;
 
         $fromEmail = (string) ($this->config['senderEmail'] ?? $smtp['user']);
         $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');

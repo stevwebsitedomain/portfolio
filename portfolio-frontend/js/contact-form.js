@@ -89,13 +89,24 @@
       if (sentEl) sentEl.classList.remove('d-block');
       if (submitBtn) submitBtn.disabled = true;
 
+      var headers = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      };
+      if (debug) {
+        headers['X-Portfolio-Debug'] = '1';
+      }
+
+      var controller = new AbortController();
+      var timeoutId = window.setTimeout(function () {
+        controller.abort();
+      }, 25000);
+
       fetch(url, {
         method: 'POST',
         mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
+        headers: headers,
+        signal: controller.signal,
         body: JSON.stringify({
           name: name,
           email: email,
@@ -105,6 +116,7 @@
       })
         .then(parseResponse)
         .then(function (result) {
+          window.clearTimeout(timeoutId);
           if (loading) loading.classList.remove('d-block');
           if (submitBtn) submitBtn.disabled = false;
 
@@ -117,6 +129,10 @@
           var baseMsg =
             (result.data && result.data.error) ||
             'Could not send message (HTTP ' + result.status + ').';
+
+          if (debug && result.data && result.data.debug) {
+            baseMsg += '\n\n[Mail debug]\n' + result.data.debug;
+          }
 
           if (!debug) {
             setError(errorEl, baseMsg);
@@ -135,13 +151,17 @@
           });
         })
         .catch(function (err) {
+          window.clearTimeout(timeoutId);
           if (loading) loading.classList.remove('d-block');
           if (submitBtn) submitBtn.disabled = false;
           var hint =
             window.location.protocol === 'file:'
               ? ' Open the site via http://localhost or Vercel, not as a file.'
               : '';
-          var msg = 'Cannot reach API at ' + url + '. Wait for Render to wake up, then try again.' + hint;
+          var msg =
+            err && err.name === 'AbortError'
+              ? 'Request timed out. Render/Gmail SMTP is slow or blocked. Try again in 30 seconds.'
+              : 'Cannot reach API at ' + url + '. Wait for Render to wake up, then try again.' + hint;
 
           if (!debug) {
             setError(errorEl, msg);

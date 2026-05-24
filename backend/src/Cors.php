@@ -19,7 +19,7 @@ final class Cors
         }
 
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Accept');
+        header('Access-Control-Allow-Headers: Content-Type, Accept, X-Portfolio-Debug');
         header('Access-Control-Max-Age: 86400');
     }
 

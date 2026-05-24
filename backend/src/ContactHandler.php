@@ -70,16 +70,34 @@ final class ContactHandler
         if (!$sent) {
             $detail = $this->mailer->getLastError();
             $error = 'Could not send your message right now. Please try again later or email us directly.';
-            if ($detail !== '' && (str_contains($detail, 'authenticate') || str_contains($detail, 'Authentication'))) {
-                $error = 'Email server login failed. Check Gmail App Password on Render (SMTP_PASSWORD).';
+            if ($detail !== '') {
+                if (str_contains($detail, 'authenticate') || str_contains($detail, 'Authentication')) {
+                    $error = 'Email server login failed. Check Gmail App Password on Render (SMTP_PASSWORD).';
+                } elseif (str_contains($detail, 'timed out') || str_contains($detail, 'Timeout')) {
+                    $error = 'Email server timeout. Verify SMTP_HOST=smtp.gmail.com and SMTP_PASSWORD on Render.';
+                }
             }
-            JsonResponse::send(500, [
-                'ok' => false,
-                'error' => $error,
-            ]);
+
+            $payload = ['ok' => false, 'error' => $error];
+            if ($this->isDebugRequest()) {
+                $payload['debug'] = $detail !== '' ? $detail : 'Mail send returned false with no detail.';
+            }
+
+            JsonResponse::send(500, $payload);
             return;
         }
 
         JsonResponse::send(200, ['ok' => true, 'message' => 'Your message has been sent. Thank you!']);
+    }
+
+    private function isDebugRequest(): bool
+    {
+        if (getenv('MAIL_DEBUG') === '1' || getenv('MAIL_DEBUG') === 'true') {
+            return true;
+        }
+
+        $header = $_SERVER['HTTP_X_PORTFOLIO_DEBUG'] ?? '';
+
+        return $header === '1' || strtolower($header) === 'true';
     }
 }
