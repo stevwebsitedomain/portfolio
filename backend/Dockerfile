@@ -33,19 +33,7 @@ RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-avail
         '    FallbackResource /index.php' \
         '</Directory>' \
         > /etc/apache2/conf-available/portfolio-api.conf \
-        && a2enconf portfolio-api \
-    && printf '%s\n' \
-        '<IfModule mod_headers.c>' \
-        '  SetEnvIf Origin "^https://([a-zA-Z0-9-]+\\.)*vercel\\.app$" CORS_ORIGIN=$0' \
-        '  SetEnvIf Origin "^http://(localhost|127\\.0\\.0\\.1)(:[0-9]+)?$" CORS_ORIGIN=$0' \
-        '  Header always set Access-Control-Allow-Origin "%{CORS_ORIGIN}e" env=CORS_ORIGIN' \
-        '  Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"' \
-        '  Header always set Access-Control-Allow-Headers "Content-Type, Accept, X-Portfolio-Debug"' \
-        '  Header always set Access-Control-Max-Age "86400"' \
-        '  Header always set Vary "Origin"' \
-        '</IfModule>' \
-        > /etc/apache2/conf-available/portfolio-cors.conf \
-    && a2enconf portfolio-cors
+        && a2enconf portfolio-api
 
 EXPOSE 80
 CMD ["apache2-foreground"]

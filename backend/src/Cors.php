@@ -8,6 +8,17 @@ final class Cors
 {
     public static function apply(): void
     {
+        if (headers_sent()) {
+            return;
+        }
+
+        // Avoid duplicate CORS headers if something else already set them
+        foreach (headers_list() as $h) {
+            if (stripos($h, 'Access-Control-Allow-Origin:') === 0) {
+                return;
+            }
+        }
+
         $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
         // Allow all frontend origins (Vercel, localhost, Render)
