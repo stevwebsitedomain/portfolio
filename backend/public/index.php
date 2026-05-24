@@ -10,6 +10,7 @@ use Portfolio\Api\Mailer;
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 try {
+    Portfolio\Api\Env::bootstrap();
     $config = require dirname(__DIR__) . '/config.php';
 
     Cors::apply();

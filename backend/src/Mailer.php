@@ -114,7 +114,11 @@ final class Mailer
      */
     private function sendViaBrevo(array $message): bool
     {
-        $apiKey = trim((string) ($this->config['brevoApiKey'] ?? ''));
+        $apiKey = $this->resolveBrevoApiKey();
+        if ($apiKey === '') {
+            return $this->fail('BREVO_API_KEY not found in environment.');
+        }
+
         $fromEmail = (string) ($this->config['senderEmail'] ?? '');
         $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
 
@@ -151,7 +155,10 @@ final class Mailer
      */
     private function sendViaResend(array $message): bool
     {
-        $apiKey = trim((string) ($this->config['resendApiKey'] ?? ''));
+        $apiKey = $this->resolveResendApiKey();
+        if ($apiKey === '') {
+            return $this->fail('RESEND_API_KEY not found in environment.');
+        }
         $fromEmail = (string) ($this->config['senderEmail'] ?? 'onboarding@resend.dev');
         $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
 
@@ -310,12 +317,36 @@ final class Mailer
 
     private function hasBrevo(): bool
     {
-        return trim((string) ($this->config['brevoApiKey'] ?? '')) !== '';
+        return $this->resolveBrevoApiKey() !== '';
     }
 
     private function hasResend(): bool
     {
-        return trim((string) ($this->config['resendApiKey'] ?? '')) !== '';
+        return $this->resolveResendApiKey() !== '';
+    }
+
+    private function resolveBrevoApiKey(): string
+    {
+        Env::bootstrap();
+
+        $key = Env::get('BREVO_API_KEY');
+        if ($key !== '') {
+            return $key;
+        }
+
+        return trim((string) ($this->config['brevoApiKey'] ?? ''));
+    }
+
+    private function resolveResendApiKey(): string
+    {
+        Env::bootstrap();
+
+        $key = Env::get('RESEND_API_KEY');
+        if ($key !== '') {
+            return $key;
+        }
+
+        return trim((string) ($this->config['resendApiKey'] ?? ''));
     }
 
   /**

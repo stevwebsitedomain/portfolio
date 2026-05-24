@@ -126,8 +126,12 @@ final class ContactHandler
             return 'Email server timeout. On Render use BREVO_API_KEY instead of Gmail SMTP.';
         }
 
-        if (str_contains($detail, 'API key') || str_contains($detail, 'unauthorized')) {
-            return 'Invalid BREVO_API_KEY on Render. Check the key and redeploy.';
+        if (
+            str_contains($detail, 'Key not found')
+            || str_contains($detail, 'API key')
+            || str_contains($detail, 'unauthorized')
+        ) {
+            return 'Invalid BREVO_API_KEY on Render. Create a new API key in Brevo → SMTP & API.';
         }
 
         return $detail;
@@ -141,6 +145,10 @@ final class ContactHandler
 
         if (str_contains($detail, 'sender') || str_contains($detail, 'Sender')) {
             return 'Verify sender email in Brevo dashboard (Senders → verify developer.company2026@gmail.com).';
+        }
+
+        if (str_contains($detail, 'Key not found') || str_contains($detail, 'API key')) {
+            return 'Regenerate BREVO_API_KEY in Brevo (must start with xkeysib-). Paste on Render and redeploy.';
         }
 
         return 'Check Render logs and BREVO_API_KEY. Test GET /api/contact for diagnostics.';
