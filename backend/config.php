@@ -3,18 +3,18 @@
 declare(strict_types=1);
 
 /**
- * Backend config — values from Render Environment Variables.
+ * Backend config — set these on Render (Environment Variables).
  */
 return [
     'senderEmail' => getenv('SENDER_EMAIL') ?: 'developer.company2026@gmail.com',
     'senderName' => getenv('SENDER_NAME') ?: 'LEGIT BUSINESS CONSULT LTD',
     'contactRecipientEmail' => getenv('CONTACT_EMAIL') ?: 'developer.company2026@gmail.com',
     'mailerDsn' => getenv('MAILER_DSN') ?: '',
-    'corsOrigins' => array_filter(array_map('trim', explode(',', (string) (getenv('CORS_ORIGINS') ?: implode(',', [
-        '*',
-        'https://portfolio-nu-taupe-017y2cafli.vercel.app',
-        'https://portfolio-mbvg.onrender.com',
-        'http://localhost',
-        'http://127.0.0.1',
-    ]))))),
+    'smtp' => [
+        'host' => getenv('SMTP_HOST') ?: 'smtp.gmail.com',
+        'port' => (int) (getenv('SMTP_PORT') ?: 587),
+        'user' => getenv('SMTP_USER') ?: getenv('SENDER_EMAIL') ?: 'developer.company2026@gmail.com',
+        'pass' => getenv('SMTP_PASSWORD') ?: getenv('SMTP_PASS') ?: '',
+        'encryption' => getenv('SMTP_ENCRYPTION') ?: 'tls',
+    ],
 ];

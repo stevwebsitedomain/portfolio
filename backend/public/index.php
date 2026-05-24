@@ -35,6 +35,7 @@ if ($path === '/' && $method === 'GET') {
             'GET /api/portfolio' => 'Portfolio JSON data',
             'POST /api/contact' => 'Contact form (sends email)',
         ],
+        'mailConfigured' => (new Mailer($config))->isConfigured(),
     ]);
     exit;
 }

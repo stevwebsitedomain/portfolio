@@ -1,4 +1,4 @@
-# Render — portfolio API backend (no Yii2)
+# Render — portfolio API backend
 
 services:
   - type: web
@@ -9,13 +9,19 @@ services:
     plan: free
     healthCheckPath: /api/portfolio
     envVars:
-      - key: MAILER_DSN
-        sync: false
       - key: SENDER_EMAIL
         value: developer.company2026@gmail.com
       - key: SENDER_NAME
         value: LEGIT BUSINESS CONSULT LTD
       - key: CONTACT_EMAIL
         value: developer.company2026@gmail.com
-      - key: CORS_ORIGINS
-        value: https://portfolio-nu-taupe-017y2cafli.vercel.app,https://portfolio-mbvg.onrender.com
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        value: developer.company2026@gmail.com
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: MAILER_DSN
+        sync: false

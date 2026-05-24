@@ -14,11 +14,16 @@ Minimal **PHP API** — no Yii2, no admin login page.
 
 | KEY | Example |
 |-----|---------|
-| `MAILER_DSN` | `smtp://developer.company2026@gmail.com:APP_PASSWORD@smtp.gmail.com:587` |
+| `SMTP_USER` | `developer.company2026@gmail.com` |
+| `SMTP_PASSWORD` | Gmail App Password (16 chars, no spaces) |
+| `SMTP_HOST` | `smtp.gmail.com` |
+| `SMTP_PORT` | `587` |
+| `MAILER_DSN` | (optional) `smtp://user:pass@smtp.gmail.com:587` |
 | `SENDER_EMAIL` | `developer.company2026@gmail.com` |
 | `SENDER_NAME` | `LEGIT BUSINESS CONSULT LTD` |
 | `CONTACT_EMAIL` | `developer.company2026@gmail.com` |
-| `CORS_ORIGINS` | `https://your-app.vercel.app,https://portfolio-mbvg.onrender.com` |
+
+Open `https://portfolio-mbvg.onrender.com` — if `"mailConfigured": false`, set `SMTP_PASSWORD` on Render.
 
 ## Local test
 

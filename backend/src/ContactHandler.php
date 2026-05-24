@@ -51,6 +51,14 @@ final class ContactHandler
             . "Subject: {$subject}\n\n"
             . "Message:\n{$message}\n";
 
+        if (!$this->mailer->isConfigured()) {
+            JsonResponse::send(503, [
+                'ok' => false,
+                'error' => 'Email service is not configured on the server. Please contact the site owner.',
+            ]);
+            return;
+        }
+
         $sent = $this->mailer->send([
             'to' => $to,
             'replyEmail' => $email,
