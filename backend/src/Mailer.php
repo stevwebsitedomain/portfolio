@@ -119,6 +119,18 @@ final class Mailer
             return $this->fail('BREVO_API_KEY not found in environment.');
         }
 
+        if (str_starts_with($apiKey, 'xsmtpsib-')) {
+            return $this->fail(
+                'Wrong Brevo key type: xsmtpsib- is an SMTP key. Create an API key (xkeysib-) in Brevo → SMTP & API → API keys.',
+            );
+        }
+
+        if (!str_starts_with($apiKey, 'xkeysib-')) {
+            return $this->fail(
+                'BREVO_API_KEY must start with xkeysib- (API key). Do not use xsmtpsib- SMTP keys.',
+            );
+        }
+
         $fromEmail = (string) ($this->config['senderEmail'] ?? '');
         $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
 

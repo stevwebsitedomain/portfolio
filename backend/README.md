@@ -22,7 +22,9 @@ Use an **HTTP email API** instead (works on Render free tier):
 
 1. Sign up at [brevo.com](https://www.brevo.com) (free).
 2. **Senders** → verify `developer.company2026@gmail.com` (click link in inbox).
-3. **SMTP & API** → create API key.
+3. **SMTP & API** → tab **API keys** → **Generate a new API key** (name e.g. `Portfolio-API`).
+   - Use the key that starts with **`xkeysib-`** (API key).
+   - **Do not** use **`xsmtpsib-`** — that is an SMTP password, not valid for this backend.
 4. On Render → **Environment** → add:
 
 | KEY | Value |
