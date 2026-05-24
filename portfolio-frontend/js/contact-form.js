@@ -127,8 +127,12 @@
           }
 
           var baseMsg =
-            (result.data && (result.data.error || result.data.message)) ||
+            (result.data && (result.data.message || result.data.error)) ||
             'Could not send message (HTTP ' + result.status + ').';
+
+          if (result.data && result.data.httpCode) {
+            baseMsg += ' (HTTP ' + result.data.httpCode + ')';
+          }
 
           if (result.data && result.data.hint) {
             baseMsg += ' ' + result.data.hint;

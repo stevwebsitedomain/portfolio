@@ -22,12 +22,15 @@ final class ContactHandler
         } catch (\Throwable $e) {
             error_log('[Portfolio Contact] ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
 
-            $payload = $this->mailer->getDiagnostics();
-            if ($this->isDebugRequest()) {
-                $payload['debug'] = $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine();
-            }
-
-            JsonResponse::error(500, 'Server error while sending message.', $payload);
+            http_response_code(500);
+            header('Content-Type: application/json; charset=UTF-8');
+            echo json_encode([
+                'ok' => false,
+                'success' => false,
+                'error' => $e->getMessage(),
+                'message' => $e->getMessage(),
+                'httpCode' => 500,
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -104,17 +107,22 @@ final class ContactHandler
         ], $brevoApiKey);
 
         if (!$sent) {
-            $detail = $this->mailer->getLastError();
-            $error = $this->mapMailError($detail);
+            $httpCode = $this->mailer->getLastHttpCode();
+            $brevoResponse = $this->mailer->getLastResponseBody();
+            $errorMessage = $this->mailer->getLastError();
 
-            $payload = array_merge($this->mailer->getDiagnostics(), [
-                'hint' => $this->hintForMailError($detail),
-            ]);
-            if ($this->isDebugRequest()) {
-                $payload['debug'] = $detail !== '' ? $detail : 'Mail send returned false with no detail.';
-            }
-
-            JsonResponse::error(500, $error, $payload);
+            http_response_code($httpCode > 0 ? $httpCode : 500);
+            header('Content-Type: application/json; charset=UTF-8');
+            echo json_encode([
+                'ok' => false,
+                'success' => false,
+                'error' => $brevoResponse !== '' ? $brevoResponse : $errorMessage,
+                'message' => $errorMessage,
+                'httpCode' => $httpCode,
+                'brevoResponse' => $brevoResponse,
+                'senderEmail' => (string) ($this->config['senderEmail'] ?? ''),
+                'hint' => 'If sender is not verified in Brevo, verify SENDER_EMAIL under Brevo → Senders.',
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             return;
         }
 
@@ -123,50 +131,5 @@ final class ContactHandler
             'success' => true,
             'message' => 'Your message has been sent. Thank you!',
         ]);
-    }
-
-    private function mapMailError(string $detail): string
-    {
-        if ($detail === '') {
-            return 'Could not send your message right now. Please try again later or email us directly.';
-        }
-
-        if (
-            str_contains($detail, 'Key not found')
-            || str_contains($detail, 'API key')
-            || str_contains($detail, 'unauthorized')
-        ) {
-            return 'Invalid BREVO_API_KEY. Use xkeysib- API key from Brevo → API keys (not xsmtpsib- SMTP key).';
-        }
-
-        if (str_contains($detail, 'sender') || str_contains($detail, 'Sender')) {
-            return 'Sender email not verified in Brevo. Verify developer.company2026@gmail.com under Senders.';
-        }
-
-        return $detail;
-    }
-
-    private function hintForMailError(string $detail): string
-    {
-        if (str_contains($detail, 'Key not found') || str_contains($detail, 'API key')) {
-            return 'Regenerate BREVO_API_KEY in Brevo (must start with xkeysib-). Paste on Render and redeploy.';
-        }
-
-        if (str_contains($detail, 'sender') || str_contains($detail, 'Sender')) {
-            return 'Verify sender email in Brevo dashboard (Senders → verify developer.company2026@gmail.com).';
-        }
-
-        return 'Check Render logs. Test GET /api/contact for diagnostics.';
-    }
-
-    private function isDebugRequest(): bool
-    {
-        if (getenv('MAIL_DEBUG') === '1' || getenv('MAIL_DEBUG') === 'true') {
-            return true;
-        }
-
-        $header = $_SERVER['HTTP_X_PORTFOLIO_DEBUG'] ?? '';
-
-        return $header === '1' || strtolower($header) === 'true';
     }
 }

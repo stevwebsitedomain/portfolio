@@ -10,8 +10,9 @@ FROM php:8.2-apache
 WORKDIR /var/www/html
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libzip-dev unzip \
+    && apt-get install -y --no-install-recommends libzip-dev unzip libcurl4-openssl-dev \
     && docker-php-ext-install zip \
+    && docker-php-ext-install curl \
     && a2enmod rewrite headers \
     && rm -rf /var/lib/apt/lists/*
 
