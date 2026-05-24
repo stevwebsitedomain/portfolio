@@ -8,6 +8,7 @@ Minimal **PHP API** — no Yii2, no admin login page.
 |--------|------|-------------|
 | GET | `/` | API info (JSON) |
 | GET | `/api/portfolio` | Portfolio data |
+| GET | `/api/contact` | Contact diagnostics (`mailReady`, transport) |
 | POST | `/api/contact` | Send contact email |
 
 ## Email on Render (important)
@@ -31,7 +32,7 @@ Use an **HTTP email API** instead (works on Render free tier):
 | `SENDER_NAME` | `LEGIT BUSINESS CONSULT LTD` |
 | `CONTACT_EMAIL` | `developer.company2026@gmail.com` |
 
-5. Redeploy. Open `https://portfolio-mbvg.onrender.com` — expect `"mailTransport": "brevo"`.
+5. Redeploy. Open `https://portfolio-mbvg.onrender.com/api/contact` — expect `"mailReady": true` and `"mailTransport": "brevo"`.
 
 ### Option B — Resend
 

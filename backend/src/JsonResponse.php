@@ -12,4 +12,16 @@ final class JsonResponse
         header('Content-Type: application/json; charset=UTF-8');
         echo json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
+
+    public static function error(int $status, string $message, array $extra = []): void
+    {
+        error_log('[Portfolio API] HTTP ' . $status . ': ' . $message);
+
+        self::send($status, array_merge([
+            'ok' => false,
+            'success' => false,
+            'error' => $message,
+            'message' => $message,
+        ], $extra));
+    }
 }

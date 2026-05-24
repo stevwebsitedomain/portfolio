@@ -127,8 +127,12 @@
           }
 
           var baseMsg =
-            (result.data && result.data.error) ||
+            (result.data && (result.data.error || result.data.message)) ||
             'Could not send message (HTTP ' + result.status + ').';
+
+          if (result.data && result.data.hint) {
+            baseMsg += ' ' + result.data.hint;
+          }
 
           if (debug && result.data && result.data.debug) {
             baseMsg += '\n\n[Mail debug]\n' + result.data.debug;

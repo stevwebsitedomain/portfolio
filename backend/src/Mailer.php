@@ -57,6 +57,43 @@ final class Mailer
         return $this->lastError;
     }
 
+    public static function isRenderHost(): bool
+    {
+        return getenv('RENDER') === 'true'
+            || getenv('RENDER_SERVICE_ID') !== false
+            || getenv('RENDER_SERVICE_NAME') !== false;
+    }
+
+    public function isReadyForCurrentHost(): bool
+    {
+        $transport = $this->getTransport();
+        if (self::isRenderHost()) {
+            return in_array($transport, ['brevo', 'resend'], true);
+        }
+
+        return $transport !== 'none';
+    }
+
+    public function hasSmtpConfigured(): bool
+    {
+        return $this->resolveSmtp() !== null;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getDiagnostics(): array
+    {
+        return [
+            'mailTransport' => $this->getTransport(),
+            'mailReady' => $this->isReadyForCurrentHost(),
+            'onRender' => self::isRenderHost(),
+            'brevoConfigured' => $this->hasBrevo(),
+            'resendConfigured' => $this->hasResend(),
+            'smtpConfigured' => $this->hasSmtpConfigured(),
+        ];
+    }
+
     /**
      * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
      */
