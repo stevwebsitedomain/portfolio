@@ -62,7 +62,7 @@ final class ContactHandler
             exit;
         }
 
-        $brevoApiKey = trim((string) $brevoApiKey);
+        $brevoApiKey = Env::normalizeApiKey(trim((string) $brevoApiKey));
 
         $raw = file_get_contents('php://input') ?: '';
         $data = json_decode($raw, true);
@@ -91,7 +91,7 @@ final class ContactHandler
             return;
         }
 
-        $to = (string) ($this->config['contactRecipientEmail'] ?? 'developer.company2026@gmail.com');
+        $to = (string) ($this->config['contactRecipientEmail'] ?? 'stevenabalwambo@gmail.com');
         $body = "Portfolio contact form\n\n"
             . "Name: {$name}\n"
             . "Email: {$email}\n"
@@ -111,17 +111,22 @@ final class ContactHandler
             $brevoResponse = $this->mailer->getLastResponseBody();
             $errorMessage = $this->mailer->getLastError();
 
+            $parsed = json_decode($brevoResponse, true);
+            $displayMessage = is_array($parsed) && isset($parsed['message'])
+                ? (string) $parsed['message']
+                : $errorMessage;
+
             http_response_code($httpCode > 0 ? $httpCode : 500);
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode([
                 'ok' => false,
                 'success' => false,
                 'error' => $brevoResponse !== '' ? $brevoResponse : $errorMessage,
-                'message' => $errorMessage,
+                'message' => $displayMessage,
                 'httpCode' => $httpCode,
                 'brevoResponse' => $brevoResponse,
                 'senderEmail' => (string) ($this->config['senderEmail'] ?? ''),
-                'hint' => 'If sender is not verified in Brevo, verify SENDER_EMAIL under Brevo → Senders.',
+                'hint' => 'Set SENDER_EMAIL (or BREVO_SENDER_EMAIL) to your verified Brevo sender: stevenabalwambo@gmail.com. API key must start with xkeysib-.',
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             return;
         }

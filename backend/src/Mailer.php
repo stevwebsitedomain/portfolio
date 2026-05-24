@@ -61,13 +61,14 @@ final class Mailer
      */
     public function getDiagnostics(): array
     {
-        return [
+        return array_merge([
             'mailTransport' => $this->getTransport(),
             'mailReady' => $this->isReadyForCurrentHost(),
             'onRender' => self::isRenderHost(),
             'brevoConfigured' => Env::getBrevoApiKey() !== '',
             'senderEmail' => (string) ($this->config['senderEmail'] ?? ''),
-        ];
+            'contactRecipientEmail' => (string) ($this->config['contactRecipientEmail'] ?? ''),
+        ], Env::getBrevoKeyMeta());
     }
 
     /**
@@ -79,22 +80,38 @@ final class Mailer
         $this->lastHttpCode = 0;
         $this->lastResponseBody = '';
 
-        $apiKey = trim($brevoApiKey);
+        $apiKey = Env::normalizeApiKey($brevoApiKey);
         if ($apiKey === '') {
             return $this->fail('BREVO_API_KEY is missing', 0, '');
         }
 
-        $fromEmail = trim((string) ($this->config['senderEmail'] ?? ''));
-        $fromName = trim((string) ($this->config['senderName'] ?? 'Portfolio'));
+        if (str_starts_with($apiKey, 'xsmtpsib-')) {
+            return $this->fail(
+                'Wrong key type: xsmtpsib- is SMTP only. Use API key (xkeysib-) from Brevo → API keys.',
+                401,
+                '{"message":"Wrong key type: use xkeysib- API key, not xsmtpsib- SMTP key"}',
+            );
+        }
+
+        $fromEmail = mb_strtolower(trim((string) ($this->config['senderEmail'] ?? '')));
+        $fromName = trim((string) ($this->config['senderName'] ?? 'Steven Portfolio'));
 
         if ($fromEmail === '' || !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
-            return $this->fail('SENDER_EMAIL is missing or invalid on Render.', 0, '');
+            return $this->fail('SENDER_EMAIL / BREVO_SENDER_EMAIL is missing or invalid on Render.', 0, '');
         }
 
         $payload = [
-            'sender' => ['name' => $fromName, 'email' => $fromEmail],
-            'to' => [['email' => $message['to']]],
-            'replyTo' => ['email' => $message['replyEmail'], 'name' => $message['replyName']],
+            'sender' => [
+                'name' => $fromName,
+                'email' => $fromEmail,
+            ],
+            'to' => [
+                ['email' => $message['to']],
+            ],
+            'replyTo' => [
+                'email' => $message['replyEmail'],
+                'name' => $message['replyName'],
+            ],
             'subject' => $message['subject'],
             'textContent' => $message['body'],
         ];
@@ -115,13 +132,13 @@ final class Mailer
             }
 
             curl_setopt_array($ch, [
-                CURLOPT_POST => true,
                 CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
                 CURLOPT_TIMEOUT => 25,
                 CURLOPT_HTTPHEADER => [
+                    'accept: application/json',
                     'api-key: ' . $apiKey,
-                    'Content-Type: application/json',
-                    'Accept: application/json',
+                    'content-type: application/json',
                 ],
                 CURLOPT_POSTFIELDS => $jsonBody,
             ]);
@@ -134,9 +151,11 @@ final class Mailer
             $this->lastHttpCode = $httpCode;
             $this->lastResponseBody = is_string($response) ? $response : '';
 
-            error_log('[Portfolio Mailer] Brevo request sender=' . $fromEmail . ' to=' . $message['to']);
-            error_log('[Portfolio Mailer] Brevo HTTP Code: ' . $httpCode);
-            error_log('[Portfolio Mailer] Brevo response: ' . $this->lastResponseBody);
+            error_log('[Portfolio Mailer] Brevo URL: https://api.brevo.com/v3/smtp/email');
+            error_log('[Portfolio Mailer] Brevo sender=' . $fromEmail . ' to=' . $message['to']);
+            error_log('[Portfolio Mailer] BREVO_API_KEY length=' . strlen($apiKey) . ' prefix=' . substr($apiKey, 0, 8));
+            error_log('BREVO RESPONSE: ' . $this->lastResponseBody);
+            error_log('HTTP CODE: ' . $httpCode);
 
             if ($response === false) {
                 return $this->fail('Brevo cURL error: ' . $curlError, $httpCode, $this->lastResponseBody);
@@ -148,7 +167,7 @@ final class Mailer
 
             $parsed = json_decode($this->lastResponseBody, true);
             $detail = is_array($parsed)
-                ? (string) ($parsed['message'] ?? $parsed['code'] ?? $this->lastResponseBody)
+                ? (string) ($parsed['message'] ?? json_encode($parsed))
                 : $this->lastResponseBody;
 
             return $this->fail($detail !== '' ? $detail : 'Brevo API error', $httpCode, $this->lastResponseBody);
