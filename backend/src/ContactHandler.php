@@ -73,8 +73,13 @@ final class ContactHandler
             if ($detail !== '') {
                 if (str_contains($detail, 'authenticate') || str_contains($detail, 'Authentication')) {
                     $error = 'Email server login failed. Check Gmail App Password on Render (SMTP_PASSWORD).';
+                } elseif (
+                    str_contains($detail, 'Could not connect to SMTP host')
+                    || str_contains($detail, 'Failed to connect')
+                ) {
+                    $error = 'Render blocks Gmail SMTP. Add BREVO_API_KEY on Render (free at brevo.com) — see backend README.';
                 } elseif (str_contains($detail, 'timed out') || str_contains($detail, 'Timeout')) {
-                    $error = 'Email server timeout. Verify SMTP_HOST=smtp.gmail.com and SMTP_PASSWORD on Render.';
+                    $error = 'Email server timeout. On Render use BREVO_API_KEY instead of Gmail SMTP.';
                 }
             }
 

@@ -10,6 +10,9 @@ return [
     'senderName' => getenv('SENDER_NAME') ?: 'LEGIT BUSINESS CONSULT LTD',
     'contactRecipientEmail' => getenv('CONTACT_EMAIL') ?: 'developer.company2026@gmail.com',
     'mailerDsn' => getenv('MAILER_DSN') ?: '',
+    'mailTransport' => getenv('MAIL_TRANSPORT') ?: '',
+    'brevoApiKey' => getenv('BREVO_API_KEY') ?: '',
+    'resendApiKey' => getenv('RESEND_API_KEY') ?: '',
     'smtp' => [
         'host' => getenv('SMTP_HOST') ?: 'smtp.gmail.com',
         'port' => (int) (getenv('SMTP_PORT') ?: 587),

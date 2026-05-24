@@ -27,6 +27,7 @@ if (str_starts_with($path, '/site') || $path === '/index.php') {
 }
 
 if ($path === '/' && $method === 'GET') {
+    $mailer = new Mailer($config);
     JsonResponse::send(200, [
         'ok' => true,
         'service' => 'Portfolio API',
@@ -35,7 +36,9 @@ if ($path === '/' && $method === 'GET') {
             'GET /api/portfolio' => 'Portfolio JSON data',
             'POST /api/contact' => 'Contact form (sends email)',
         ],
-        'mailConfigured' => (new Mailer($config))->isConfigured(),
+        'mailConfigured' => $mailer->isConfigured(),
+        'mailTransport' => $mailer->getTransport(),
+        'note' => 'Render blocks SMTP ports 587/465 — use BREVO_API_KEY or RESEND_API_KEY on Render.',
     ]);
     exit;
 }

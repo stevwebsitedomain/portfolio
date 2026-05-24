@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Portfolio\Api;
 
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as MailerException;
+use PHPMailer\PHPMailer\PHPMailer;
 
 final class Mailer
 {
@@ -20,7 +20,36 @@ final class Mailer
 
     public function isConfigured(): bool
     {
-        return $this->resolveSmtp() !== null;
+        return $this->getTransport() !== 'none';
+    }
+
+    public function getTransport(): string
+    {
+        $forced = strtolower(trim((string) ($this->config['mailTransport'] ?? '')));
+        if ($forced === 'brevo' && $this->hasBrevo()) {
+            return 'brevo';
+        }
+        if ($forced === 'resend' && $this->hasResend()) {
+            return 'resend';
+        }
+        if ($forced === 'smtp' && $this->resolveSmtp() !== null) {
+            return 'smtp';
+        }
+        if ($forced !== '' && $forced !== 'auto') {
+            return 'none';
+        }
+
+        if ($this->hasBrevo()) {
+            return 'brevo';
+        }
+        if ($this->hasResend()) {
+            return 'resend';
+        }
+        if ($this->resolveSmtp() !== null) {
+            return 'smtp';
+        }
+
+        return 'none';
     }
 
     public function getLastError(): string
@@ -35,17 +64,102 @@ final class Mailer
     {
         $this->lastError = '';
 
+        return match ($this->getTransport()) {
+            'brevo' => $this->sendViaBrevo($message),
+            'resend' => $this->sendViaResend($message),
+            'smtp' => $this->sendViaSmtp($message),
+            default => $this->fail('Email not configured. Set BREVO_API_KEY on Render (see backend README).'),
+        };
+    }
+
+    /**
+     * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
+     */
+    private function sendViaBrevo(array $message): bool
+    {
+        $apiKey = trim((string) ($this->config['brevoApiKey'] ?? ''));
+        $fromEmail = (string) ($this->config['senderEmail'] ?? '');
+        $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
+
+        $result = $this->httpPostJson(
+            'https://api.brevo.com/v3/smtp/email',
+            [
+                'api-key: ' . $apiKey,
+                'Content-Type: application/json',
+                'Accept: application/json',
+            ],
+            [
+                'sender' => ['name' => $fromName, 'email' => $fromEmail],
+                'to' => [['email' => $message['to']]],
+                'replyTo' => ['email' => $message['replyEmail'], 'name' => $message['replyName']],
+                'subject' => $message['subject'],
+                'textContent' => $message['body'],
+            ],
+        );
+
+        if ($result['status'] >= 200 && $result['status'] < 300) {
+            return true;
+        }
+
+        $detail = is_array($result['json']) ? (string) ($result['json']['message'] ?? '') : '';
+        if ($detail === '') {
+            $detail = trim($result['body']);
+        }
+
+        return $this->fail($detail !== '' ? $detail : 'Brevo API request failed (HTTP ' . $result['status'] . ').');
+    }
+
+    /**
+     * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
+     */
+    private function sendViaResend(array $message): bool
+    {
+        $apiKey = trim((string) ($this->config['resendApiKey'] ?? ''));
+        $fromEmail = (string) ($this->config['senderEmail'] ?? 'onboarding@resend.dev');
+        $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
+
+        $result = $this->httpPostJson(
+            'https://api.resend.com/emails',
+            [
+                'Authorization: Bearer ' . $apiKey,
+                'Content-Type: application/json',
+                'Accept: application/json',
+            ],
+            [
+                'from' => $fromName . ' <' . $fromEmail . '>',
+                'to' => [$message['to']],
+                'reply_to' => $message['replyEmail'],
+                'subject' => $message['subject'],
+                'text' => $message['body'],
+            ],
+        );
+
+        if ($result['status'] >= 200 && $result['status'] < 300) {
+            return true;
+        }
+
+        $detail = is_array($result['json']) ? (string) ($result['json']['message'] ?? '') : '';
+        if ($detail === '') {
+            $detail = trim($result['body']);
+        }
+
+        return $this->fail($detail !== '' ? $detail : 'Resend API request failed (HTTP ' . $result['status'] . ').');
+    }
+
+    /**
+     * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
+     */
+    private function sendViaSmtp(array $message): bool
+    {
         $smtp = $this->resolveSmtp();
         if ($smtp === null) {
-            $this->lastError = 'SMTP not configured (set SMTP_PASSWORD or MAILER_DSN on Render).';
-            return false;
+            return $this->fail('SMTP not configured (set SMTP_PASSWORD or MAILER_DSN).');
         }
 
         $mail = new PHPMailer(true);
         try {
             return $this->attemptSend($mail, $smtp, $message);
         } catch (MailerException $e) {
-            // Retry Gmail on port 465 (SSL) if 587 failed
             if ($smtp['port'] === 587 && $smtp['host'] === 'smtp.gmail.com') {
                 try {
                     $smtp465 = $smtp;
@@ -55,17 +169,11 @@ final class Mailer
 
                     return $this->attemptSend($mail, $smtp465, $message);
                 } catch (MailerException $retry) {
-                    $this->lastError = $retry->getMessage();
-                    error_log('[Portfolio Mailer] ' . $retry->getMessage());
-
-                    return false;
+                    return $this->fail($retry->getMessage());
                 }
             }
 
-            $this->lastError = $e->getMessage();
-            error_log('[Portfolio Mailer] ' . $e->getMessage());
-
-            return false;
+            return $this->fail($e->getMessage());
         }
     }
 
@@ -100,7 +208,7 @@ final class Mailer
         return $mail->send();
     }
 
-    /**
+  /**
      * @return array{host:string,port:int,user:string,pass:string,encryption:string}|null
      */
     private function resolveSmtp(): ?array
@@ -161,5 +269,55 @@ final class Mailer
                 ? PHPMailer::ENCRYPTION_SMTPS
                 : PHPMailer::ENCRYPTION_STARTTLS,
         ];
+    }
+
+    private function hasBrevo(): bool
+    {
+        return trim((string) ($this->config['brevoApiKey'] ?? '')) !== '';
+    }
+
+    private function hasResend(): bool
+    {
+        return trim((string) ($this->config['resendApiKey'] ?? '')) !== '';
+    }
+
+  /**
+     * @param array<int, string> $headers
+     * @param array<string, mixed> $body
+     * @return array{status:int,body:string,json:mixed}
+     */
+    private function httpPostJson(string $url, array $headers, array $body): array
+    {
+        $headerStr = implode("\r\n", $headers) . "\r\n";
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'POST',
+                'header' => $headerStr,
+                'content' => json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                'timeout' => 20,
+                'ignore_errors' => true,
+            ],
+        ]);
+
+        $raw = @file_get_contents($url, false, $context);
+        $status = 0;
+        if (isset($http_response_header[0])) {
+            preg_match('/\d{3}/', (string) $http_response_header[0], $matches);
+            $status = (int) ($matches[0] ?? 0);
+        }
+
+        return [
+            'status' => $status,
+            'body' => is_string($raw) ? $raw : '',
+            'json' => json_decode(is_string($raw) ? $raw : '[]', true),
+        ];
+    }
+
+    private function fail(string $message): bool
+    {
+        $this->lastError = $message;
+        error_log('[Portfolio Mailer] ' . $message);
+
+        return false;
     }
 }
