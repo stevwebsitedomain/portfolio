@@ -6,55 +6,40 @@ namespace Portfolio\Api;
 
 final class Env
 {
-    public static function getBrevoApiKey(): string
-    {
-        $brevoApiKey = '';
-
-        if (isset($_ENV['BREVO_API_KEY'])) {
-            $brevoApiKey = $_ENV['BREVO_API_KEY'];
-        }
-
-        if (!$brevoApiKey && getenv('BREVO_API_KEY')) {
-            $brevoApiKey = getenv('BREVO_API_KEY');
-        }
-
-        if (!$brevoApiKey && isset($_SERVER['BREVO_API_KEY'])) {
-            $brevoApiKey = $_SERVER['BREVO_API_KEY'];
-        }
-
-        return self::normalizeApiKey(is_string($brevoApiKey) ? $brevoApiKey : '');
-    }
-
     public static function get(string $name, string $default = ''): string
     {
-        if ($name === 'BREVO_API_KEY') {
-            $key = self::getBrevoApiKey();
+        $value = '';
 
-            return $key !== '' ? $key : $default;
+        if (isset($_ENV[$name])) {
+            $value = $_ENV[$name];
+        } elseif (getenv($name)) {
+            $value = getenv($name);
+        } elseif (isset($_SERVER[$name])) {
+            $value = $_SERVER[$name];
         }
 
-        $value = $_ENV[$name] ?? getenv($name) ?: ($_SERVER[$name] ?? '');
+        if (!is_string($value)) {
+            return $default;
+        }
 
-        return is_string($value) && trim($value) !== '' ? trim($value) : $default;
+        $trimmed = trim($value);
+
+        return $trimmed !== '' ? $trimmed : $default;
     }
 
-    public static function normalizeApiKey(string $key): string
+    public static function getGmailAppPassword(): string
     {
-        $key = trim($key);
-        $key = trim($key, "\"'");
+        $password = self::get('GMAIL_APP_PASSWORD');
 
-        // Remove accidental line breaks/spaces from Render copy-paste
-        return preg_replace('/\s+/', '', $key) ?? '';
-    }
+        if ($password === '') {
+            $password = self::get('SMTP_PASSWORD');
+        }
 
-    public static function getBrevoKeyMeta(): array
-    {
-        $key = self::getBrevoApiKey();
+        if ($password === '') {
+            $password = self::get('SMTP_PASS');
+        }
 
-        return [
-            'brevoKeyLength' => strlen($key),
-            'brevoKeyPrefix' => $key !== '' ? substr($key, 0, 8) : '',
-            'brevoKeyLooksValid' => str_starts_with($key, 'xkeysib-'),
-        ];
+        // Gmail app passwords are 16 chars; remove spaces from copy-paste
+        return preg_replace('/\s+/', '', $password) ?? '';
     }
 }

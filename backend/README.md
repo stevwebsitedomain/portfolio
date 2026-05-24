@@ -1,40 +1,45 @@
 # Portfolio Backend (Render)
 
-Minimal **PHP API** — Brevo HTTP API only (no SMTP).
-
-## Endpoints
-
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/contact` | Diagnostics (`senderEmail`, `brevoKeyPrefix`, `mailReady`) |
-| POST | `/api/contact` | Send contact email via Brevo API |
+Minimal **PHP API** — contact form email via **Gmail SMTP** (PHPMailer).
 
 ## Render environment variables
 
 | KEY | Value |
 |-----|--------|
-| `BREVO_API_KEY` | Brevo **API key** starting with `xkeysib-` (not `xsmtpsib-`) |
-| `BREVO_SENDER_EMAIL` | Verified sender in Brevo, e.g. `stevenabalwambo@gmail.com` |
-| `SENDER_EMAIL` | Same as `BREVO_SENDER_EMAIL` |
+| `GMAIL_APP_PASSWORD` | Gmail App Password (16 characters, spaces optional) |
+| `SENDER_EMAIL` | `developer.company2026@gmail.com` |
 | `SENDER_NAME` | `Steven Portfolio` |
-| `CONTACT_EMAIL` | Where form messages are delivered |
+| `CONTACT_EMAIL` | `developer.company2026@gmail.com` |
+| `SMTP_USER` | `developer.company2026@gmail.com` (optional, defaults to SENDER_EMAIL) |
 
-### Brevo setup
+## Gmail App Password
 
-1. [brevo.com](https://www.brevo.com) → **Senders** → verify `stevenabalwambo@gmail.com`
-2. **SMTP & API** → **API keys** → Generate → copy `xkeysib-...`
-3. Render → set `BREVO_API_KEY` and `SENDER_EMAIL=stevenabalwambo@gmail.com` → redeploy
-4. Check GET `/api/contact`:
-   - `"senderEmail": "stevenabalwambo@gmail.com"`
-   - `"brevoKeyPrefix": "xkeysib-"`
-   - `"brevoKeyLooksValid": true`
+1. Google Account → Security → 2-Step Verification (ON)
+2. App passwords → create for "Mail" / "Render"
+3. Copy 16-character password → paste into Render `GMAIL_APP_PASSWORD`
+4. Redeploy
 
-## 401 "Key not found"
+## SMTP settings (built-in)
 
-Usually means:
+- Host: `smtp.gmail.com`
+- Port: `587`
+- Encryption: TLS (STARTTLS)
+- Auth: enabled
 
-- Wrong key type (`xsmtpsib-` SMTP key instead of `xkeysib-` API key)
-- Invalid or revoked API key
-- Extra spaces/quotes in Render env value
+## Endpoints
 
-POST `/api/contact` returns the full `brevoResponse` body from Brevo for debugging.
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/contact` | Diagnostics |
+| POST | `/api/contact` | Send contact email |
+
+## Local test
+
+```bash
+cd backend
+composer install
+set GMAIL_APP_PASSWORD=your_app_password
+php -S localhost:8080 -t public
+```
+
+**Note:** Render free tier may block outbound SMTP (ports 587/465). If SMTP fails with connection timeout, use a host that allows SMTP or a transactional email API.

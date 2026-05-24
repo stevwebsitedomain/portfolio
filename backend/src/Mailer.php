@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Portfolio\Api;
 
+use PHPMailer\PHPMailer\Exception as MailerException;
+use PHPMailer\PHPMailer\PHPMailer;
+
 final class Mailer
 {
     private string $lastError = '';
-
-    private int $lastHttpCode = 0;
-
-    private string $lastResponseBody = '';
 
     /**
      * @param array<string, mixed> $config
@@ -21,12 +20,17 @@ final class Mailer
 
     public function isConfigured(): bool
     {
-        return Env::getBrevoApiKey() !== '';
+        return Env::getGmailAppPassword() !== '';
     }
 
     public function getTransport(): string
     {
-        return $this->isConfigured() ? 'brevo' : 'none';
+        return $this->isConfigured() ? 'smtp' : 'none';
+    }
+
+    public function isReadyForCurrentHost(): bool
+    {
+        return $this->isConfigured();
     }
 
     public function getLastError(): string
@@ -34,160 +38,71 @@ final class Mailer
         return $this->lastError;
     }
 
-    public function getLastHttpCode(): int
-    {
-        return $this->lastHttpCode;
-    }
-
-    public function getLastResponseBody(): string
-    {
-        return $this->lastResponseBody;
-    }
-
-    public static function isRenderHost(): bool
-    {
-        return getenv('RENDER') === 'true'
-            || getenv('RENDER_SERVICE_ID') !== false
-            || getenv('RENDER_SERVICE_NAME') !== false;
-    }
-
-    public function isReadyForCurrentHost(): bool
-    {
-        return Env::getBrevoApiKey() !== '';
-    }
-
     /**
      * @return array<string, mixed>
      */
     public function getDiagnostics(): array
     {
-        return array_merge([
+        return [
             'mailTransport' => $this->getTransport(),
             'mailReady' => $this->isReadyForCurrentHost(),
-            'onRender' => self::isRenderHost(),
-            'brevoConfigured' => Env::getBrevoApiKey() !== '',
+            'mailConfigured' => $this->isConfigured(),
             'senderEmail' => (string) ($this->config['senderEmail'] ?? ''),
             'contactRecipientEmail' => (string) ($this->config['contactRecipientEmail'] ?? ''),
-        ], Env::getBrevoKeyMeta());
+            'smtpHost' => (string) ($this->config['smtpHost'] ?? 'smtp.gmail.com'),
+            'smtpPort' => (int) ($this->config['smtpPort'] ?? 587),
+            'gmailPasswordConfigured' => Env::getGmailAppPassword() !== '',
+        ];
     }
 
     /**
      * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
      */
-    public function send(array $message, string $brevoApiKey): bool
+    public function send(array $message): bool
     {
         $this->lastError = '';
-        $this->lastHttpCode = 0;
-        $this->lastResponseBody = '';
 
-        $apiKey = Env::normalizeApiKey($brevoApiKey);
-        if ($apiKey === '') {
-            return $this->fail('BREVO_API_KEY is missing', 0, '');
+        $password = Env::getGmailAppPassword();
+        if ($password === '') {
+            $this->lastError = 'GMAIL_APP_PASSWORD is not set on the server.';
+
+            return false;
         }
 
-        if (str_starts_with($apiKey, 'xsmtpsib-')) {
-            return $this->fail(
-                'Wrong key type: xsmtpsib- is SMTP only. Use API key (xkeysib-) from Brevo → API keys.',
-                401,
-                '{"message":"Wrong key type: use xkeysib- API key, not xsmtpsib- SMTP key"}',
-            );
-        }
+        $fromEmail = (string) ($this->config['senderEmail'] ?? 'developer.company2026@gmail.com');
+        $fromName = (string) ($this->config['senderName'] ?? 'Steven Portfolio');
+        $smtpUser = (string) ($this->config['smtpUser'] ?? $fromEmail);
+        $smtpHost = (string) ($this->config['smtpHost'] ?? 'smtp.gmail.com');
+        $smtpPort = (int) ($this->config['smtpPort'] ?? 587);
 
-        $fromEmail = mb_strtolower(trim((string) ($this->config['senderEmail'] ?? '')));
-        $fromName = trim((string) ($this->config['senderName'] ?? 'Steven Portfolio'));
-
-        if ($fromEmail === '' || !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
-            return $this->fail('SENDER_EMAIL / BREVO_SENDER_EMAIL is missing or invalid on Render.', 0, '');
-        }
-
-        $payload = [
-            'sender' => [
-                'name' => $fromName,
-                'email' => $fromEmail,
-            ],
-            'to' => [
-                ['email' => $message['to']],
-            ],
-            'replyTo' => [
-                'email' => $message['replyEmail'],
-                'name' => $message['replyName'],
-            ],
-            'subject' => $message['subject'],
-            'textContent' => $message['body'],
-        ];
-
-        $jsonBody = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        if ($jsonBody === false) {
-            return $this->fail('Failed to encode email payload.', 0, '');
-        }
-
-        if (!function_exists('curl_init')) {
-            return $this->fail('PHP cURL extension is not available on the server.', 0, '');
-        }
+        $mail = new PHPMailer(true);
 
         try {
-            $ch = curl_init('https://api.brevo.com/v3/smtp/email');
-            if ($ch === false) {
-                return $this->fail('Could not initialize cURL.', 0, '');
-            }
+            $mail->isSMTP();
+            $mail->Host = $smtpHost;
+            $mail->SMTPAuth = true;
+            $mail->Username = $smtpUser;
+            $mail->Password = $password;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = $smtpPort;
+            $mail->CharSet = PHPMailer::CHARSET_UTF8;
+            $mail->Timeout = 20;
 
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST => true,
-                CURLOPT_TIMEOUT => 25,
-                CURLOPT_HTTPHEADER => [
-                    'accept: application/json',
-                    'api-key: ' . $apiKey,
-                    'content-type: application/json',
-                ],
-                CURLOPT_POSTFIELDS => $jsonBody,
-            ]);
+            $mail->setFrom($fromEmail, $fromName);
+            $mail->addAddress($message['to']);
+            $mail->addReplyTo($message['replyEmail'], $message['replyName']);
+            $mail->Subject = $message['subject'];
+            $mail->Body = $message['body'];
+            $mail->isHTML(false);
 
-            $response = curl_exec($ch);
-            $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curlError = curl_error($ch);
-            curl_close($ch);
+            $mail->send();
 
-            $this->lastHttpCode = $httpCode;
-            $this->lastResponseBody = is_string($response) ? $response : '';
+            return true;
+        } catch (MailerException $e) {
+            $this->lastError = $mail->ErrorInfo !== '' ? $mail->ErrorInfo : $e->getMessage();
+            error_log('[Portfolio Mailer] ' . $this->lastError);
 
-            error_log('[Portfolio Mailer] Brevo URL: https://api.brevo.com/v3/smtp/email');
-            error_log('[Portfolio Mailer] Brevo sender=' . $fromEmail . ' to=' . $message['to']);
-            error_log('[Portfolio Mailer] BREVO_API_KEY length=' . strlen($apiKey) . ' prefix=' . substr($apiKey, 0, 8));
-            error_log('BREVO RESPONSE: ' . $this->lastResponseBody);
-            error_log('HTTP CODE: ' . $httpCode);
-
-            if ($response === false) {
-                return $this->fail('Brevo cURL error: ' . $curlError, $httpCode, $this->lastResponseBody);
-            }
-
-            if ($httpCode >= 200 && $httpCode < 300) {
-                return true;
-            }
-
-            $parsed = json_decode($this->lastResponseBody, true);
-            $detail = is_array($parsed)
-                ? (string) ($parsed['message'] ?? json_encode($parsed))
-                : $this->lastResponseBody;
-
-            return $this->fail($detail !== '' ? $detail : 'Brevo API error', $httpCode, $this->lastResponseBody);
-        } catch (\Throwable $e) {
-            error_log('[Portfolio Mailer] Exception: ' . $e->getMessage());
-
-            return $this->fail($e->getMessage(), $this->lastHttpCode, $this->lastResponseBody);
+            return false;
         }
-    }
-
-    private function fail(string $message, int $httpCode, string $responseBody): bool
-    {
-        $this->lastError = $message;
-        $this->lastHttpCode = $httpCode;
-        if ($responseBody !== '') {
-            $this->lastResponseBody = $responseBody;
-        }
-
-        error_log('[Portfolio Mailer] ' . $message);
-
-        return false;
     }
 }

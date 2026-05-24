@@ -35,12 +35,12 @@ try {
             'endpoints' => [
                 'GET /api/portfolio' => 'Portfolio JSON data',
                 'GET /api/contact' => 'Contact endpoint diagnostics',
-                'POST /api/contact' => 'Contact form (sends email)',
+                'POST /api/contact' => 'Contact form (Gmail SMTP)',
             ],
             'mailConfigured' => $mailer->isConfigured(),
             'mailReady' => $mailer->isReadyForCurrentHost(),
         ], $mailer->getDiagnostics(), [
-            'note' => 'Contact form uses Brevo API only. Set BREVO_API_KEY (xkeysib-) on Render.',
+            'note' => 'Set GMAIL_APP_PASSWORD on Render (Gmail App Password, 16 chars).',
         ]));
         exit;
     }
@@ -68,8 +68,8 @@ try {
             'mailReady' => $mailer->isReadyForCurrentHost(),
         ], $mailer->getDiagnostics(), [
             'hint' => $mailer->isReadyForCurrentHost()
-                ? 'Ready to accept POST requests.'
-                : 'Add BREVO_API_KEY on Render, redeploy, then mailReady should become true.',
+                ? 'Ready to accept POST requests via Gmail SMTP.'
+                : 'Add GMAIL_APP_PASSWORD on Render and redeploy.',
         ]));
         exit;
     }
@@ -87,8 +87,7 @@ try {
         Cors::apply();
     }
 
-    $debug = getenv('MAIL_DEBUG') === '1' || getenv('MAIL_DEBUG') === 'true';
-    JsonResponse::error(500, 'Internal server error.', $debug ? [
-        'debug' => $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine(),
-    ] : []);
+    JsonResponse::error(500, 'Internal server error.', [
+        'debug' => $e->getMessage(),
+    ]);
 }

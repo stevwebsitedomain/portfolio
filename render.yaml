@@ -1,4 +1,4 @@
-# Render — portfolio API backend (Brevo only)
+# Render — portfolio API backend (Gmail SMTP)
 
 services:
   - type: web
@@ -9,13 +9,17 @@ services:
     plan: free
     healthCheckPath: /api/portfolio
     envVars:
-      - key: BREVO_API_KEY
+      - key: GMAIL_APP_PASSWORD
         sync: false
-      - key: BREVO_SENDER_EMAIL
-        value: stevenabalwambo@gmail.com
       - key: SENDER_EMAIL
-        value: stevenabalwambo@gmail.com
+        value: developer.company2026@gmail.com
       - key: SENDER_NAME
         value: Steven Portfolio
       - key: CONTACT_EMAIL
-        value: stevenabalwambo@gmail.com
+        value: developer.company2026@gmail.com
+      - key: SMTP_USER
+        value: developer.company2026@gmail.com
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"

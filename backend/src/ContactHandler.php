@@ -17,53 +17,6 @@ final class ContactHandler
 
     public function handle(): void
     {
-        try {
-            $this->process();
-        } catch (\Throwable $e) {
-            error_log('[Portfolio Contact] ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
-
-            http_response_code(500);
-            header('Content-Type: application/json; charset=UTF-8');
-            echo json_encode([
-                'ok' => false,
-                'success' => false,
-                'error' => $e->getMessage(),
-                'message' => $e->getMessage(),
-                'httpCode' => 500,
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        }
-    }
-
-    private function process(): void
-    {
-        $brevoApiKey = '';
-
-        if (isset($_ENV['BREVO_API_KEY'])) {
-            $brevoApiKey = $_ENV['BREVO_API_KEY'];
-        }
-
-        if (!$brevoApiKey && getenv('BREVO_API_KEY')) {
-            $brevoApiKey = getenv('BREVO_API_KEY');
-        }
-
-        if (!$brevoApiKey && isset($_SERVER['BREVO_API_KEY'])) {
-            $brevoApiKey = $_SERVER['BREVO_API_KEY'];
-        }
-
-        if (empty(trim((string) $brevoApiKey))) {
-            http_response_code(503);
-            header('Content-Type: application/json; charset=UTF-8');
-            echo json_encode([
-                'ok' => false,
-                'success' => false,
-                'message' => 'BREVO_API_KEY is missing',
-                'error' => 'BREVO_API_KEY is missing',
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-            exit;
-        }
-
-        $brevoApiKey = Env::normalizeApiKey(trim((string) $brevoApiKey));
-
         $raw = file_get_contents('php://input') ?: '';
         $data = json_decode($raw, true);
         if (!is_array($data)) {
@@ -91,7 +44,19 @@ final class ContactHandler
             return;
         }
 
-        $to = (string) ($this->config['contactRecipientEmail'] ?? 'stevenabalwambo@gmail.com');
+        if (!$this->mailer->isConfigured()) {
+            http_response_code(503);
+            header('Content-Type: application/json; charset=UTF-8');
+            echo json_encode([
+                'ok' => false,
+                'success' => false,
+                'message' => 'GMAIL_APP_PASSWORD is missing on Render',
+                'error' => 'GMAIL_APP_PASSWORD is missing on Render',
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $to = (string) ($this->config['contactRecipientEmail'] ?? 'developer.company2026@gmail.com');
         $body = "Portfolio contact form\n\n"
             . "Name: {$name}\n"
             . "Email: {$email}\n"
@@ -104,29 +69,19 @@ final class ContactHandler
             'replyName' => $name,
             'subject' => '[Portfolio] ' . $subject,
             'body' => $body,
-        ], $brevoApiKey);
+        ]);
 
         if (!$sent) {
-            $httpCode = $this->mailer->getLastHttpCode();
-            $brevoResponse = $this->mailer->getLastResponseBody();
-            $errorMessage = $this->mailer->getLastError();
+            $errorInfo = $this->mailer->getLastError();
+            error_log('[Portfolio Contact] ' . $errorInfo);
 
-            $parsed = json_decode($brevoResponse, true);
-            $displayMessage = is_array($parsed) && isset($parsed['message'])
-                ? (string) $parsed['message']
-                : $errorMessage;
-
-            http_response_code($httpCode > 0 ? $httpCode : 500);
+            http_response_code(500);
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode([
                 'ok' => false,
                 'success' => false,
-                'error' => $brevoResponse !== '' ? $brevoResponse : $errorMessage,
-                'message' => $displayMessage,
-                'httpCode' => $httpCode,
-                'brevoResponse' => $brevoResponse,
-                'senderEmail' => (string) ($this->config['senderEmail'] ?? ''),
-                'hint' => 'Set SENDER_EMAIL (or BREVO_SENDER_EMAIL) to your verified Brevo sender: stevenabalwambo@gmail.com. API key must start with xkeysib-.',
+                'message' => $errorInfo,
+                'error' => $errorInfo,
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             return;
         }
