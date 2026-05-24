@@ -68,9 +68,14 @@ final class ContactHandler
         ]);
 
         if (!$sent) {
+            $detail = $this->mailer->getLastError();
+            $error = 'Could not send your message right now. Please try again later or email us directly.';
+            if ($detail !== '' && (str_contains($detail, 'authenticate') || str_contains($detail, 'Authentication'))) {
+                $error = 'Email server login failed. Check Gmail App Password on Render (SMTP_PASSWORD).';
+            }
             JsonResponse::send(500, [
                 'ok' => false,
-                'error' => 'Could not send your message right now. Please try again later or email us directly.',
+                'error' => $error,
             ]);
             return;
         }

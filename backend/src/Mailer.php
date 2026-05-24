@@ -43,40 +43,60 @@ final class Mailer
 
         $mail = new PHPMailer(true);
         try {
-            $mail->isSMTP();
-            $mail->Host = $smtp['host'];
-            $mail->Port = $smtp['port'];
-            $mail->SMTPAuth = true;
-            $mail->Username = $smtp['user'];
-            $mail->Password = $smtp['pass'];
-            $mail->SMTPSecure = $smtp['encryption'];
-            $mail->CharSet = PHPMailer::CHARSET_UTF8;
-            $mail->Timeout = 30;
-            $mail->SMTPOptions = [
-                'ssl' => [
-                    'verify_peer' => true,
-                    'verify_peer_name' => true,
-                    'allow_self_signed' => false,
-                ],
-            ];
-
-            $fromEmail = (string) ($this->config['senderEmail'] ?? $smtp['user']);
-            $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
-
-            $mail->setFrom($fromEmail, $fromName);
-            $mail->addAddress($message['to']);
-            $mail->addReplyTo($message['replyEmail'], $message['replyName']);
-            $mail->Subject = $message['subject'];
-            $mail->Body = $message['body'];
-            $mail->isHTML(false);
-
-            return $mail->send();
+            return $this->attemptSend($mail, $smtp, $message);
         } catch (MailerException $e) {
+            // Retry Gmail on port 465 (SSL) if 587 failed
+            if ($smtp['port'] === 587 && $smtp['host'] === 'smtp.gmail.com') {
+                try {
+                    $smtp465 = $smtp;
+                    $smtp465['port'] = 465;
+                    $smtp465['encryption'] = PHPMailer::ENCRYPTION_SMTPS;
+                    $mail = new PHPMailer(true);
+
+                    return $this->attemptSend($mail, $smtp465, $message);
+                } catch (MailerException $retry) {
+                    $this->lastError = $retry->getMessage();
+                    error_log('[Portfolio Mailer] ' . $retry->getMessage());
+
+                    return false;
+                }
+            }
+
             $this->lastError = $e->getMessage();
             error_log('[Portfolio Mailer] ' . $e->getMessage());
 
             return false;
         }
+    }
+
+    /**
+     * @param array{host:string,port:int,user:string,pass:string,encryption:string} $smtp
+     * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
+     */
+    private function attemptSend(PHPMailer $mail, array $smtp, array $message): bool
+    {
+        $mail->isSMTP();
+        $mail->Host = $smtp['host'];
+        $mail->Port = $smtp['port'];
+        $mail->SMTPAuth = true;
+        $mail->Username = $smtp['user'];
+        $mail->Password = $smtp['pass'];
+        $mail->SMTPSecure = $smtp['encryption'];
+        $mail->CharSet = PHPMailer::CHARSET_UTF8;
+        $mail->Timeout = 25;
+        $mail->SMTPKeepAlive = false;
+
+        $fromEmail = (string) ($this->config['senderEmail'] ?? $smtp['user']);
+        $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
+
+        $mail->setFrom($fromEmail, $fromName);
+        $mail->addAddress($message['to']);
+        $mail->addReplyTo($message['replyEmail'], $message['replyName']);
+        $mail->Subject = $message['subject'];
+        $mail->Body = $message['body'];
+        $mail->isHTML(false);
+
+        return $mail->send();
     }
 
     /**
