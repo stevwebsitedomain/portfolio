@@ -10,7 +10,6 @@ use Portfolio\Api\Mailer;
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 try {
-    Portfolio\Api\Env::bootstrap();
     $config = require dirname(__DIR__) . '/config.php';
 
     Cors::apply();
@@ -41,7 +40,7 @@ try {
             'mailConfigured' => $mailer->isConfigured(),
             'mailReady' => $mailer->isReadyForCurrentHost(),
         ], $mailer->getDiagnostics(), [
-            'note' => 'On Render: mailReady requires BREVO_API_KEY or RESEND_API_KEY (SMTP is blocked).',
+            'note' => 'Contact form uses Brevo API only. Set BREVO_API_KEY (xkeysib-) on Render.',
         ]));
         exit;
     }

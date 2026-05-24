@@ -33,6 +33,34 @@ final class ContactHandler
 
     private function process(): void
     {
+        $brevoApiKey = '';
+
+        if (isset($_ENV['BREVO_API_KEY'])) {
+            $brevoApiKey = $_ENV['BREVO_API_KEY'];
+        }
+
+        if (!$brevoApiKey && getenv('BREVO_API_KEY')) {
+            $brevoApiKey = getenv('BREVO_API_KEY');
+        }
+
+        if (!$brevoApiKey && isset($_SERVER['BREVO_API_KEY'])) {
+            $brevoApiKey = $_SERVER['BREVO_API_KEY'];
+        }
+
+        if (empty(trim((string) $brevoApiKey))) {
+            http_response_code(503);
+            header('Content-Type: application/json; charset=UTF-8');
+            echo json_encode([
+                'ok' => false,
+                'success' => false,
+                'message' => 'BREVO_API_KEY is missing',
+                'error' => 'BREVO_API_KEY is missing',
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $brevoApiKey = trim((string) $brevoApiKey);
+
         $raw = file_get_contents('php://input') ?: '';
         $data = json_decode($raw, true);
         if (!is_array($data)) {
@@ -60,17 +88,6 @@ final class ContactHandler
             return;
         }
 
-        if (!$this->mailer->isReadyForCurrentHost()) {
-            JsonResponse::error(
-                503,
-                'BREVO_API_KEY is not set on Render. Gmail SMTP is blocked on Render free tier.',
-                array_merge($this->mailer->getDiagnostics(), [
-                    'hint' => 'Create free account at brevo.com → verify sender email → add BREVO_API_KEY on Render → redeploy.',
-                ]),
-            );
-            return;
-        }
-
         $to = (string) ($this->config['contactRecipientEmail'] ?? 'developer.company2026@gmail.com');
         $body = "Portfolio contact form\n\n"
             . "Name: {$name}\n"
@@ -84,7 +101,7 @@ final class ContactHandler
             'replyName' => $name,
             'subject' => '[Portfolio] ' . $subject,
             'body' => $body,
-        ]);
+        ], $brevoApiKey);
 
         if (!$sent) {
             $detail = $this->mailer->getLastError();
@@ -114,24 +131,16 @@ final class ContactHandler
             return 'Could not send your message right now. Please try again later or email us directly.';
         }
 
-        if (str_contains($detail, 'authenticate') || str_contains($detail, 'Authentication')) {
-            return 'Email server login failed. Check Gmail App Password on Render (SMTP_PASSWORD).';
-        }
-
-        if (str_contains($detail, 'Could not connect to SMTP host') || str_contains($detail, 'Failed to connect')) {
-            return 'Render blocks Gmail SMTP. Add BREVO_API_KEY on Render (free at brevo.com).';
-        }
-
-        if (str_contains($detail, 'timed out') || str_contains($detail, 'Timeout')) {
-            return 'Email server timeout. On Render use BREVO_API_KEY instead of Gmail SMTP.';
-        }
-
         if (
             str_contains($detail, 'Key not found')
             || str_contains($detail, 'API key')
             || str_contains($detail, 'unauthorized')
         ) {
-            return 'Invalid BREVO_API_KEY on Render. Create a new API key in Brevo → SMTP & API.';
+            return 'Invalid BREVO_API_KEY. Use xkeysib- API key from Brevo → API keys (not xsmtpsib- SMTP key).';
+        }
+
+        if (str_contains($detail, 'sender') || str_contains($detail, 'Sender')) {
+            return 'Sender email not verified in Brevo. Verify developer.company2026@gmail.com under Senders.';
         }
 
         return $detail;
@@ -139,19 +148,15 @@ final class ContactHandler
 
     private function hintForMailError(string $detail): string
     {
-        if (str_contains($detail, 'Could not connect to SMTP host') || str_contains($detail, 'Failed to connect')) {
-            return 'Set BREVO_API_KEY on Render Environment Variables, then redeploy.';
+        if (str_contains($detail, 'Key not found') || str_contains($detail, 'API key')) {
+            return 'Regenerate BREVO_API_KEY in Brevo (must start with xkeysib-). Paste on Render and redeploy.';
         }
 
         if (str_contains($detail, 'sender') || str_contains($detail, 'Sender')) {
             return 'Verify sender email in Brevo dashboard (Senders → verify developer.company2026@gmail.com).';
         }
 
-        if (str_contains($detail, 'Key not found') || str_contains($detail, 'API key')) {
-            return 'Regenerate BREVO_API_KEY in Brevo (must start with xkeysib-). Paste on Render and redeploy.';
-        }
-
-        return 'Check Render logs and BREVO_API_KEY. Test GET /api/contact for diagnostics.';
+        return 'Check Render logs. Test GET /api/contact for diagnostics.';
     }
 
     private function isDebugRequest(): bool

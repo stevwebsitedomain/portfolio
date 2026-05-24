@@ -1,9 +1,8 @@
 {
     "name": "portfolio/backend-api",
-    "description": "Minimal portfolio API for Render (no Yii2)",
+    "description": "Minimal portfolio API for Render (Brevo email, no Yii2)",
     "require": {
-        "php": ">=8.2",
-        "phpmailer/phpmailer": "^6.9"
+        "php": ">=8.2"
     },
     "autoload": {
         "psr-4": {

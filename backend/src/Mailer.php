@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Portfolio\Api;
 
-use PHPMailer\PHPMailer\Exception as MailerException;
-use PHPMailer\PHPMailer\PHPMailer;
-
 final class Mailer
 {
     private string $lastError = '';
@@ -20,36 +17,12 @@ final class Mailer
 
     public function isConfigured(): bool
     {
-        return $this->getTransport() !== 'none';
+        return Env::getBrevoApiKey() !== '';
     }
 
     public function getTransport(): string
     {
-        $forced = strtolower(trim((string) ($this->config['mailTransport'] ?? '')));
-        if ($forced === 'brevo' && $this->hasBrevo()) {
-            return 'brevo';
-        }
-        if ($forced === 'resend' && $this->hasResend()) {
-            return 'resend';
-        }
-        if ($forced === 'smtp' && $this->resolveSmtp() !== null) {
-            return 'smtp';
-        }
-        if ($forced !== '' && $forced !== 'auto') {
-            return 'none';
-        }
-
-        if ($this->hasBrevo()) {
-            return 'brevo';
-        }
-        if ($this->hasResend()) {
-            return 'resend';
-        }
-        if ($this->resolveSmtp() !== null) {
-            return 'smtp';
-        }
-
-        return 'none';
+        return $this->isConfigured() ? 'brevo' : 'none';
     }
 
     public function getLastError(): string
@@ -66,17 +39,7 @@ final class Mailer
 
     public function isReadyForCurrentHost(): bool
     {
-        $transport = $this->getTransport();
-        if (self::isRenderHost()) {
-            return in_array($transport, ['brevo', 'resend'], true);
-        }
-
-        return $transport !== 'none';
-    }
-
-    public function hasSmtpConfigured(): bool
-    {
-        return $this->resolveSmtp() !== null;
+        return Env::getBrevoApiKey() !== '';
     }
 
     /**
@@ -88,47 +51,30 @@ final class Mailer
             'mailTransport' => $this->getTransport(),
             'mailReady' => $this->isReadyForCurrentHost(),
             'onRender' => self::isRenderHost(),
-            'brevoConfigured' => $this->hasBrevo(),
-            'resendConfigured' => $this->hasResend(),
-            'smtpConfigured' => $this->hasSmtpConfigured(),
+            'brevoConfigured' => Env::getBrevoApiKey() !== '',
         ];
     }
 
     /**
      * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
      */
-    public function send(array $message): bool
+    public function send(array $message, string $brevoApiKey): bool
     {
         $this->lastError = '';
+        $apiKey = trim($brevoApiKey);
 
-        return match ($this->getTransport()) {
-            'brevo' => $this->sendViaBrevo($message),
-            'resend' => $this->sendViaResend($message),
-            'smtp' => $this->sendViaSmtp($message),
-            default => $this->fail('Email not configured. Set BREVO_API_KEY on Render (see backend README).'),
-        };
-    }
-
-    /**
-     * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
-     */
-    private function sendViaBrevo(array $message): bool
-    {
-        $apiKey = $this->resolveBrevoApiKey();
         if ($apiKey === '') {
-            return $this->fail('BREVO_API_KEY not found in environment.');
+            return $this->fail('BREVO_API_KEY is missing');
         }
 
         if (str_starts_with($apiKey, 'xsmtpsib-')) {
             return $this->fail(
-                'Wrong Brevo key type: xsmtpsib- is an SMTP key. Create an API key (xkeysib-) in Brevo → SMTP & API → API keys.',
+                'Wrong Brevo key: xsmtpsib- is SMTP only. Use API key (xkeysib-) from Brevo → API keys.',
             );
         }
 
         if (!str_starts_with($apiKey, 'xkeysib-')) {
-            return $this->fail(
-                'BREVO_API_KEY must start with xkeysib- (API key). Do not use xsmtpsib- SMTP keys.',
-            );
+            return $this->fail('BREVO_API_KEY must start with xkeysib- (Brevo API key).');
         }
 
         $fromEmail = (string) ($this->config['senderEmail'] ?? '');
@@ -163,205 +109,6 @@ final class Mailer
     }
 
     /**
-     * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
-     */
-    private function sendViaResend(array $message): bool
-    {
-        $apiKey = $this->resolveResendApiKey();
-        if ($apiKey === '') {
-            return $this->fail('RESEND_API_KEY not found in environment.');
-        }
-        $fromEmail = (string) ($this->config['senderEmail'] ?? 'onboarding@resend.dev');
-        $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
-
-        $result = $this->httpPostJson(
-            'https://api.resend.com/emails',
-            [
-                'Authorization: Bearer ' . $apiKey,
-                'Content-Type: application/json',
-                'Accept: application/json',
-            ],
-            [
-                'from' => $fromName . ' <' . $fromEmail . '>',
-                'to' => [$message['to']],
-                'reply_to' => $message['replyEmail'],
-                'subject' => $message['subject'],
-                'text' => $message['body'],
-            ],
-        );
-
-        if ($result['status'] >= 200 && $result['status'] < 300) {
-            return true;
-        }
-
-        $detail = is_array($result['json']) ? (string) ($result['json']['message'] ?? '') : '';
-        if ($detail === '') {
-            $detail = trim($result['body']);
-        }
-
-        return $this->fail($detail !== '' ? $detail : 'Resend API request failed (HTTP ' . $result['status'] . ').');
-    }
-
-    /**
-     * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
-     */
-    private function sendViaSmtp(array $message): bool
-    {
-        $smtp = $this->resolveSmtp();
-        if ($smtp === null) {
-            return $this->fail('SMTP not configured (set SMTP_PASSWORD or MAILER_DSN).');
-        }
-
-        $mail = new PHPMailer(true);
-        try {
-            return $this->attemptSend($mail, $smtp, $message);
-        } catch (MailerException $e) {
-            if ($smtp['port'] === 587 && $smtp['host'] === 'smtp.gmail.com') {
-                try {
-                    $smtp465 = $smtp;
-                    $smtp465['port'] = 465;
-                    $smtp465['encryption'] = PHPMailer::ENCRYPTION_SMTPS;
-                    $mail = new PHPMailer(true);
-
-                    return $this->attemptSend($mail, $smtp465, $message);
-                } catch (MailerException $retry) {
-                    return $this->fail($retry->getMessage());
-                }
-            }
-
-            return $this->fail($e->getMessage());
-        }
-    }
-
-    /**
-     * @param array{host:string,port:int,user:string,pass:string,encryption:string} $smtp
-     * @param array{to:string,replyEmail:string,replyName:string,subject:string,body:string} $message
-     */
-    private function attemptSend(PHPMailer $mail, array $smtp, array $message): bool
-    {
-        $mail->isSMTP();
-        $mail->Host = $smtp['host'];
-        $mail->Port = $smtp['port'];
-        $mail->SMTPAuth = true;
-        $mail->Username = $smtp['user'];
-        $mail->Password = $smtp['pass'];
-        $mail->SMTPSecure = $smtp['encryption'];
-        $mail->CharSet = PHPMailer::CHARSET_UTF8;
-        $mail->Timeout = 12;
-        $mail->SMTPKeepAlive = false;
-        $mail->SMTPAutoTLS = true;
-
-        $fromEmail = (string) ($this->config['senderEmail'] ?? $smtp['user']);
-        $fromName = (string) ($this->config['senderName'] ?? 'Portfolio');
-
-        $mail->setFrom($fromEmail, $fromName);
-        $mail->addAddress($message['to']);
-        $mail->addReplyTo($message['replyEmail'], $message['replyName']);
-        $mail->Subject = $message['subject'];
-        $mail->Body = $message['body'];
-        $mail->isHTML(false);
-
-        return $mail->send();
-    }
-
-  /**
-     * @return array{host:string,port:int,user:string,pass:string,encryption:string}|null
-     */
-    private function resolveSmtp(): ?array
-    {
-        $smtp = $this->config['smtp'] ?? [];
-        if (is_array($smtp) && ($smtp['pass'] ?? '') !== '' && ($smtp['user'] ?? '') !== '') {
-            $encryption = strtolower((string) ($smtp['encryption'] ?? 'tls'));
-            $secure = $encryption === 'ssl'
-                ? PHPMailer::ENCRYPTION_SMTPS
-                : PHPMailer::ENCRYPTION_STARTTLS;
-
-            return [
-                'host' => (string) ($smtp['host'] ?: 'smtp.gmail.com'),
-                'port' => (int) ($smtp['port'] ?: 587),
-                'user' => (string) $smtp['user'],
-                'pass' => (string) $smtp['pass'],
-                'encryption' => $secure,
-            ];
-        }
-
-        $dsn = (string) ($this->config['mailerDsn'] ?? '');
-        if ($dsn !== '') {
-            return $this->parseDsn($dsn);
-        }
-
-        return null;
-    }
-
-    /**
-     * @return array{host:string,port:int,user:string,pass:string,encryption:string}|null
-     */
-    private function parseDsn(string $dsn): ?array
-    {
-        $parts = parse_url($dsn);
-        if ($parts === false || ($parts['scheme'] ?? '') !== 'smtp') {
-            return null;
-        }
-
-        $user = rawurldecode((string) ($parts['user'] ?? ''));
-        $pass = rawurldecode((string) ($parts['pass'] ?? ''));
-        if ($user === '' || $pass === '') {
-            return null;
-        }
-
-        $host = (string) ($parts['host'] ?? '');
-        if ($host === '' || $host === 'default') {
-            $host = 'smtp.gmail.com';
-        }
-
-        $port = (int) ($parts['port'] ?? 587);
-
-        return [
-            'host' => $host,
-            'port' => $port,
-            'user' => $user,
-            'pass' => $pass,
-            'encryption' => $port === 465
-                ? PHPMailer::ENCRYPTION_SMTPS
-                : PHPMailer::ENCRYPTION_STARTTLS,
-        ];
-    }
-
-    private function hasBrevo(): bool
-    {
-        return $this->resolveBrevoApiKey() !== '';
-    }
-
-    private function hasResend(): bool
-    {
-        return $this->resolveResendApiKey() !== '';
-    }
-
-    private function resolveBrevoApiKey(): string
-    {
-        Env::bootstrap();
-
-        $key = Env::get('BREVO_API_KEY');
-        if ($key !== '') {
-            return $key;
-        }
-
-        return trim((string) ($this->config['brevoApiKey'] ?? ''));
-    }
-
-    private function resolveResendApiKey(): string
-    {
-        Env::bootstrap();
-
-        $key = Env::get('RESEND_API_KEY');
-        if ($key !== '') {
-            return $key;
-        }
-
-        return trim((string) ($this->config['resendApiKey'] ?? ''));
-    }
-
-  /**
      * @param array<int, string> $headers
      * @param array<string, mixed> $body
      * @return array{status:int,body:string,json:mixed}
