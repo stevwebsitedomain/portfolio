@@ -100,7 +100,7 @@
       var controller = new AbortController();
       var timeoutId = window.setTimeout(function () {
         controller.abort();
-      }, 25000);
+      }, 60000);
 
       fetch(url, {
         method: 'POST',
@@ -158,7 +158,7 @@
             setError(errorEl, baseMsg + extra);
           });
         })
-        .catch(function (err) {
+        .catch(function (error) {
           window.clearTimeout(timeoutId);
           if (loading) loading.classList.remove('d-block');
           if (submitBtn) submitBtn.disabled = false;
@@ -167,13 +167,15 @@
               ? ' Open the site via http://localhost or Vercel, not as a file.'
               : '';
           var msg =
-            err && err.name === 'AbortError'
-              ? 'Request timed out. Render/Gmail SMTP is slow or blocked. Try again in 30 seconds.'
-              : 'Cannot reach API at ' + url + '. Wait for Render to wake up, then try again.' + hint;
+            error && error.name === 'AbortError'
+              ? 'Request timeout. Server took too long.'
+              : (error && error.message) || ('Cannot reach API at ' + url + '. Wait for Render to wake up, then try again.' + hint);
+
+          console.error(error);
+          window.alert(msg);
 
           if (!debug) {
             setError(errorEl, msg);
-            console.error('[Contact form]', err);
             return;
           }
 
@@ -182,9 +184,8 @@
               '\n\n[Debug]\n' +
               'POST: ' + url + '\n' +
               'mailConfigured: ' + String(mailConfigured) + '\n' +
-              'error: ' + String((err && err.message) || err);
+              'error: ' + String((error && error.message) || error);
             setError(errorEl, msg + extra);
-            console.error('[Contact form]', err);
           });
         });
     });
