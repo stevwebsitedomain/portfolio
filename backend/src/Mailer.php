@@ -73,36 +73,57 @@ final class Mailer
         $fromName = (string) ($this->config['senderName'] ?? 'Steven Portfolio');
         $smtpUser = (string) ($this->config['smtpUser'] ?? $fromEmail);
         $smtpHost = (string) ($this->config['smtpHost'] ?? 'smtp.gmail.com');
-        $smtpPort = (int) ($this->config['smtpPort'] ?? 587);
+        $portsToTry = [
+            [
+                'port' => 587,
+                'encryption' => PHPMailer::ENCRYPTION_STARTTLS,
+                'label' => '587/TLS',
+            ],
+            [
+                'port' => 465,
+                'encryption' => PHPMailer::ENCRYPTION_SMTPS,
+                'label' => '465/SSL',
+            ],
+        ];
 
-        $mail = new PHPMailer(true);
+        $attemptErrors = [];
 
-        try {
-            $mail->isSMTP();
-            $mail->Host = $smtpHost;
-            $mail->SMTPAuth = true;
-            $mail->Username = $smtpUser;
-            $mail->Password = $password;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = $smtpPort;
-            $mail->CharSet = PHPMailer::CHARSET_UTF8;
-            $mail->Timeout = 20;
+        foreach ($portsToTry as $attempt) {
+            $mail = new PHPMailer(true);
 
-            $mail->setFrom($fromEmail, $fromName);
-            $mail->addAddress($message['to']);
-            $mail->addReplyTo($message['replyEmail'], $message['replyName']);
-            $mail->Subject = $message['subject'];
-            $mail->Body = $message['body'];
-            $mail->isHTML(false);
+            try {
+                $mail->isSMTP();
+                $mail->Host = $smtpHost;
+                $mail->SMTPAuth = true;
+                $mail->Username = $smtpUser;
+                $mail->Password = $password;
+                $mail->SMTPSecure = $attempt['encryption'];
+                $mail->Port = $attempt['port'];
+                $mail->CharSet = PHPMailer::CHARSET_UTF8;
+                $mail->Timeout = 60;
 
-            $mail->send();
+                $mail->setFrom($fromEmail, $fromName);
+                $mail->addAddress($message['to']);
+                $mail->addReplyTo($message['replyEmail'], $message['replyName']);
+                $mail->Subject = $message['subject'];
+                $mail->Body = $message['body'];
+                $mail->isHTML(false);
 
-            return true;
-        } catch (MailerException $e) {
-            $this->lastError = $mail->ErrorInfo !== '' ? $mail->ErrorInfo : $e->getMessage();
-            error_log('[Portfolio Mailer] ' . $this->lastError);
+                $mail->send();
 
-            return false;
+                return true;
+            } catch (MailerException $e) {
+                $error = $mail->ErrorInfo !== '' ? $mail->ErrorInfo : $e->getMessage();
+                $attemptErrors[] = $attempt['label'] . ': ' . $error;
+                error_log('[Portfolio Mailer] Gmail SMTP ' . $attempt['label'] . ' failed: ' . $error);
+            }
         }
+
+        $this->lastError = 'Gmail SMTP failed on 587/TLS and 465/SSL. '
+            . implode(' | ', $attemptErrors)
+            . ' If both ports time out on Render, Render is likely blocking outbound Gmail SMTP.';
+        error_log('[Portfolio Mailer] ' . $this->lastError);
+
+        return false;
     }
 }

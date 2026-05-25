@@ -9,7 +9,7 @@ Two folders only:
 
 ## Render backend
 
-- URL: https://portfolio-mbvg.onrender.com
+- URL: https://portfolio-ar0s.onrender.com
 - Endpoints: `GET /api/portfolio`, `POST /api/contact`
 - Env: `MAILER_DSN`, `SENDER_EMAIL`, `SENDER_NAME`, `CONTACT_EMAIL`
 

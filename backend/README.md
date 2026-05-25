@@ -22,8 +22,8 @@ Minimal **PHP API** — contact form email via **Gmail SMTP** (PHPMailer).
 ## SMTP settings (built-in)
 
 - Host: `smtp.gmail.com`
-- Port: `587`
-- Encryption: TLS (STARTTLS)
+- First try: `587` with TLS (STARTTLS)
+- Fallback: `465` with SSL (SMTPS)
 - Auth: enabled
 
 ## Endpoints
@@ -42,4 +42,4 @@ set GMAIL_APP_PASSWORD=your_app_password
 php -S localhost:8080 -t public
 ```
 
-**Note:** Render free tier may block outbound SMTP (ports 587/465). If SMTP fails with connection timeout, use a host that allows SMTP or a transactional email API.
+**Note:** If both `587/TLS` and `465/SSL` fail with timeout on Render, Render is likely blocking outbound Gmail SMTP. In that case switch back to an API mail provider.
