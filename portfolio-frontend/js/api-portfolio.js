@@ -6,7 +6,7 @@
   'use strict';
 
   var cfg = window.PORTFOLIO_CONFIG || {};
-  var base = (cfg.apiBaseUrl || 'https://portfolio-mbvg.onrender.com').replace(/\/$/, '');
+  var base = (cfg.apiBaseUrl || 'https://portfolio-ar0s.onrender.com').replace(/\/$/, '');
   var path = (cfg.endpoints && cfg.endpoints.portfolio) || '/api/portfolio';
   var API_URL =
     document.documentElement.getAttribute('data-api-url') || base + path;

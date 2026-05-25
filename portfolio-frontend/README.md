@@ -42,7 +42,7 @@ Backend base URL is set in **`js/config.js`**:
 
 ```javascript
 window.PORTFOLIO_CONFIG = {
-  apiBaseUrl: 'https://portfolio-mbvg.onrender.com',
+  apiBaseUrl: 'https://portfolio-ar0s.onrender.com',
   endpoints: {
     portfolio: '/api/portfolio',
     requestPasswordReset: '/api/applicant/request-password-reset',

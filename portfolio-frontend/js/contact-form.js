@@ -17,14 +17,14 @@
 
   function apiUrl() {
     var cfg = window.PORTFOLIO_CONFIG || {};
-    var base = (cfg.apiBaseUrl || 'https://portfolio-mbvg.onrender.com').replace(/\/$/, '');
+    var base = (cfg.apiBaseUrl || 'https://portfolio-ar0s.onrender.com').replace(/\/$/, '');
     var path = (cfg.endpoints && cfg.endpoints.contact) || '/api/contact';
     return base + path;
   }
 
   function apiRootUrl() {
     var cfg = window.PORTFOLIO_CONFIG || {};
-    return (cfg.apiBaseUrl || 'https://portfolio-mbvg.onrender.com').replace(/\/$/, '') + '/';
+    return (cfg.apiBaseUrl || 'https://portfolio-ar0s.onrender.com').replace(/\/$/, '') + '/';
   }
 
   function parseResponse(response) {
