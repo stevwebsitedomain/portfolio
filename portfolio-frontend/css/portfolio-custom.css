@@ -21,14 +21,14 @@
   background: color-mix(in srgb, var(--accent-color), transparent 15%);
 }
 
-/* Hero — circular profile photo (right side) */
+/* Hero — square profile photo (right side) */
 .hero .hero-profile {
   position: relative;
   z-index: 3;
   flex-shrink: 0;
   width: 280px;
   height: 280px;
-  border-radius: 50%;
+  border-radius: 12px;
   overflow: hidden;
   border: 5px solid color-mix(in srgb, var(--contrast-color), transparent 20%);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
