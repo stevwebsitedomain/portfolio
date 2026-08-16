@@ -62,7 +62,7 @@
     {
       "name": "White Lake High School",
       "year": "2026",
-      "url": null,
+      "url": "https://whitelakeschoolportal.co.tz",
       "description": "Student results management system for teachers and parents.",
       "tags": ["Results System", "Education", "School Management", "Web App"]
     },
@@ -72,6 +72,13 @@
       "url": null,
       "description": "Web-based institutional management system.",
       "tags": ["Management System", "Web Development", "Database", "Institution"]
+    },
+    {
+      "name": "AGRIDATA SMART",
+      "year": "2026",
+      "url": "https://agridata.co.tz",
+      "description": "Data-driven smart farming platform for crop monitoring, farm records, weather insights, and agricultural analytics.",
+      "tags": ["Smart Farming", "Agriculture", "Data Analytics", "AgriTech"]
     },
     {
       "name": "Portfolio Website",
