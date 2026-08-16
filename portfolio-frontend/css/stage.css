@@ -15,6 +15,86 @@
   font-family: "Poppins", "Open Sans", sans-serif;
   color: var(--bk-ink);
   overflow: hidden;
+  position: relative;
+}
+
+.bk-season {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  overflow: hidden;
+}
+
+.bk-season-badge {
+  position: absolute;
+  top: 4.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(107, 70, 193, 0.25);
+  color: var(--bk-purple);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.08);
+  z-index: 6;
+  white-space: nowrap;
+}
+
+.bk-season-icon {
+  position: absolute;
+  opacity: 0.82;
+  animation: bkSeasonFloat 5.5s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
+  user-select: none;
+}
+
+@keyframes bkSeasonFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(8deg);
+  }
+}
+
+.bk-hero.season-christmas {
+  background: linear-gradient(180deg, #fff7f7 0%, #ffffff 45%, #f0fff4 100%);
+}
+
+.bk-hero.season-eid {
+  background: linear-gradient(180deg, #f7fafc 0%, #ffffff 50%, #faf5ff 100%);
+}
+
+.bk-hero.season-nanenane,
+.bk-hero.season-sabasaba {
+  background: linear-gradient(180deg, #fffff0 0%, #ffffff 50%, #f0fff4 100%);
+}
+
+.bk-hero.season-independence,
+.bk-hero.season-revolution,
+.bk-hero.season-union,
+.bk-hero.season-karume {
+  background: linear-gradient(180deg, #f0fff4 0%, #ffffff 55%, #fffff0 100%);
+}
+
+.bk-hero.season-newyear {
+  background: linear-gradient(180deg, #faf5ff 0%, #ffffff 50%, #ebf8ff 100%);
+}
+
+.bk-hero.season-workers {
+  background: linear-gradient(180deg, #ebf8ff 0%, #ffffff 55%, #fffaf0 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bk-season-icon {
+    animation: none;
+  }
 }
 
 .bk-nav {
@@ -182,6 +262,8 @@ body.nav-open .bk-burger span:nth-child(3) {
   grid-template-columns: 1fr;
   gap: 2rem;
   align-items: center;
+  position: relative;
+  z-index: 8;
 }
 
 .bk-hey {

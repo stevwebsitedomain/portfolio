@@ -391,3 +391,136 @@
 .footer-org-marquee .org-marquee-track img {
   height: 60px;
 }
+
+/* Skills pie chart */
+.skills-chart-wrap {
+  background: var(--surface-color);
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.06);
+  padding: 20px 16px 16px;
+  text-align: center;
+}
+
+.skills-chart-wrap canvas {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.skills-chart-legend {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 10px;
+  text-align: left;
+}
+
+.skills-chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--default-color);
+  min-width: 0;
+}
+
+.skills-chart-legend .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skills-chart-legend .lbl {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.skills-chart-legend .val {
+  color: color-mix(in srgb, var(--default-color), transparent 35%);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+/* Project card hover — features + view */
+.work-done .org-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.work-done .org-hover {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--heading-color), transparent 8%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+  z-index: 5;
+  text-align: center;
+}
+
+.work-done .org-card:hover .org-hover,
+.work-done .org-card:focus-within .org-hover {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.work-done .org-hover-title {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 0.65rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+}
+
+.work-done .org-hover-list {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.work-done .org-hover-list li {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.work-done .org-hover-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--heading-color);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 999px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.work-done .org-hover-btn:hover {
+  background: var(--accent-color);
+  color: #fff;
+  transform: translateY(-1px);
+}
