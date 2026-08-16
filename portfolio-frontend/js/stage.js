@@ -54,7 +54,7 @@
   var cloudL = document.querySelector(".serene-cloud-l");
   var cloudR = document.querySelector(".serene-cloud-r");
 
-  var rainbowY = 120;
+  var rainbowY = -8;
   var cloudLX = -200;
   var cloudRX = 200;
   var cloudY = 0;
@@ -66,7 +66,7 @@
     var windowHeight = window.innerHeight;
     var progress = clamp((windowHeight - rect.top) / (windowHeight + rect.height), 0, 1);
 
-    var rainbowTarget = 120 + ( -160 - 120) * progress;
+    var rainbowTarget = -8 + progress * -28;
     rainbowY = lerp(rainbowY, rainbowTarget, 0.06);
 
     var inView = progress > 0.12 && progress < 0.92;
