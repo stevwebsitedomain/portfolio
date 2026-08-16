@@ -310,6 +310,13 @@ body.nav-open .bk-burger span:nth-child(3) {
   margin: 0 0 1.25rem;
 }
 
+.bk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .bk-cta {
   display: inline-flex;
   align-items: center;
@@ -323,13 +330,25 @@ body.nav-open .bk-burger span:nth-child(3) {
   padding: 0.7rem 1.35rem;
   border-radius: 8px;
   box-shadow: 0 8px 18px rgba(107, 70, 193, 0.28);
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .bk-cta:hover {
   color: #fff;
   background: var(--bk-purple-deep);
   transform: translateY(-1px);
+}
+
+.bk-cta-outline {
+  background: transparent;
+  color: var(--bk-purple);
+  border: 1.5px solid var(--bk-purple);
+  box-shadow: none;
+}
+
+.bk-cta-outline:hover {
+  background: var(--bk-purple);
+  color: #fff;
 }
 
 .bk-stats {

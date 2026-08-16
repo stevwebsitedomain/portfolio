@@ -212,13 +212,44 @@
   padding: 20px 18px;
   height: 100%;
   box-shadow: 0 0 18px rgba(0, 0, 0, 0.06);
-  transition: 0.3s;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
   display: flex;
   flex-direction: column;
+  animation: orgCardFloat 4.8s ease-in-out infinite;
+}
+
+.work-done .col-lg-4:nth-child(2n) .org-card {
+  animation-delay: 0.6s;
+}
+
+.work-done .col-lg-4:nth-child(3n) .org-card {
+  animation-delay: 1.2s;
+}
+
+.work-done .col-lg-4:nth-child(4n) .org-card {
+  animation-delay: 1.8s;
+}
+
+@keyframes orgCardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
 }
 
 .work-done .org-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-12px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-done .org-card {
+    animation: none;
+  }
 }
 
 .work-done .org-card .org-logo {
