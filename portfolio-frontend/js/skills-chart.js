@@ -1,110 +1,140 @@
 (function () {
   "use strict";
 
-  var COLORS = [
-    "#e84545",
-    "#6b46c1",
-    "#3182ce",
-    "#38a169",
-    "#d69e2e",
-    "#dd6b20",
-    "#319795",
-    "#805ad5",
-    "#e53e3e",
-    "#2b6cb0",
-    "#c05621",
+  var chart;
+  var SKILLS = [
+    { name: "HTML", value: 95 },
+    { name: "CSS", value: 90 },
+    { name: "JavaScript", value: 85 },
+    { name: "Bootstrap", value: 90 },
+    { name: "PHP", value: 88 },
+    { name: "Yii2", value: 82 },
+    { name: "MySQL", value: 85 },
+    { name: "Git", value: 80 },
+    { name: "Cloud", value: 78 },
+    { name: "API", value: 80 },
+    { name: "Responsive", value: 92 },
   ];
 
-  function readSkills() {
-    return Array.prototype.slice
-      .call(document.querySelectorAll("#skills .skill-item[data-skill]"))
-      .map(function (el) {
-        return {
-          label: el.getAttribute("data-skill"),
-          value: Number(el.getAttribute("data-value")) || 0,
-        };
-      })
-      .filter(function (s) {
-        return s.label && s.value > 0;
-      });
-  }
-
-  function drawPie(canvas, skills) {
-    if (!canvas || !skills.length) return;
-    var ctx = canvas.getContext("2d");
-    var dpr = window.devicePixelRatio || 1;
-    var size = Math.min(320, canvas.parentElement ? canvas.parentElement.clientWidth - 16 : 320);
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
-    canvas.style.width = size + "px";
-    canvas.style.height = size + "px";
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    var total = skills.reduce(function (sum, s) {
-      return sum + s.value;
-    }, 0);
-    var cx = size / 2;
-    var cy = size / 2;
-    var radius = size * 0.38;
-    var start = -Math.PI / 2;
-
-    ctx.clearRect(0, 0, size, size);
-
-    skills.forEach(function (skill, i) {
-      var slice = (skill.value / total) * Math.PI * 2;
-      var end = start + slice;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, radius, start, end);
-      ctx.closePath();
-      ctx.fillStyle = COLORS[i % COLORS.length];
-      ctx.fill();
-      start = end;
+  function buildWaterfallOption() {
+    var labels = SKILLS.map(function (s) {
+      return s.name;
+    });
+    var values = SKILLS.map(function (s) {
+      return s.value;
+    });
+    // Transparent helper series (ECharts waterfall2 pattern).
+    // All zeros = bars rise from the baseline like proficiency levels.
+    var placeholder = values.map(function () {
+      return 0;
     });
 
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius * 0.52, 0, Math.PI * 2);
-    ctx.fillStyle = "#fff";
-    ctx.fill();
-
-    ctx.fillStyle = "#32353a";
-    ctx.font = "600 13px Poppins, Open Sans, sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("Skills", cx, cy - 8);
-    ctx.fillStyle = "#e84545";
-    ctx.font = "700 18px Montserrat, sans-serif";
-    ctx.fillText(skills.length + "", cx, cy + 12);
-  }
-
-  function renderLegend(el, skills, total) {
-    if (!el) return;
-    el.innerHTML = skills
-      .map(function (skill, i) {
-        var pct = Math.round((skill.value / total) * 100);
-        return (
-          '<li><span class="dot" style="background:' +
-          COLORS[i % COLORS.length] +
-          '"></span><span class="lbl">' +
-          skill.label +
-          '</span><span class="val">' +
-          skill.value +
-          "% · " +
-          pct +
-          "%</span></li>"
-        );
-      })
-      .join("");
+    return {
+      title: {
+        text: "Skills Analysis",
+        subtext: "Proficiency by technology (out of 100)",
+        left: "center",
+        textStyle: {
+          fontFamily: "Montserrat, Poppins, sans-serif",
+          fontWeight: 700,
+          fontSize: 16,
+          color: "#32353a",
+        },
+        subtextStyle: {
+          fontFamily: "Poppins, Open Sans, sans-serif",
+          fontSize: 12,
+          color: "#6b7280",
+        },
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: { type: "shadow" },
+        formatter: function (params) {
+          var tar = params[1] || params[0];
+          if (!tar) return "";
+          return tar.name + "<br/>" + tar.seriesName + " : " + tar.value + "%";
+        },
+      },
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "8%",
+        top: 70,
+        containLabel: true,
+      },
+      xAxis: {
+        type: "category",
+        splitLine: { show: false },
+        data: labels,
+        axisLabel: {
+          interval: 0,
+          rotate: 28,
+          fontSize: 10,
+          color: "#4b5563",
+        },
+      },
+      yAxis: {
+        type: "value",
+        max: 100,
+        axisLabel: {
+          formatter: "{value}%",
+          color: "#6b7280",
+        },
+        splitLine: {
+          lineStyle: { color: "rgba(0,0,0,0.06)" },
+        },
+      },
+      series: [
+        {
+          name: "Placeholder",
+          type: "bar",
+          stack: "Total",
+          itemStyle: {
+            borderColor: "transparent",
+            color: "transparent",
+          },
+          emphasis: {
+            itemStyle: {
+              borderColor: "transparent",
+              color: "transparent",
+            },
+          },
+          data: placeholder,
+        },
+        {
+          name: "Proficiency",
+          type: "bar",
+          stack: "Total",
+          label: {
+            show: true,
+            position: "inside",
+            formatter: "{c}%",
+            color: "#fff",
+            fontSize: 10,
+            fontWeight: 600,
+          },
+          itemStyle: {
+            color: "#e84545",
+            borderRadius: [4, 4, 0, 0],
+          },
+          data: values,
+        },
+      ],
+    };
   }
 
   function initChart() {
-    var skills = readSkills();
-    if (!skills.length) return;
-    var total = skills.reduce(function (sum, s) {
-      return sum + s.value;
-    }, 0);
-    drawPie(document.getElementById("skillsPieChart"), skills);
-    renderLegend(document.getElementById("skillsPieLegend"), skills, total);
+    var el = document.getElementById("skillsWaterfallChart");
+    if (!el || typeof echarts === "undefined") return;
+
+    if (!chart) {
+      chart = echarts.init(el, null, {
+        renderer: "canvas",
+        useDirtyRect: false,
+      });
+    }
+    chart.setOption(buildWaterfallOption());
+    chart.resize();
   }
 
   function enhanceProjectCards() {
@@ -147,6 +177,6 @@
   }
 
   window.addEventListener("resize", function () {
-    initChart();
+    if (chart) chart.resize();
   });
 })();

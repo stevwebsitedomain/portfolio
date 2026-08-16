@@ -94,7 +94,26 @@
   --bs-gutter-y: 1rem;
 }
 
-/* Skills progress bars */
+/* Skills ECharts waterfall */
+.skills-echarts-wrap {
+  background: var(--surface-color);
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.06);
+  padding: 12px 8px 8px;
+}
+
+.skills-echarts {
+  width: 100%;
+  height: 420px;
+}
+
+@media (max-width: 767.98px) {
+  .skills-echarts {
+    height: 360px;
+  }
+}
+
+/* Skills progress bars (legacy — unused) */
 .skills .skill-item {
   margin-bottom: 22px;
 }
