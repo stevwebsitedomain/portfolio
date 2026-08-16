@@ -1,10 +1,11 @@
 (function () {
   "use strict";
 
-  var burger = document.querySelector(".jw-burger");
+  var burger = document.querySelector(".bk-burger");
   var menu = document.getElementById("menu");
 
   function closeMenu() {
+    document.body.classList.remove("nav-open");
     if (menu) menu.hidden = true;
     if (burger) {
       burger.setAttribute("aria-label", "Open menu");
@@ -13,6 +14,7 @@
   }
 
   function openMenu() {
+    document.body.classList.add("nav-open");
     if (menu) menu.hidden = false;
     if (burger) {
       burger.setAttribute("aria-label", "Close menu");
@@ -22,7 +24,7 @@
 
   if (burger) {
     burger.addEventListener("click", function () {
-      if (menu && !menu.hidden) closeMenu();
+      if (document.body.classList.contains("nav-open")) closeMenu();
       else openMenu();
     });
   }
