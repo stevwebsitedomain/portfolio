@@ -92,9 +92,9 @@
 
 .bk-logo-img {
   display: block;
-  height: 38px;
+  height: clamp(48px, 10vw, 56px);
   width: auto;
-  max-width: min(220px, 52vw);
+  max-width: min(300px, 72vw);
   object-fit: contain;
 }
 
@@ -398,6 +398,11 @@ body.nav-open .bk-burger span:nth-child(3) {
 @media (min-width: 992px) {
   .bk-nav {
     padding: 1.5rem 1.5rem 0;
+  }
+
+  .bk-logo-img {
+    height: 64px;
+    max-width: 360px;
   }
 
   .bk-links,
