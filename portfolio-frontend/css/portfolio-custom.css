@@ -260,8 +260,8 @@
 }
 
 .work-done .org-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.06);
   animation-play-state: paused;
 }
 
@@ -508,20 +508,19 @@
 .work-done .org-hover {
   position: absolute;
   inset: 0;
-  background: rgba(50, 53, 58, 0.42);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--heading-color);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(8px);
   transition: opacity 0.28s ease, transform 0.28s ease;
   z-index: 5;
   text-align: center;
+  box-shadow: none;
 }
 
 .work-done .org-card:hover .org-hover,
@@ -535,9 +534,8 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin: 0 0 0.65rem;
-  color: #fff;
+  color: var(--accent-color);
   font-weight: 700;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 
 .work-done .org-hover-list {
@@ -554,9 +552,9 @@
   font-size: 12px;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  color: #32353a;
+  background: color-mix(in srgb, var(--accent-color), transparent 88%);
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 75%);
+  color: var(--accent-color);
   font-weight: 600;
 }
 
@@ -564,14 +562,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  color: var(--heading-color);
+  background: var(--accent-color);
+  color: #fff;
   text-decoration: none;
   font-weight: 700;
   font-size: 0.78rem;
   padding: 0.55rem 1.15rem;
   border-radius: 999px;
   transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow: none;
 }
 
 .work-done .org-hover-btn:hover {
