@@ -173,37 +173,8 @@
     chart.resize();
   }
 
-  function enhanceProjectCards() {
-    document.querySelectorAll(".work-done .org-card").forEach(function (card) {
-      if (card.querySelector(".org-hover")) return;
-      var tags = Array.prototype.slice.call(card.querySelectorAll(".org-tags span")).map(function (s) {
-        return s.textContent.trim();
-      });
-      var link = card.querySelector(".btn-live a");
-      var href = link ? link.getAttribute("href") : "#";
-      var blank = href && href.indexOf("http") === 0;
-
-      var hover = document.createElement("div");
-      hover.className = "org-hover";
-      hover.innerHTML =
-        '<p class="org-hover-title">Features</p><ul class="org-hover-list">' +
-        tags
-          .map(function (t) {
-            return "<li>" + t + "</li>";
-          })
-          .join("") +
-        '</ul><a class="org-hover-btn" href="' +
-        href +
-        '"' +
-        (blank ? ' target="_blank" rel="noopener"' : "") +
-        ">View project</a>";
-      card.appendChild(hover);
-    });
-  }
-
   function boot() {
     initChart();
-    enhanceProjectCards();
   }
 
   if (document.readyState === "loading") {
