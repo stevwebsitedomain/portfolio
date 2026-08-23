@@ -232,24 +232,9 @@
   height: 100%;
   box-shadow: none;
   border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
-  transition: border-color 0.3s ease;
   display: flex;
   flex-direction: column;
   animation: orgCardFloat 4.8s ease-in-out infinite;
-}
-
-.work-done .org-card > :not(.btn-live) {
-  transition: opacity 0.32s ease;
-}
-
-.work-done .org-card:hover > :not(.btn-live) {
-  opacity: 0.18;
-}
-
-.work-done .org-card:hover {
-  box-shadow: none;
-  transform: none;
-  animation-play-state: paused;
 }
 
 .work-done .col-lg-4:nth-child(2n) .org-card {
@@ -341,15 +326,9 @@
   padding: 8px 18px;
   background: transparent;
   color: var(--accent-color);
-  border: 1.5px solid transparent;
+  border: 1.5px solid var(--accent-color);
   border-radius: 6px;
-  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
-}
-
-.work-done .org-card:hover .btn-live .btn-get-started {
-  border-color: var(--accent-color);
-  background: transparent;
-  color: var(--accent-color);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .work-done .org-card .btn-live .btn-get-started:hover {
