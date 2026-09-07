@@ -8,16 +8,21 @@
 
     const main = document.querySelector("main.main");
     if (!main) return;
+    main.id = main.id || "main-content";
 
-    const header = document.createElement("div");
+    const header = document.createElement("header");
     header.className = "moh-site-header";
     header.innerHTML = `
-      <a class="moh-skip-link" href="#main-content">Ruka kwenda kwenye maudhui</a>
+      <a class="moh-skip" href="#main-content">Ruka kwenda kwenye maudhui</a>
+
       <div class="moh-utility">
-        <div class="container moh-utility-inner">
-          <span><i class="bi bi-geo-alt-fill" aria-hidden="true"></i> Tanzania</span>
-          <div class="moh-utility-actions">
+        <div class="moh-container moh-utility-inner">
+          <div class="moh-utility-links" aria-label="Quick links">
+            <a href="#contact"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i> Tanzania</a>
+            <a href="#projects">Projects</a>
             <a href="#contact">Wasiliana nasi</a>
+          </div>
+          <div class="moh-tools">
             <button type="button" class="moh-text-size" aria-label="Badilisha ukubwa wa maandishi">A<sup>+</sup></button>
             <button type="button" class="moh-fullscreen" aria-label="Fungua skrini nzima"><i class="bi bi-arrows-fullscreen" aria-hidden="true"></i></button>
           </div>
@@ -25,100 +30,103 @@
       </div>
 
       <div class="moh-identity">
-        <div class="container moh-identity-inner">
+        <div class="moh-container moh-identity-inner">
+          <p class="moh-identity-note">United Republic<br>of Tanzania</p>
           <a class="moh-brand" href="#home" aria-label="Digital Matrix Technology - Mwanzo">
             <img src="images/DIGITAL MATRIX TECHNOLOGY.png" alt="Digital Matrix Technology">
-            <span>
-              <small>United Republic of Tanzania</small>
-              <strong>Digital Matrix Technology</strong>
-              <em>Software Developer Portfolio</em>
+            <span class="moh-brand-copy">
+              <small class="moh-brand-kicker">Professional Portfolio</small>
+              <strong class="moh-brand-title">Digital Matrix Technology</strong>
+              <em class="moh-brand-subtitle">Software Developer • Tanzania</em>
             </span>
           </a>
-          <div class="moh-identity-contact">
-            <span><i class="bi bi-envelope-fill" aria-hidden="true"></i> info@digitalmatrixtechnology.com</span>
-            <a href="#contact"><i class="bi bi-chat-square-text-fill" aria-hidden="true"></i> Pata huduma</a>
-          </div>
+          <p class="moh-identity-note">Websites<br>Management Systems</p>
         </div>
       </div>
 
-      <nav class="moh-navbar" aria-label="Main navigation">
-        <div class="container moh-navbar-inner">
-          <button class="moh-nav-toggle" type="button" aria-expanded="false" aria-controls="moh-nav-links">
-            <i class="bi bi-list" aria-hidden="true"></i><span>Menu</span>
-          </button>
-          <div id="moh-nav-links" class="moh-nav-links">
-            <a class="active" href="#home">Home</a>
-            <a href="#profile">Profile</a>
-            <a href="#skills">Skills</a>
-            <a href="#qualifications">Qualifications</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact">Contact</a>
+      <nav class="moh-main-nav" aria-label="Main navigation">
+        <div class="moh-container moh-nav-inner">
+          <ul id="moh-nav-links" class="moh-nav-links">
+            <li><a class="active" href="#home">Home</a></li>
+            <li><a href="#profile">Profile</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#qualifications">Qualifications</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <div class="moh-nav-actions">
+            <button class="moh-nav-icon moh-search-toggle" type="button" aria-label="Tafuta kwenye tovuti">
+              <i class="bi bi-search" aria-hidden="true"></i>
+            </button>
+            <button class="moh-burger" type="button" aria-expanded="false" aria-controls="moh-nav-links" aria-label="Fungua menu">
+              <i class="bi bi-list" aria-hidden="true"></i>
+            </button>
           </div>
-          <button class="moh-search-toggle" type="button" aria-label="Tafuta kwenye tovuti">
-            <i class="bi bi-search" aria-hidden="true"></i>
-          </button>
         </div>
       </nav>
+
       <button class="moh-nav-backdrop" type="button" aria-label="Funga menu"></button>
 
-      <div class="moh-search-overlay" aria-hidden="true">
-        <div class="container moh-search-panel" role="dialog" aria-modal="true" aria-labelledby="moh-search-title">
-          <button class="moh-search-close" type="button" aria-label="Funga utafutaji"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
-          <h2 id="moh-search-title">Tafuta kwenye portfolio</h2>
-          <form class="moh-search-form">
-            <label class="visually-hidden" for="moh-search-input">Neno la kutafuta</label>
+      <div class="moh-search" aria-hidden="true">
+        <button class="moh-search-close" type="button" aria-label="Funga utafutaji"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+        <form class="moh-search-form" role="search">
+          <label for="moh-search-input">Tafuta kwenye portfolio</label>
+          <div class="moh-search-row">
             <input id="moh-search-input" type="search" placeholder="Mfano: website, database, project..." required>
-            <button type="submit">Tafuta</button>
-          </form>
+            <button type="submit" aria-label="Tafuta"><i class="bi bi-search" aria-hidden="true"></i></button>
+          </div>
           <p class="moh-search-feedback" aria-live="polite"></p>
-        </div>
+        </form>
       </div>
     `;
 
-    main.id = main.id || "main-content";
     document.body.insertBefore(header, main);
 
-    const navToggle = header.querySelector(".moh-nav-toggle");
+    const navToggle = header.querySelector(".moh-burger");
     const navBackdrop = header.querySelector(".moh-nav-backdrop");
     const navLinks = [...header.querySelectorAll(".moh-nav-links a")];
 
     const closeNavigation = () => {
-      document.body.classList.remove("moh-nav-open");
+      document.body.classList.remove("nav-open");
       navToggle?.setAttribute("aria-expanded", "false");
+      navToggle?.setAttribute("aria-label", "Fungua menu");
     };
 
     navToggle?.addEventListener("click", () => {
-      const open = document.body.classList.toggle("moh-nav-open");
+      const open = document.body.classList.toggle("nav-open");
       navToggle.setAttribute("aria-expanded", String(open));
+      navToggle.setAttribute("aria-label", open ? "Funga menu" : "Fungua menu");
     });
     navBackdrop?.addEventListener("click", closeNavigation);
     navLinks.forEach((link) => link.addEventListener("click", closeNavigation));
 
-    const searchOverlay = header.querySelector(".moh-search-overlay");
+    const search = header.querySelector(".moh-search");
     const searchInput = header.querySelector("#moh-search-input");
     const searchFeedback = header.querySelector(".moh-search-feedback");
 
     const setSearchOpen = (open) => {
+      search?.classList.toggle("open", open);
+      search?.setAttribute("aria-hidden", String(!open));
       document.body.classList.toggle("moh-search-open", open);
-      searchOverlay?.setAttribute("aria-hidden", String(!open));
       if (open) window.setTimeout(() => searchInput?.focus(), 100);
     };
 
     header.querySelector(".moh-search-toggle")?.addEventListener("click", () => setSearchOpen(true));
     header.querySelector(".moh-search-close")?.addEventListener("click", () => setSearchOpen(false));
-    searchOverlay?.addEventListener("click", (event) => {
-      if (event.target === searchOverlay) setSearchOpen(false);
+    search?.addEventListener("click", (event) => {
+      if (event.target === search) setSearchOpen(false);
     });
 
     header.querySelector(".moh-search-form")?.addEventListener("submit", (event) => {
       event.preventDefault();
-      const term = searchInput?.value.trim().toLocaleLowerCase() || "";
+      const rawTerm = searchInput?.value.trim() || "";
+      const term = rawTerm.toLocaleLowerCase();
       if (!term) return;
 
       const candidates = [...main.querySelectorAll("h1, h2, h3, h4, p, .org-card")];
       const match = candidates.find((node) => node.textContent.toLocaleLowerCase().includes(term));
       if (!match) {
-        searchFeedback.textContent = `Hakuna matokeo ya “${searchInput.value.trim()}”.`;
+        searchFeedback.textContent = `Hakuna matokeo ya “${rawTerm}”.`;
         return;
       }
 
@@ -130,11 +138,12 @@
     });
 
     const fontButton = header.querySelector(".moh-text-size");
-    const fontScales = ["1", "1.08", "1.16"];
+    const sizeClasses = ["", "moh-text-large", "moh-text-larger"];
     let fontIndex = 0;
     fontButton?.addEventListener("click", () => {
-      fontIndex = (fontIndex + 1) % fontScales.length;
-      document.documentElement.style.setProperty("--moh-font-scale", fontScales[fontIndex]);
+      document.body.classList.remove("moh-text-large", "moh-text-larger");
+      fontIndex = (fontIndex + 1) % sizeClasses.length;
+      if (sizeClasses[fontIndex]) document.body.classList.add(sizeClasses[fontIndex]);
       fontButton.setAttribute("aria-label", `Ukubwa wa maandishi: kiwango ${fontIndex + 1}`);
     });
 
@@ -148,8 +157,8 @@
     });
 
     const projectSection = document.querySelector("#projects");
-    const projectRow = projectSection?.querySelector(".container:not(:has(.section-title)) .row.gy-4")
-      || [...(projectSection?.querySelectorAll(".row.gy-4") || [])].find((row) => row.querySelector(".org-card"));
+    const projectRows = projectSection ? [...projectSection.querySelectorAll(".row.gy-4")] : [];
+    const projectRow = projectRows.find((row) => row.querySelector(".org-card"));
 
     if (projectRow && !projectSection.querySelector(".moh-project-layout")) {
       const cards = [...projectRow.children].filter((item) => item.querySelector(".org-card"));
