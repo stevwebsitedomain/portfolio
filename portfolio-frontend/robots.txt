@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Private / non-public areas (none currently on this static portfolio)
+Disallow: /backend/
+Disallow: /*.json$
+
+Sitemap: https://portfolio-nu-taupe-017y2cafli.vercel.app/sitemap.xml
