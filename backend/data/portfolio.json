@@ -88,6 +88,20 @@
       "tags": ["E-Commerce", "Luxury Retail", "Web Design", "Responsive"]
     },
     {
+      "name": "G4 Elevate Travel & Tours",
+      "year": "2026",
+      "url": "http://g4elevate.co.tz/",
+      "description": "Travel agency website for flights, hotels, safaris, transfers, visa assistance, and holiday package enquiries.",
+      "tags": ["Travel Website", "Bookings", "Web Design", "Responsive"]
+    },
+    {
+      "name": "Buhalahala Secondary School",
+      "year": "2026",
+      "url": "http://buhalahalasecondaryschool.com/",
+      "description": "School website and admissions platform with applications, portals, results, fees, news, and announcements.",
+      "tags": ["School Website", "Online Admission", "Education", "Web App"]
+    },
+    {
       "name": "Portfolio Website",
       "year": "2026",
       "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app",
