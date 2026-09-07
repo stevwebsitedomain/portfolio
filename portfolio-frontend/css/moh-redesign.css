@@ -1455,3 +1455,76 @@ body.moh-redesign .footer .copyright {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Interaction refinements */
+body.moh-search-open {
+  overflow: hidden;
+}
+
+body.moh-redesign .moh-program-card > i {
+  display: inline-grid;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 12px;
+  place-items: center;
+  color: var(--moh-navy);
+  background: var(--moh-gold);
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+body.moh-redesign .moh-program-card span {
+  display: block;
+}
+
+body.moh-redesign .moh-program-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 13px;
+  color: var(--moh-gold);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+body.moh-redesign .moh-program-card a:hover {
+  color: #fff;
+}
+
+.moh-search-feedback {
+  min-height: 26px;
+  margin: 11px 0 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.moh-search-hit {
+  animation: moh-search-pulse 2.1s ease;
+}
+
+body.moh-text-large main p,
+body.moh-text-large .moh-nav-links a,
+body.moh-text-large .footer p {
+  font-size: 1.06em !important;
+}
+
+body.moh-text-larger main p,
+body.moh-text-larger .moh-nav-links a,
+body.moh-text-larger .footer p {
+  font-size: 1.13em !important;
+}
+
+@keyframes moh-search-pulse {
+  0%,
+  100% {
+    outline: 0 solid transparent;
+  }
+
+  25%,
+  70% {
+    outline: 6px solid rgba(240, 196, 63, 0.48);
+    outline-offset: 6px;
+  }
+}
