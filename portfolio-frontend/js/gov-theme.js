@@ -96,30 +96,36 @@ window.addEventListener('scroll', () => toTop.classList.toggle('show', scrollY >
 toTop.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Showcase auto-scroll (unique cards only — ping-pong, no duplicates)
+// Showcase auto-scroll — continuous loop right → left
 (function () {
   const scroller = document.getElementById('showcaseScroll');
-  if (!scroller) return;
-  let dir = 1;
+  const track = document.getElementById('showcaseTrack');
+  if (!scroller || !track) return;
+
+  // Duplicate cards once for seamless wrap
+  Array.from(track.children).forEach((node) => {
+    track.appendChild(node.cloneNode(true));
+  });
+
   let paused = false;
-  let raf = 0;
-  const speed = 0.55;
+  const speed = 0.65;
 
   function tick() {
     if (!paused) {
-      const max = scroller.scrollWidth - scroller.clientWidth;
-      if (max > 4) {
-        scroller.scrollLeft += dir * speed;
-        if (scroller.scrollLeft >= max - 1) dir = -1;
-        if (scroller.scrollLeft <= 0) dir = 1;
+      const half = track.scrollWidth / 2;
+      if (half > 4) {
+        scroller.scrollLeft += speed;
+        if (scroller.scrollLeft >= half) {
+          scroller.scrollLeft -= half;
+        }
       }
     }
-    raf = requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   }
 
   scroller.addEventListener('mouseenter', () => { paused = true; });
   scroller.addEventListener('mouseleave', () => { paused = false; });
   scroller.addEventListener('touchstart', () => { paused = true; }, { passive: true });
   scroller.addEventListener('touchend', () => { paused = false; }, { passive: true });
-  raf = requestAnimationFrame(tick);
+  requestAnimationFrame(tick);
 })();
