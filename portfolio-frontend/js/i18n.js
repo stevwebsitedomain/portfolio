@@ -100,7 +100,17 @@
       search_input: 'Type what you are looking for...',
       to_top: 'Back to top',
       qr_caption: 'Scan to open this portfolio',
-      brand_line: 'Brand · Systems & Web Solutions'
+      brand_line: 'Brand · Systems & Web Solutions',
+      proj_reacris: 'Luxury spirits e-commerce platform — online sales, product listings, and customer contact.',
+      proj_g4: 'Travel agency website for flights, safaris, and bookings for local and international clients.',
+      proj_buhalahala: 'School website and online admissions portal for students and parents in Geita.',
+      proj_agridata: 'Smart farming and agri-data platform for farmers and agriculture stakeholders.',
+      proj_miracle: 'Company website showcasing services, portfolio, and contact for Miracle Tech.',
+      proj_whitelake: 'Student results and school management portal for White Lake High School.',
+      proj_tra: 'Tax-related web system with data handling, scraping support, and database workflows.',
+      proj_plustax: 'Office management system for documents, staff communication, and audit workflows.',
+      proj_aquinas: 'Online application system for admissions — easier for parents, students, and school staff.',
+      proj_eastc: 'Institutional management system for records, workflows, and administrative operations.'
     },
     sw: {
       search_placeholder: 'Tafuta miradi, stadi, mawasiliano ...',
@@ -200,7 +210,17 @@
       search_input: 'Andika unachotafuta...',
       to_top: 'Rudi juu',
       qr_caption: 'Scan fungua portfolio hii',
-      brand_line: 'Brand · Systems & Web Solutions'
+      brand_line: 'Brand · Systems & Web Solutions',
+      proj_reacris: 'Jukwaa la e-commerce la luxury spirits — mauzo mtandaoni, bidhaa, na mawasiliano kwa wateja.',
+      proj_g4: 'Tovuti ya usafiri kwa flights, safaris, na bookings kwa wateja wa ndani na nje.',
+      proj_buhalahala: 'Tovuti ya shule na portal ya uandikishaji mtandaoni kwa wanafunzi na wazazi Geita.',
+      proj_agridata: 'Jukwaa la kilimo smart na data kwa wakulima na wadau wa sekta ya kilimo.',
+      proj_miracle: 'Tovuti ya kampuni inayoonesha huduma, portfolio, na mawasiliano ya Miracle Tech.',
+      proj_whitelake: 'Portal ya matokeo ya wanafunzi na usimamizi wa shule ya White Lake.',
+      proj_tra: 'Mfumo wa tovuti wa kodi — data, scraping, na database workflows.',
+      proj_plustax: 'Mfumo wa ofisi kwa nyaraka, mawasiliano ya wafanyakazi, na audit workflows.',
+      proj_aquinas: 'Mfumo wa maombi ya kujiunga mtandaoni — rahisi kwa wazazi, wanafunzi, na shule.',
+      proj_eastc: 'Mfumo wa usimamizi wa taasisi kwa rekodi, mtiririko wa kazi, na utawala.'
     }
   };
 
