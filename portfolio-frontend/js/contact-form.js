@@ -1,44 +1,13 @@
 /**
- * Contact form → Render backend API (sends email to contactRecipientEmail).
+ * Contact form → opens WhatsApp with the composed message.
+ * Number: +255 715 296 092
  */
 (function () {
   'use strict';
 
-  function isDebugEnabled() {
-    try {
-      var qs = new URLSearchParams(window.location.search);
-      if (qs.get('debug') === '1') return true;
-      if (window.localStorage && localStorage.getItem('portfolioDebug') === '1') return true;
-    } catch (e) {
-      // ignore
-    }
-    return false;
-  }
-
-  function apiUrl() {
+  function whatsappNumber() {
     var cfg = window.PORTFOLIO_CONFIG || {};
-    var base = (cfg.apiBaseUrl || 'https://portfolio-ar0s.onrender.com').replace(/\/$/, '');
-    var path = (cfg.endpoints && cfg.endpoints.contact) || '/api/contact';
-    return base + path;
-  }
-
-  function apiRootUrl() {
-    var cfg = window.PORTFOLIO_CONFIG || {};
-    return (cfg.apiBaseUrl || 'https://portfolio-ar0s.onrender.com').replace(/\/$/, '') + '/';
-  }
-
-  function parseResponse(response) {
-    return response.text().then(function (text) {
-      var data = {};
-      if (text) {
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          data = { error: text.substring(0, 200) };
-        }
-      }
-      return { ok: response.ok, data: data, status: response.status };
-    });
+    return String(cfg.whatsappNumber || '255715296092').replace(/\D/g, '');
   }
 
   function setError(errorEl, text) {
@@ -47,16 +16,14 @@
     errorEl.classList.add('d-block');
   }
 
-  function fetchMailConfigured() {
-    return fetch(apiRootUrl(), { method: 'GET', mode: 'cors', headers: { Accept: 'application/json' } })
-      .then(parseResponse)
-      .then(function (r) {
-        if (r && r.data && typeof r.data.mailConfigured !== 'undefined') return r.data.mailConfigured;
-        return null;
-      })
-      .catch(function () {
-        return null;
-      });
+  function buildWhatsAppText(name, email, subject, message) {
+    return (
+      'Hello Steven Makarious,\n\n' +
+      'Name: ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Subject: ' + subject + '\n\n' +
+      'Message:\n' + message
+    );
   }
 
   document.querySelectorAll('.php-email-form').forEach(function (form) {
@@ -67,8 +34,6 @@
       var errorEl = form.querySelector('.error-message');
       var sentEl = form.querySelector('.sent-message');
       var submitBtn = form.querySelector('button[type="submit"]');
-      var url = apiUrl();
-      var debug = isDebugEnabled();
 
       var name = ((form.querySelector('[name="name"]') || {}).value || '').trim();
       var email = ((form.querySelector('[name="email"]') || {}).value || '').trim();
@@ -85,109 +50,23 @@
         errorEl.classList.remove('d-block');
         errorEl.textContent = '';
       }
-      if (loading) loading.classList.add('d-block');
       if (sentEl) sentEl.classList.remove('d-block');
+      if (loading) loading.classList.add('d-block');
       if (submitBtn) submitBtn.disabled = true;
 
-      var headers = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      };
-      if (debug) {
-        headers['X-Portfolio-Debug'] = '1';
-      }
+      var text = buildWhatsAppText(name, email, subject, message);
+      var url = 'https://wa.me/' + whatsappNumber() + '?text=' + encodeURIComponent(text);
 
-      var controller = new AbortController();
-      var timeoutId = window.setTimeout(function () {
-        controller.abort();
-      }, 60000);
-
-      fetch(url, {
-        method: 'POST',
-        mode: 'cors',
-        headers: headers,
-        signal: controller.signal,
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          subject: subject,
-          message: message,
-        }),
-      })
-        .then(parseResponse)
-        .then(function (result) {
-          window.clearTimeout(timeoutId);
-          if (loading) loading.classList.remove('d-block');
-          if (submitBtn) submitBtn.disabled = false;
-
-          if (result.ok && result.data && result.data.ok) {
-            if (sentEl) sentEl.classList.add('d-block');
-            form.reset();
-            return;
-          }
-
-          var baseMsg =
-            (result.data && (result.data.message || result.data.error)) ||
-            'Could not send message (HTTP ' + result.status + ').';
-
-          if (result.data && result.data.httpCode) {
-            baseMsg += ' (HTTP ' + result.data.httpCode + ')';
-          }
-
-          if (result.data && result.data.hint) {
-            baseMsg += ' ' + result.data.hint;
-          }
-
-          if (debug && result.data && result.data.debug) {
-            baseMsg += '\n\n[Mail debug]\n' + result.data.debug;
-          }
-
-          if (!debug) {
-            setError(errorEl, baseMsg);
-            return;
-          }
-
-          fetchMailConfigured().then(function (mailConfigured) {
-            var extra =
-              '\n\n[Debug]\n' +
-              'POST: ' + url + '\n' +
-              'HTTP: ' + result.status + '\n' +
-              'mailConfigured: ' + String(mailConfigured) + '\n' +
-              'response: ' + JSON.stringify(result.data || {}, null, 2);
-
-            setError(errorEl, baseMsg + extra);
-          });
-        })
-        .catch(function (error) {
-          window.clearTimeout(timeoutId);
-          if (loading) loading.classList.remove('d-block');
-          if (submitBtn) submitBtn.disabled = false;
-          var hint =
-            window.location.protocol === 'file:'
-              ? ' Open the site via http://localhost or Vercel, not as a file.'
-              : '';
-          var msg =
-            error && error.name === 'AbortError'
-              ? 'Request timeout. Server took too long.'
-              : (error && error.message) || ('Cannot reach API at ' + url + '. Wait for Render to wake up, then try again.' + hint);
-
-          console.error(error);
-          window.alert(msg);
-
-          if (!debug) {
-            setError(errorEl, msg);
-            return;
-          }
-
-          fetchMailConfigured().then(function (mailConfigured) {
-            var extra =
-              '\n\n[Debug]\n' +
-              'POST: ' + url + '\n' +
-              'mailConfigured: ' + String(mailConfigured) + '\n' +
-              'error: ' + String((error && error.message) || error);
-            setError(errorEl, msg + extra);
-          });
-        });
+      window.setTimeout(function () {
+        if (loading) loading.classList.remove('d-block');
+        if (submitBtn) submitBtn.disabled = false;
+        window.open(url, '_blank', 'noopener,noreferrer');
+        if (sentEl) {
+          sentEl.textContent = 'Opening WhatsApp… Complete send there. Thank you!';
+          sentEl.classList.add('d-block');
+        }
+        form.reset();
+      }, 250);
     });
   });
 })();

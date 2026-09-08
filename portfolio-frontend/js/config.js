@@ -7,6 +7,7 @@ window.PORTFOLIO_CONFIG = {
   siteUrl: 'https://portfolio-nu-taupe-017y2cafli.vercel.app',
   /** Paste Google Search Console HTML-tag token here, then uncomment meta in index.html */
   googleSiteVerification: '',
+  whatsappNumber: '255715296092',
   apiBaseUrl: 'https://portfolio-ar0s.onrender.com',
   endpoints: {
     portfolio: '/api/portfolio',
