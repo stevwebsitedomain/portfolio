@@ -46,36 +46,36 @@ body {
 /* ========== HEADER (MOH screenshot) ========== */
 .site-header {
   max-width: var(--header-max);
-  margin: 2px auto 0;
+  margin: 0 auto;
   background: #fff;
-  box-shadow: 0 0 22px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.14);
 }
 
 .header-container {
-  width: calc(100% - 64px);
+  width: calc(100% - 72px);
   max-width: 1680px;
   margin: auto;
 }
 
 .utility.topbar,
 .topbar {
-  height: 76px;
+  height: 46px;
   padding: 0;
   background: var(--header-blue);
   color: #fff;
-  border-bottom: 3px solid #eef2f5;
+  border-bottom: 0;
 }
 
 .topbar-row {
   height: 100%;
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(260px, 355px) minmax(200px, 1fr) minmax(180px, 280px);
+  grid-template-columns: minmax(210px, 1fr) minmax(230px, 300px) minmax(160px, 1fr) minmax(130px, 170px);
   align-items: center;
-  gap: 20px;
+  gap: 18px;
 }
 
 .topbar .welcome {
-  font: 600 1.15rem/1.2 "Source Sans 3", Arial, sans-serif;
+  font: 500 0.95rem/1.2 "Source Sans 3", Arial, sans-serif;
   color: #fff;
   white-space: nowrap;
 }
@@ -85,12 +85,12 @@ body {
 }
 
 .header-search {
-  height: 42px;
+  height: 30px;
   display: flex;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  box-shadow: none;
 }
 
 .header-search input {
@@ -98,23 +98,23 @@ body {
   min-width: 0;
   border: 0;
   outline: 0;
-  padding: 0 18px;
-  color: #333;
+  padding: 0 12px;
+  color: #555;
   background: #fff;
-  font: 700 1.05rem/1 Georgia, serif;
+  font: 400 0.86rem/1 "Source Sans 3", Arial, sans-serif;
 }
 
 .header-search input::placeholder {
-  color: #999;
+  color: #9aa3ab;
   opacity: 1;
 }
 
 .header-search button {
-  width: 46px;
+  width: 34px;
   border: 0;
   background: #fff;
   color: var(--header-blue);
-  font-size: 1rem;
+  font-size: 0.78rem;
 }
 
 .social-links {
@@ -122,30 +122,32 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 28px;
+  gap: 22px;
 }
 
 .social-links a {
   color: #fff;
-  font-size: 1.45rem;
+  font-size: 1.05rem;
   line-height: 1;
   transition: 0.2s;
 }
 
 .social-links a:hover {
   color: #bde7ff;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .language-select {
-  height: 48px;
+  height: 30px;
   width: 100%;
-  border: 0;
-  border-radius: 7px;
-  background: rgba(23, 91, 148, 0.48);
+  max-width: 150px;
+  margin-left: auto;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 3px;
+  background: rgba(10, 58, 104, 0.35);
   color: #fff;
-  padding: 0 18px;
-  font: 800 1.05rem/1 Montserrat, Arial, sans-serif;
+  padding: 0 10px;
+  font: 600 0.86rem/1 "Source Sans 3", Arial, sans-serif;
   outline: 0;
   cursor: pointer;
 }
@@ -157,11 +159,17 @@ body {
 
 /* Branding banner */
 .identity.brand-header,
-.brand-header {
+.brand-header,
+.identity {
   position: relative;
-  min-height: 200px;
+  min-height: 118px;
+  height: 118px;
   overflow: hidden;
-  background: #eef4f7;
+  background: #f4f7f9;
+}
+
+.identity::after {
+  display: none;
 }
 
 .brand-header::before {
@@ -169,9 +177,9 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.64) 36%, rgba(255, 255, 255, 0.47) 57%, rgba(255, 255, 255, 0.06) 100%),
-    url("../assets/images/brand-programming.jpg") center 42% / cover no-repeat;
-  filter: saturate(0.85);
+    linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.72) 34%, rgba(255, 255, 255, 0.42) 58%, rgba(255, 255, 255, 0.08) 100%),
+    url("../assets/images/brand-programming.jpg") center 40% / cover no-repeat;
+  filter: saturate(0.8);
 }
 
 .brand-header::after {
@@ -179,29 +187,32 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  width: 23%;
+  width: 20%;
   height: 100%;
   background: linear-gradient(145deg, transparent 0 24%, rgba(30, 181, 58, 0.76) 25% 44%, rgba(252, 209, 22, 0.85) 45% 49%, rgba(0, 0, 0, 0.73) 50% 66%, rgba(0, 163, 221, 0.72) 67% 100%);
   mix-blend-mode: multiply;
-  opacity: 0.73;
+  opacity: 0.68;
 }
 
 .identity .flag-line {
   display: none;
 }
 
-.brand-row {
+.brand-row,
+.identity-row {
   position: relative;
   z-index: 2;
-  min-height: 200px;
+  min-height: 118px;
+  height: 118px;
   display: grid;
-  grid-template-columns: 170px 1fr 170px;
+  grid-template-columns: 96px 1fr 96px;
   align-items: center;
-  gap: 24px;
+  gap: 12px;
 }
 
-.brand-header .logo-wrap {
-  width: auto;
+.brand-header .logo-wrap,
+.identity .logo-wrap {
+  width: 86px;
   flex: none;
   padding: 0;
   display: grid;
@@ -209,45 +220,54 @@ body {
 }
 
 .brand-header .emblem,
-.brand-header .logo-wrap img {
-  width: 128px;
-  height: 150px;
+.brand-header .logo-wrap img,
+.identity .logo-wrap img {
+  width: 78px;
+  height: 92px;
   object-fit: contain;
   margin: auto;
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.14));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
 }
 
-.brand-copy {
+.brand-copy,
+.brand-copy.titles,
+.identity .titles {
   text-align: center;
-  color: #050505;
+  color: #111;
   font-family: "Source Sans 3", Arial, sans-serif;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-  padding: 10px 12px;
+  text-shadow: none;
+  padding: 0;
 }
 
-.brand-copy .republic {
-  font-size: 2.05rem;
-  font-weight: 400;
-  letter-spacing: 0.025em;
-  margin-bottom: 13px;
-  color: #050505;
+.brand-copy .republic,
+.brand-copy.titles p,
+.identity .titles p {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+  color: #111;
   text-transform: none;
 }
 
-.brand-copy h1 {
+.brand-copy h1,
+.brand-copy.titles h1,
+.identity .titles h1 {
   color: var(--title-blue);
-  font-size: clamp(1.8rem, 3.4vw, 3rem);
+  font-size: 2.15rem;
   font-weight: 800;
-  letter-spacing: 0.005em;
-  line-height: 1.1;
+  letter-spacing: 0;
+  line-height: 1.15;
   text-transform: none;
 }
 
-html.dark .brand-copy .republic {
-  color: #050505;
+html.dark .brand-copy .republic,
+html.dark .identity .titles p {
+  color: #111;
 }
 
-html.dark .brand-copy h1 {
+html.dark .brand-copy h1,
+html.dark .identity .titles h1 {
   color: var(--title-blue);
 }
 
@@ -261,7 +281,8 @@ html.dark .brand-copy h1 {
 }
 
 .main-nav .nav-row {
-  min-height: 66px;
+  min-height: 42px;
+  height: 42px;
   display: flex;
   align-items: stretch;
 }
@@ -279,18 +300,22 @@ html.dark .brand-copy h1 {
   display: flex;
 }
 
+.main-nav .nav-link i {
+  font-size: 0.58rem;
+}
+
 .main-nav .nav-link {
   border: 0;
-  border-right: 1px solid #064879;
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
   background: transparent;
   color: #fff;
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 0 16px;
+  padding: 0 13px;
   font-family: "Source Sans 3", Arial, sans-serif;
-  font-size: 1.02rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 600;
   transition: 0.2s;
   white-space: nowrap;
 }
@@ -340,15 +365,16 @@ html.dark .brand-copy h1 {
 }
 
 .nav-actions button {
-  width: 52px;
+  width: 42px;
   align-self: stretch;
-  min-height: 66px;
+  min-height: 42px;
+  height: 42px;
   border: 0;
   border-left: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0;
   background: transparent;
   color: #fff;
-  font-size: 1.05rem;
+  font-size: 0.88rem;
 }
 
 .nav-actions button:hover {
@@ -918,14 +944,15 @@ html.dark .service-link {
   }
 
   .main-nav .nav-link {
-    padding: 0 12px;
-    font-size: 0.92rem;
+    padding: 0 10px;
+    font-size: 0.8rem;
   }
 }
 
 @media (max-width: 1180px) {
   .main-nav .nav-row {
-    min-height: 58px;
+    min-height: 42px;
+    height: 42px;
   }
 
   .main-nav .nav-list {
@@ -936,7 +963,7 @@ html.dark .service-link {
     right: 0;
     background: var(--header-blue);
     padding: 7px 18px 17px;
-    max-height: calc(100vh - 58px);
+    max-height: calc(100vh - 42px);
     overflow: auto;
     justify-content: flex-start;
   }
@@ -975,8 +1002,8 @@ html.dark .service-link {
   }
 
   .nav-actions button {
-    min-height: 58px;
-    height: 58px;
+    min-height: 42px;
+    height: 42px;
   }
 }
 
@@ -990,22 +1017,28 @@ html.dark .service-link {
     display: none;
   }
 
-  .brand-row {
-    grid-template-columns: 140px 1fr 100px;
+  .brand-row,
+  .identity-row {
+    grid-template-columns: 86px 1fr 70px;
   }
 
   .brand-header .emblem,
-  .brand-header .logo-wrap img {
-    width: 108px;
-    height: 130px;
+  .brand-header .logo-wrap img,
+  .identity .logo-wrap img {
+    width: 70px;
+    height: 84px;
   }
 
-  .brand-copy .republic {
-    font-size: 1.65rem;
+  .brand-copy .republic,
+  .brand-copy.titles p,
+  .identity .titles p {
+    font-size: 1.05rem;
   }
 
-  .brand-copy h1 {
-    font-size: 2.2rem;
+  .brand-copy h1,
+  .brand-copy.titles h1,
+  .identity .titles h1 {
+    font-size: 1.55rem;
   }
 }
 
@@ -1021,21 +1054,21 @@ html.dark .service-link {
   .utility.topbar,
   .topbar {
     height: auto;
-    min-height: 66px;
+    min-height: 42px;
   }
 
   .topbar-row {
     display: flex;
-    gap: 14px;
-    padding: 10px 0;
+    gap: 10px;
+    padding: 6px 0;
   }
 
   .topbar .welcome {
-    font-size: 1rem;
+    font-size: 0.82rem;
   }
 
   .header-search {
-    height: 40px;
+    height: 28px;
     flex: 1;
   }
 
@@ -1043,29 +1076,39 @@ html.dark .service-link {
     display: none;
   }
 
+  .identity.brand-header,
   .brand-header,
-  .brand-row {
-    min-height: 150px;
+  .identity,
+  .brand-row,
+  .identity-row {
+    min-height: 88px;
+    height: 88px;
   }
 
-  .brand-row {
-    grid-template-columns: 105px 1fr 20px;
-    gap: 8px;
+  .brand-row,
+  .identity-row {
+    grid-template-columns: 72px 1fr 12px;
+    gap: 6px;
   }
 
   .brand-header .emblem,
-  .brand-header .logo-wrap img {
-    width: 86px;
-    height: 110px;
+  .brand-header .logo-wrap img,
+  .identity .logo-wrap img {
+    width: 58px;
+    height: 70px;
   }
 
-  .brand-copy .republic {
-    font-size: 1.15rem;
-    margin-bottom: 8px;
+  .brand-copy .republic,
+  .brand-copy.titles p,
+  .identity .titles p {
+    font-size: 0.92rem;
+    margin-bottom: 2px;
   }
 
-  .brand-copy h1 {
-    font-size: 1.7rem;
+  .brand-copy h1,
+  .brand-copy.titles h1,
+  .identity .titles h1 {
+    font-size: 1.3rem;
   }
 
   .hero {
@@ -1145,44 +1188,54 @@ html.dark .service-link {
   }
 
   .topbar .welcome {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     white-space: normal;
   }
 
   .header-search input {
-    font-size: 0.88rem;
-    padding: 0 13px;
+    font-size: 0.78rem;
+    padding: 0 10px;
   }
 
+  .identity.brand-header,
   .brand-header,
-  .brand-row {
-    min-height: 120px;
+  .identity,
+  .brand-row,
+  .identity-row {
+    min-height: 78px;
+    height: 78px;
   }
 
   .brand-header::after {
-    width: 18%;
-    opacity: 0.55;
+    width: 16%;
+    opacity: 0.5;
   }
 
-  .brand-row {
-    grid-template-columns: 74px 1fr 8px;
-    gap: 3px;
+  .brand-row,
+  .identity-row {
+    grid-template-columns: 58px 1fr 6px;
+    gap: 4px;
   }
 
   .brand-header .emblem,
-  .brand-header .logo-wrap img {
-    width: 64px;
-    height: 84px;
+  .brand-header .logo-wrap img,
+  .identity .logo-wrap img {
+    width: 50px;
+    height: 60px;
   }
 
-  .brand-copy h1 {
-    font-size: 1.2rem;
+  .brand-copy h1,
+  .brand-copy.titles h1,
+  .identity .titles h1 {
+    font-size: 1.08rem;
   }
 
-  .brand-copy .republic {
-    font-size: 0.78rem;
+  .brand-copy .republic,
+  .brand-copy.titles p,
+  .identity .titles p {
+    font-size: 0.72rem;
     letter-spacing: 0;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
   }
 
   .hero {
