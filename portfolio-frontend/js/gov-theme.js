@@ -95,3 +95,31 @@ const toTop = document.getElementById('toTop');
 window.addEventListener('scroll', () => toTop.classList.toggle('show', scrollY > 550));
 toTop.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Showcase auto-scroll (unique cards only — ping-pong, no duplicates)
+(function () {
+  const scroller = document.getElementById('showcaseScroll');
+  if (!scroller) return;
+  let dir = 1;
+  let paused = false;
+  let raf = 0;
+  const speed = 0.55;
+
+  function tick() {
+    if (!paused) {
+      const max = scroller.scrollWidth - scroller.clientWidth;
+      if (max > 4) {
+        scroller.scrollLeft += dir * speed;
+        if (scroller.scrollLeft >= max - 1) dir = -1;
+        if (scroller.scrollLeft <= 0) dir = 1;
+      }
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  scroller.addEventListener('mouseenter', () => { paused = true; });
+  scroller.addEventListener('mouseleave', () => { paused = false; });
+  scroller.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+  scroller.addEventListener('touchend', () => { paused = false; }, { passive: true });
+  raf = requestAnimationFrame(tick);
+})();
