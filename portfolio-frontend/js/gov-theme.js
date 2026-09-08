@@ -1,0 +1,60 @@
+// Mobile menu
+    const menuBtn = document.getElementById('menuBtn');
+    const navList = document.getElementById('navList');
+    menuBtn.addEventListener('click', () => {
+      navList.classList.toggle('open');
+      menuBtn.innerHTML = navList.classList.contains('open') ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+    });
+    document.querySelectorAll('.submenu-toggle').forEach(button => button.addEventListener('click', () => {
+      if (innerWidth <= 850) button.parentElement.classList.toggle('mobile-open');
+    }));
+
+    // Hero slider
+    const slides = [...document.querySelectorAll('.slide')];
+    const dots = [...document.querySelectorAll('.dot')];
+    const heroContent = [
+      ['Kujenga mifumo inayowezesha biashara Tanzania','Ninaunda tovuti, mifumo ya usimamizi na programu za wingu — kutoka interface hadi database, backend na deployment.'],
+      ['Suluhisho za kidijitali kwa taasisi na biashara','Mifumo ya shule, e-commerce, travel na kilimo — iliyojengwa kwa PHP, Yii2, MySQL na cloud hosting.'],
+      ['Digital Matrix Technology — Full Stack Development','Kutoka idea hadi live system: design, development, hosting na support kwa wateja nchini Tanzania.']
+    ];
+    let current = 0, sliderTimer;
+    function showSlide(index) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide,i) => slide.classList.toggle('active', i === current));
+      dots.forEach((dot,i) => dot.classList.toggle('active', i === current));
+      document.getElementById('heroTitle').textContent = heroContent[current][0];
+      document.getElementById('heroText').textContent = heroContent[current][1];
+    }
+    function autoPlay(){ clearInterval(sliderTimer); sliderTimer = setInterval(() => showSlide(current + 1), 6000); }
+    document.querySelector('.hero-arrow.next').onclick = () => { showSlide(current + 1); autoPlay(); };
+    document.querySelector('.hero-arrow.prev').onclick = () => { showSlide(current - 1); autoPlay(); };
+    dots.forEach((dot,i) => dot.onclick = () => { showSlide(i); autoPlay(); }); autoPlay();
+
+    // Dark/light theme
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const dark = document.documentElement.classList.contains('dark');
+      themeToggle.innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+      localStorage.setItem('site-theme', dark ? 'dark' : 'light');
+    });
+    if (localStorage.getItem('site-theme') === 'dark') { document.documentElement.classList.add('dark'); themeToggle.innerHTML='<i class="fa-solid fa-sun"></i>'; }
+
+    // Text size
+    const sizes = [14, 16, 18]; let sizeIndex = 0;
+    document.getElementById('textSize').addEventListener('click', () => { sizeIndex=(sizeIndex+1)%sizes.length; document.documentElement.style.fontSize=sizes[sizeIndex]+'px'; });
+
+    // Search modal
+    const modal = document.getElementById('searchModal');
+    function toggleSearch(open){ modal.classList.toggle('open', open); document.body.classList.toggle('no-scroll', open); if(open) setTimeout(()=>document.getElementById('siteSearchInput').focus(),50); }
+    document.getElementById('openSearch').onclick=()=>toggleSearch(true); document.getElementById('closeSearch').onclick=()=>toggleSearch(false);
+    modal.addEventListener('click',e=>{if(e.target===modal)toggleSearch(false)}); document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleSearch(false)});
+
+    // Animated statistics
+    const stats = document.querySelectorAll('[data-count]'); let counted=false;
+    const statObserver = new IntersectionObserver(entries => { if(entries[0].isIntersecting && !counted){ counted=true; stats.forEach(el=>{ const target=+el.dataset.count, start=performance.now(), duration=1600; function tick(now){ const p=Math.min((now-start)/duration,1); el.textContent=Math.floor(target*(1-Math.pow(1-p,3))).toLocaleString(); if(p<1)requestAnimationFrame(tick); } requestAnimationFrame(tick); }); } },{threshold:.25});
+    statObserver.observe(document.querySelector('.stats'));
+
+    // Back to top and current year
+    const toTop=document.getElementById('toTop'); window.addEventListener('scroll',()=>toTop.classList.toggle('show',scrollY>550)); toTop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+    document.getElementById('year').textContent=new Date().getFullYear();
