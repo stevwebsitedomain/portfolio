@@ -31,9 +31,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link rel="stylesheet" href="css/gov-theme.css?v=3">
+  <link rel="stylesheet" href="css/gov-theme.css?v=4">
+  <link rel="stylesheet" href="css/moh-layout.css?v=2">
   <script>try{var __l=localStorage.getItem('site-lang');if(__l==='sw'||__l==='en')document.documentElement.lang=__l;else document.documentElement.lang='en';}catch(e){}</script>
 
   <script type="application/ld+json">
@@ -107,44 +108,46 @@
 </head>
 <body>
 
-  <header>
-    <div class="utility">
-      <div class="container utility-row">
-        <button class="mini-search" id="openSearch" data-i18n-aria="search_aria" aria-label="Open search"><i class="fa-solid fa-magnifying-glass"></i><span data-i18n="search_placeholder">Search projects, skills, contact ...</span></button>
-        <div class="utility-spacer"></div>
-        <nav class="utility-links" aria-label="Utility links">
-          <a href="#contact" data-i18n="util_support">Customer Support</a>
-          <a href="#announcements" data-i18n="util_announcements">Announcements</a>
-          <a href="#footer" data-i18n="util_sitemap">Sitemap</a>
-          <a href="#contact" data-i18n="util_contact">Contact Us</a>
+  <header class="site-header">
+    <div class="utility topbar">
+      <div class="header-container topbar-row">
+        <a class="welcome" href="#contact" data-i18n="welcome_talk">Talk To Steven Makarious</a>
+        <form class="header-search" id="headerSearchForm" role="search">
+          <label class="sr-only" for="headerSearch">Search</label>
+          <input id="headerSearch" type="search" placeholder="Search Here" data-i18n="search_here">
+          <button type="submit" id="openSearch" data-i18n-aria="search_aria" aria-label="Open search"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+        <nav class="social-links" aria-label="Social links">
+          <a href="https://wa.me/255715296092" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="mailto:stevenabalwambo@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+          <a href="#contact" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#contact" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
         </nav>
-        <button class="round-btn text-size" id="textSize" data-i18n-title="text_size" title="Change text size"><i class="fa-solid fa-text-height"></i></button>
-        <button class="round-btn" id="themeToggle" data-i18n-title="theme" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
-        <div class="lang-wrap">
-          <button class="language" id="langBtn" type="button" aria-haspopup="listbox" aria-expanded="false" title="Language">EN <i class="fa-solid fa-chevron-down"></i></button>
-          <ul class="lang-menu" id="langMenu" role="listbox">
-            <li><button type="button" data-lang="en">English</button></li>
-            <li><button type="button" data-lang="sw">Kiswahili</button></li>
-          </ul>
+        <div class="language-wrap">
+          <label class="sr-only" for="language">Language</label>
+          <select class="language-select" id="language">
+            <option value="en">English</option>
+            <option value="sw">Kiswahili</option>
+          </select>
         </div>
       </div>
     </div>
 
-    <div class="identity">
-      <div class="container identity-row">
-        <a href="#hero" class="logo-wrap"><img src="images/DIGITAL%20MATRIX%20TECHNOLOGY.png" alt="Digital Matrix Technology"></a>
-        <div class="titles">
-          <p>DIGITAL MATRIX TECHNOLOGY</p>
-          <h1>Steven Makarious — Full Stack Developer</h1>
+    <div class="identity brand-header">
+      <div class="header-container brand-row">
+        <a href="#hero" class="logo-wrap"><img class="emblem" src="images/DIGITAL%20MATRIX%20TECHNOLOGY.png" alt="Digital Matrix Technology"></a>
+        <div class="brand-copy titles">
+          <p class="republic">Digital Matrix Technology</p>
+          <h1>Steven Makarious</h1>
         </div>
+        <span aria-hidden="true"></span>
       </div>
-      <div class="flag-line"><span></span><span></span><span></span><span></span></div>
     </div>
 
     <nav class="main-nav" aria-label="Main menu">
-      <div class="container nav-row">
+      <div class="header-container nav-row">
         <ul class="nav-list" id="navList">
-          <li class="nav-item"><a class="nav-link" href="#hero" data-i18n="nav_home">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#hero" data-i18n="nav_home">Home</a></li>
           <li class="nav-item">
             <button class="nav-link submenu-toggle" type="button"><span data-i18n="nav_about">About</span> <i class="fa-solid fa-chevron-down"></i></button>
             <ul class="dropdown">
@@ -153,36 +156,236 @@
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link" href="#skills" data-i18n="nav_skills">Skills</a></li>
-          <li class="nav-item"><a class="nav-link" href="#projects" data-i18n="nav_projects">Projects</a></li>
+          <li class="nav-item">
+            <button class="nav-link submenu-toggle" type="button"><span data-i18n="nav_projects">Projects</span> <i class="fa-solid fa-chevron-down"></i></button>
+            <ul class="dropdown">
+              <li><a href="#news" data-i18n="portal_news">Latest Projects</a></li>
+              <li><a href="#projects" data-i18n="nav_projects">All Projects</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#notices" data-i18n="portal_docs">Publications</a></li>
           <li class="nav-item"><a class="nav-link" href="#qualifications" data-i18n="nav_qualifications">Qualifications</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact" data-i18n="nav_contact">Contact</a></li>
         </ul>
-        <button class="menu-btn" id="menuBtn" data-i18n-aria="menu_open" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+        <div class="nav-actions">
+          <button class="round-btn text-size" id="textSize" data-i18n-title="text_size" title="Change text size" type="button"><i class="fa-solid fa-text-height"></i></button>
+          <button class="round-btn" id="themeToggle" data-i18n-title="theme" title="Toggle theme" type="button"><i class="fa-solid fa-moon"></i></button>
+          <button class="menu-btn" id="menuBtn" data-i18n-aria="menu_open" aria-label="Open menu" type="button"><i class="fa-solid fa-bars"></i></button>
+        </div>
       </div>
     </nav>
   </header>
 
   <main>
     <section class="hero" id="hero" aria-label="Featured">
-      <div class="slides">
-        <div class="slide active"><img src="images/hero-bg.jpg" alt="Steven Makarious — Full Stack Developer"></div>
-        <div class="slide"><img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1900&q=85" alt="Software development"></div>
-        <div class="slide"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1900&q=85" alt="Coding workspace"></div>
-      </div>
-      <div class="container hero-content">
-        <div class="hero-copy">
-          <span class="hero-label"><i class="fa-solid fa-code"></i> <span data-i18n="hero_label">Full Stack · Tanzania</span></span>
-          <h2 id="heroTitle">Building systems that power businesses in Tanzania</h2>
-          <p id="heroText">I build websites, management systems, and cloud apps — from interface to database, backend, and deployment.</p>
-          <a href="#projects" class="primary-btn"><span data-i18n="hero_cta">View projects</span> <i class="fa-solid fa-arrow-right"></i></a>
+      <div class="container hero-shell">
+        <aside class="officials-column" aria-label="Profile">
+          <article class="official-card">
+            <img src="images/profile.png" alt="Steven Makarious">
+            <div class="official-info">
+              <h3>Steven Makarious</h3>
+              <p>Full Stack Developer</p>
+            </div>
+          </article>
+          <article class="official-card">
+            <img class="logo-leader" src="images/DIGITAL%20MATRIX%20TECHNOLOGY.png" alt="Digital Matrix Technology">
+            <div class="official-info">
+              <h3>Digital Matrix Technology</h3>
+              <p data-i18n="brand_line">Brand · Systems &amp; Web Solutions</p>
+            </div>
+          </article>
+        </aside>
+
+        <div class="carousel">
+          <div class="slides">
+            <div class="slide active"><img src="assets/images/hero-coding.jpg" alt="Software development and programming"></div>
+            <div class="slide"><img src="assets/images/hero-workspace.jpg" alt="Coding workspace"></div>
+            <div class="slide"><img src="assets/images/hero-team.jpg" alt="Technology team collaboration"></div>
+          </div>
+          <div class="hero-content">
+            <div class="hero-copy">
+              <span class="hero-label"><i class="fa-solid fa-code"></i> <span data-i18n="hero_label">Full Stack · Tanzania</span></span>
+              <h2 id="heroTitle">Building systems that power businesses in Tanzania</h2>
+              <p id="heroText">I build websites, management systems, and cloud apps — from interface to database, backend, and deployment.</p>
+              <a href="#projects" class="primary-btn"><span data-i18n="hero_cta">View projects</span> <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+          <button class="hero-arrow prev" aria-label="Previous slide" type="button"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="hero-arrow next" aria-label="Next slide" type="button"><i class="fa-solid fa-chevron-right"></i></button>
+          <div class="hero-controls">
+            <button class="dot active" aria-label="Slide 1" type="button"></button>
+            <button class="dot" aria-label="Slide 2" type="button"></button>
+            <button class="dot" aria-label="Slide 3" type="button"></button>
+          </div>
         </div>
+
+        <aside class="officials-column right" aria-label="Core services">
+          <article class="official-card">
+            <img src="assets/images/project-web.jpg" alt="Website development">
+            <div class="official-info">
+              <h3>Website Development</h3>
+              <p>Custom web systems</p>
+            </div>
+          </article>
+          <article class="official-card">
+            <img src="assets/images/project-mobile.jpg" alt="Mobile applications">
+            <div class="official-info">
+              <h3>Mobile Applications</h3>
+              <p>Android &amp; iOS apps</p>
+            </div>
+          </article>
+          <article class="official-card">
+            <img src="assets/images/project-cloud.jpg" alt="Cloud services">
+            <div class="official-info">
+              <h3>Cloud Services</h3>
+              <p>Hosting &amp; deployment</p>
+            </div>
+          </article>
+        </aside>
       </div>
-      <button class="hero-arrow prev" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
-      <button class="hero-arrow next" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
-      <div class="hero-controls">
-        <button class="dot active" aria-label="Slide 1"></button>
-        <button class="dot" aria-label="Slide 2"></button>
-        <button class="dot" aria-label="Slide 3"></button>
+    </section>
+
+    <section class="portal-section" id="news">
+      <div class="container portal-surface">
+        <div class="portal-grid">
+          <div class="portal-column">
+            <h2 class="portal-heading" data-i18n="portal_news">Latest Projects</h2>
+            <div class="portal-news-list">
+              <article class="portal-news-item">
+                <img src="assets/images/project-web.jpg" alt="Website development project" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#projects">Website Development</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: September 8th, 2026</div>
+                  <p class="portal-excerpt">Responsive professional websites for businesses and institutions — from design to live deployment. <a class="inline-more" href="#projects" data-i18n="read_more">read more</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-mobile.jpg" alt="Mobile applications project" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#projects">Mobile Applications</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: September 6th, 2026</div>
+                  <p class="portal-excerpt">Native and hybrid mobile apps that help teams and customers work on the go. <a class="inline-more" href="#projects" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-school.jpg" alt="School management system" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#projects">School Management Systems</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: September 3rd, 2026</div>
+                  <p class="portal-excerpt">Admissions, results, and student records portals for schools across Tanzania. <a class="inline-more" href="#projects" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-business.jpg" alt="Business systems" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#projects">Business Systems</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: September 1st, 2026</div>
+                  <p class="portal-excerpt">Office, audit, and operations platforms that reduce paperwork and improve workflows. <a class="inline-more" href="#projects" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-presentation.jpg" alt="Professional presentations" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#contact">Professional Presentations</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: August 28th, 2026</div>
+                  <p class="portal-excerpt">Pitch decks, academic slides, and client-ready visual presentations for technology projects. <a class="inline-more" href="#contact" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-analytics.jpg" alt="Data analytics" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#skills">Data Analytics</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: August 22nd, 2026</div>
+                  <p class="portal-excerpt">Dashboards and reports that turn operational data into clear decisions. <a class="inline-more" href="#skills" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-ai.jpg" alt="Artificial intelligence" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#qualifications">Artificial Intelligence</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: August 18th, 2026</div>
+                  <p class="portal-excerpt">Practical AI features for search, automation, and smarter business applications. <a class="inline-more" href="#qualifications" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-security.jpg" alt="Cybersecurity" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#skills">Cybersecurity</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: August 12th, 2026</div>
+                  <p class="portal-excerpt">Secure authentication, backups, and hardening for production web systems. <a class="inline-more" href="#skills" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-network.jpg" alt="Networking" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#qualifications">Networking</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: August 6th, 2026</div>
+                  <p class="portal-excerpt">Reliable network design, connectivity, and infrastructure support for live systems. <a class="inline-more" href="#qualifications" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+              <article class="portal-news-item">
+                <img src="assets/images/project-cloud.jpg" alt="Cloud services" loading="lazy">
+                <div>
+                  <a class="portal-news-title" href="#projects">Cloud Services</a>
+                  <div class="portal-date"><i class="fa-solid fa-calendar"></i> Posted On: August 1st, 2026</div>
+                  <p class="portal-excerpt">Vercel, Render, and hosting pipelines — from build to production go-live. <a class="inline-more" href="#projects" data-i18n="view_project">View Project</a></p>
+                </div>
+              </article>
+            </div>
+            <a class="portal-all" href="#projects" data-i18n="view_all_projects">View all / Request a project</a>
+          </div>
+
+          <div class="portal-column" id="notices">
+            <h2 class="portal-heading" data-i18n="portal_docs">Taarifa na Machapisho</h2>
+            <div class="press-list">
+              <a class="press-item" href="#contact">
+                <span class="press-item-title"><i class="fa-solid fa-certificate new-mark"></i>System Documentation</span>
+                <span class="portal-date">Posted On: September 4th, 2026</span>
+              </a>
+              <a class="press-item" href="#contact">
+                <span class="press-item-title"><i class="fa-solid fa-file-pdf"></i>Business Proposal</span>
+                <span class="portal-date">Posted On: August 28th, 2026</span>
+              </a>
+              <a class="press-item" href="#contact">
+                <span class="press-item-title"><i class="fa-solid fa-file-pdf"></i>Academic Presentation</span>
+                <span class="portal-date">Posted On: August 20th, 2026</span>
+              </a>
+              <a class="press-item" href="#contact">
+                <span class="press-item-title"><i class="fa-solid fa-file-pdf"></i>Data Analysis Report</span>
+                <span class="portal-date">Posted On: August 12th, 2026</span>
+              </a>
+              <a class="press-item" href="#contact">
+                <span class="press-item-title"><i class="fa-solid fa-certificate new-mark"></i>Cybersecurity Report</span>
+                <span class="portal-date">Posted On: August 5th, 2026</span>
+              </a>
+              <a class="press-item" href="#contact">
+                <span class="press-item-title"><i class="fa-solid fa-file-pdf"></i>Project Requirements Document</span>
+                <span class="portal-date">Posted On: July 29th, 2026</span>
+              </a>
+            </div>
+            <a class="portal-all" href="#contact" data-i18n="portal_view_all">View all</a>
+          </div>
+
+          <aside class="portal-column">
+            <h2 class="portal-heading" data-i18n="portal_events">Vipeperushi na Matukio Yajayo</h2>
+            <img class="flyer" src="assets/images/flyer-presentation.jpg" alt="Upcoming technology presentation cover" loading="lazy" onerror="this.onerror=null;this.src='assets/images/fallback-code.jpg'">
+            <div class="subportal">
+              <h2 class="portal-heading" data-i18n="portal_services">Huduma na Mipango</h2>
+              <div class="service-stack">
+                <a class="service-link" href="#projects"><span>Website Development</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#projects"><span>Mobile Applications</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#projects"><span>School Management Systems</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#projects"><span>Business Systems</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#contact"><span>Professional Presentations</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#skills"><span>Data Analytics</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#qualifications"><span>Artificial Intelligence</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#skills"><span>Cybersecurity</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#qualifications"><span>Networking</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="service-link" href="#projects"><span>Cloud Services</span><i class="fa-solid fa-chevron-right"></i></a>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
 
@@ -723,7 +926,7 @@
   <script src="js/config.js"></script>
   <script src="js/contact-form.js"></script>
   <script src="js/api-portfolio.js"></script>
-  <script src="js/gov-theme.js?v=3"></script>
-  <script src="js/i18n.js"></script>
+  <script src="js/gov-theme.js?v=4"></script>
+  <script src="js/i18n.js?v=4"></script>
 </body>
 </html>

@@ -347,7 +347,7 @@
 
 
     /* STATS */
-    .stats { color:#fff; background:linear-gradient(115deg,rgba(25,49,84,.97),rgba(20,104,146,.94)), url("https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1800&q=80") center/cover fixed; }
+    .stats { color:#fff; background:linear-gradient(115deg,rgba(25,49,84,.97),rgba(20,104,146,.94)), url("../assets/images/hero-team.jpg") center/cover fixed; }
     .stats .section-title { color:#fff; }.stats .section-title::after{background:var(--yellow)}
     .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
     .stat { text-align:center; padding:24px 12px; border:1px solid rgba(255,255,255,.18); border-radius:12px; background:rgba(255,255,255,.08); backdrop-filter:blur(6px); }

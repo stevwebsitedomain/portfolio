@@ -7,12 +7,12 @@ menuBtn.addEventListener('click', () => {
   menuBtn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
 });
 document.querySelectorAll('.submenu-toggle').forEach(button => button.addEventListener('click', () => {
-  if (innerWidth <= 850) button.parentElement.classList.toggle('mobile-open');
+  if (innerWidth <= 1180) button.parentElement.classList.toggle('mobile-open');
 }));
 
 // Hero slider
-const slides = [...document.querySelectorAll('.slide')];
-const dots = [...document.querySelectorAll('.dot')];
+const slides = [...document.querySelectorAll('.hero .slide')];
+const dots = [...document.querySelectorAll('.hero-controls .dot')];
 window.__heroContent = window.__heroContent || [
   ['Building systems that power businesses in Tanzania', 'I build websites, management systems, and cloud apps — from interface to database, backend, and deployment.'],
   ['Digital solutions for institutions and businesses', 'School systems, e-commerce, travel, and agriculture platforms — built with PHP, Yii2, MySQL, and cloud hosting.'],
@@ -63,7 +63,23 @@ function toggleSearch(open) {
   document.body.classList.toggle('no-scroll', open);
   if (open) setTimeout(() => document.getElementById('siteSearchInput').focus(), 50);
 }
-document.getElementById('openSearch').onclick = () => toggleSearch(true);
+const openSearchBtn = document.getElementById('openSearch');
+if (openSearchBtn) {
+  openSearchBtn.onclick = (e) => {
+    e.preventDefault();
+    toggleSearch(true);
+  };
+}
+const headerSearchForm = document.getElementById('headerSearchForm');
+if (headerSearchForm) {
+  headerSearchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = document.getElementById('headerSearch');
+    const dest = document.getElementById('siteSearchInput');
+    if (query && dest) dest.value = query.value;
+    toggleSearch(true);
+  });
+}
 document.getElementById('closeSearch').onclick = () => toggleSearch(false);
 modal.addEventListener('click', e => { if (e.target === modal) toggleSearch(false); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSearch(false); });

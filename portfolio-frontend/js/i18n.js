@@ -4,7 +4,15 @@
   const dict = {
     en: {
       search_placeholder: 'Search projects, skills, contact ...',
+      search_here: 'Search Here',
       search_aria: 'Open search',
+      welcome_talk: 'Talk To Steven Makarious',
+      portal_news: 'Latest Projects',
+      portal_docs: 'Publications & Documents',
+      portal_events: 'Flyers & Upcoming Events',
+      portal_services: 'Services & Programs',
+      portal_view_all: 'View all',
+      view_project: 'View Project',
       util_support: 'Customer Support',
       util_announcements: 'Announcements',
       util_sitemap: 'Sitemap',
@@ -114,7 +122,14 @@
     },
     sw: {
       search_placeholder: 'Tafuta miradi, stadi, mawasiliano ...',
+      search_here: 'Tafuta Hapa',
       search_aria: 'Fungua sehemu ya kutafuta',
+      welcome_talk: 'Ongea Na Steven Makarious',
+      portal_news: 'Habari / Miradi',
+      portal_docs: 'Taarifa na Machapisho',
+      portal_events: 'Vipeperushi na Matukio Yajayo',
+      portal_services: 'Huduma na Mipango',
+      portal_view_all: 'Tazama Zote',
       util_support: 'Huduma kwa Wateja',
       util_announcements: 'Matangazo',
       util_sitemap: 'Ramani ya Tovuti',
@@ -211,6 +226,7 @@
       to_top: 'Rudi juu',
       qr_caption: 'Scan fungua portfolio hii',
       brand_line: 'Brand · Systems & Web Solutions',
+      view_project: 'Tazama Mradi',
       proj_reacris: 'Jukwaa la e-commerce la luxury spirits — mauzo mtandaoni, bidhaa, na mawasiliano kwa wateja.',
       proj_g4: 'Tovuti ya usafiri kwa flights, safaris, na bookings kwa wateja wa ndani na nje.',
       proj_buhalahala: 'Tovuti ya shule na portal ya uandikishaji mtandaoni kwa wanafunzi na wazazi Geita.',
@@ -262,6 +278,8 @@
       langBtn.innerHTML = (L === 'en' ? 'EN' : 'SW') + ' <i class="fa-solid fa-chevron-down"></i>';
       langBtn.setAttribute('title', t(L, 'lang_title'));
     }
+    const langSelect = document.getElementById('language');
+    if (langSelect && langSelect.value !== L) langSelect.value = L;
 
     // Sync hero copy for current slide
     window.__heroContent = [
@@ -275,6 +293,12 @@
   }
 
   function initLanguageUI() {
+    const langSelect = document.getElementById('language');
+    if (langSelect) {
+      langSelect.value = getLang();
+      langSelect.addEventListener('change', () => applyLanguage(langSelect.value));
+    }
+
     const wrap = document.querySelector('.lang-wrap');
     const btn = document.getElementById('langBtn');
     const menu = document.getElementById('langMenu');
