@@ -50,7 +50,7 @@ if (localStorage.getItem('site-theme') === 'dark') {
 }
 
 // Text size
-const sizes = [14, 16, 18]; let sizeIndex = 0;
+const sizes = [16, 18, 20]; let sizeIndex = 0;
 document.getElementById('textSize').addEventListener('click', () => {
   sizeIndex = (sizeIndex + 1) % sizes.length;
   document.documentElement.style.fontSize = sizes[sizeIndex] + 'px';
