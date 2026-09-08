@@ -96,28 +96,27 @@ window.addEventListener('scroll', () => toTop.classList.toggle('show', scrollY >
 toTop.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Showcase auto-scroll — continuous loop right → left
+// Showcase auto-scroll — continuous loop right → left (transform, no scrollbar)
 (function () {
   const scroller = document.getElementById('showcaseScroll');
   const track = document.getElementById('showcaseTrack');
   if (!scroller || !track) return;
 
-  // Duplicate cards once for seamless wrap
   Array.from(track.children).forEach((node) => {
     track.appendChild(node.cloneNode(true));
   });
 
   let paused = false;
-  const speed = 0.65;
+  let offset = 0;
+  const speed = 0.7;
 
   function tick() {
     if (!paused) {
       const half = track.scrollWidth / 2;
       if (half > 4) {
-        scroller.scrollLeft += speed;
-        if (scroller.scrollLeft >= half) {
-          scroller.scrollLeft -= half;
-        }
+        offset += speed;
+        if (offset >= half) offset -= half;
+        track.style.transform = 'translateX(' + (-offset) + 'px)';
       }
     }
     requestAnimationFrame(tick);
