@@ -62,6 +62,19 @@
       display: inline-grid; place-items: center; padding: 0 9px;
     }
     .round-btn:hover, .language:hover { background: rgba(255,255,255,.2); }
+    .lang-wrap { position: relative; }
+    .lang-menu {
+      display: none; position: absolute; right: 0; top: calc(100% + 6px); z-index: 60;
+      min-width: 140px; list-style: none; background: var(--surface); color: var(--text);
+      border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden;
+    }
+    .lang-menu.open { display: block; }
+    .lang-menu button {
+      width: 100%; border: 0; background: transparent; color: inherit;
+      text-align: left; padding: 10px 14px; font-weight: 700;
+    }
+    .lang-menu button:hover { background: var(--soft); color: var(--primary); }
+
 
     /* IDENTITY HEADER */
     .identity {
@@ -230,24 +243,30 @@
     .soma-zaidi:hover { text-decoration: underline; }
     html.dark .soma-zaidi { color: var(--accent); }
 
-    .project-list { list-style: none; }
+    .project-list {
+      list-style: none;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+    }
     .project-row {
       border-bottom: 1px solid var(--border);
     }
     .project-row > a {
       display: grid;
-      grid-template-columns: 52px 1fr;
-      gap: 12px;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
       align-items: center;
-      padding: 14px 0;
+      padding: 10px 0;
       position: relative;
     }
     .project-row.is-new > a {
-      grid-template-columns: 52px 44px 1fr;
+      grid-template-columns: 36px 34px 1fr;
     }
     .project-logo {
-      width: 52px;
-      height: 52px;
+      width: 36px;
+      height: 36px;
       border: 1px solid var(--border);
       border-radius: 6px;
       background: #fff;
@@ -260,8 +279,64 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      padding: 3px;
+    }
+
+    /* Auto-scrolling project icon strip */
+    .project-icons-scroll {
+      overflow: hidden;
+      margin: 0 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--soft);
+      padding: 8px 0;
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .project-icons-track {
+      display: flex;
+      width: max-content;
+      gap: 18px;
+      animation: project-marquee 28s linear infinite;
+    }
+    .project-icons-scroll:hover .project-icons-track { animation-play-state: paused; }
+    .project-icons-track a {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .project-icons-track a img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
       padding: 4px;
     }
+    .project-icons-track a .mini-new {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      font-size: .42rem;
+      font-weight: 900;
+      color: #fff;
+      background: #e11d48;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+    }
+    @keyframes project-marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
     .project-text {
       display: flex;
       flex-direction: column;
@@ -280,11 +355,11 @@
     html.dark .project-row > a:hover .project-text strong { color: var(--accent); }
 
     .new-sticker {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       display: grid;
       place-items: center;
-      font-size: .55rem;
+      font-size: .48rem;
       font-weight: 900;
       letter-spacing: .04em;
       color: #fff;
@@ -314,6 +389,26 @@
     }
     .hub-more:hover { text-decoration: underline; }
     html.dark .hub-more { color: var(--accent); }
+
+    .footer-qr {
+      margin-top: 16px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .footer-qr img {
+      width: 120px;
+      height: 120px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 6px;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .footer-qr-caption {
+      font-size: .82rem;
+      color: #cbd5e1;
+    }
 
     /* legacy card helpers still used elsewhere */
     .card-body { padding:18px; }

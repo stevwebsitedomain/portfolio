@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Steven Makarious Portfolio">
-  <meta property="og:locale" content="sw_TZ">
+  <meta property="og:locale" content="en_TZ">
   <meta property="og:url" content="https://portfolio-nu-taupe-017y2cafli.vercel.app/">
   <meta property="og:title" content="Steven Makarious | Digital Matrix Technology — Tanzania">
   <meta property="og:description" content="Full Stack Developer in Tanzania building websites, management systems, and cloud apps for organizations.">
@@ -34,6 +34,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="css/gov-theme.css">
+  <script>try{var __l=localStorage.getItem('site-lang');if(__l==='sw'||__l==='en')document.documentElement.lang=__l;else document.documentElement.lang='en';}catch(e){}</script>
 
   <script type="application/ld+json">
   {
@@ -45,7 +46,7 @@
         "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/",
         "name": "Steven Makarious Portfolio",
         "description": "Portfolio of Steven Makarious — Full Stack Developer building websites, systems, and cloud apps in Tanzania.",
-        "inLanguage": "sw",
+        "inLanguage": "en",
         "publisher": { "@id": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#person" }
       },
       {
@@ -92,12 +93,12 @@
         "@type": "ItemList",
         "name": "Main sections",
         "itemListElement": [
-          { "@type": "SiteNavigationElement", "position": 1, "name": "Mwanzo", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#hero" },
-          { "@type": "SiteNavigationElement", "position": 2, "name": "Kuhusu", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#about" },
-          { "@type": "SiteNavigationElement", "position": 3, "name": "Stadi", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#skills" },
-          { "@type": "SiteNavigationElement", "position": 4, "name": "Miradi", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#projects" },
-          { "@type": "SiteNavigationElement", "position": 5, "name": "Sifa", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#qualifications" },
-          { "@type": "SiteNavigationElement", "position": 6, "name": "Mawasiliano", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#contact" }
+          { "@type": "SiteNavigationElement", "position": 1, "name": "Home", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#hero" },
+          { "@type": "SiteNavigationElement", "position": 2, "name": "About", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#about" },
+          { "@type": "SiteNavigationElement", "position": 3, "name": "Skills", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#skills" },
+          { "@type": "SiteNavigationElement", "position": 4, "name": "Projects", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#projects" },
+          { "@type": "SiteNavigationElement", "position": 5, "name": "Qualifications", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#qualifications" },
+          { "@type": "SiteNavigationElement", "position": 6, "name": "Contact", "url": "https://portfolio-nu-taupe-017y2cafli.vercel.app/#contact" }
         ]
       }
     ]
@@ -109,17 +110,23 @@
   <header>
     <div class="utility">
       <div class="container utility-row">
-        <button class="mini-search" id="openSearch" aria-label="Fungua sehemu ya kutafuta"><i class="fa-solid fa-magnifying-glass"></i><span>Tafuta miradi, stadi, mawasiliano ...</span></button>
+        <button class="mini-search" id="openSearch" data-i18n-aria="search_aria" aria-label="Open search"><i class="fa-solid fa-magnifying-glass"></i><span data-i18n="search_placeholder">Search projects, skills, contact ...</span></button>
         <div class="utility-spacer"></div>
-        <nav class="utility-links" aria-label="Viungo vya juu">
-          <a href="#contact">Huduma kwa Wateja</a>
-          <a href="#announcements">Matangazo</a>
-          <a href="#footer">Ramani ya Tovuti</a>
-          <a href="#contact">Wasiliana Nasi</a>
+        <nav class="utility-links" aria-label="Utility links">
+          <a href="#contact" data-i18n="util_support">Customer Support</a>
+          <a href="#announcements" data-i18n="util_announcements">Announcements</a>
+          <a href="#footer" data-i18n="util_sitemap">Sitemap</a>
+          <a href="#contact" data-i18n="util_contact">Contact Us</a>
         </nav>
-        <button class="round-btn text-size" id="textSize" title="Badili ukubwa wa maandishi"><i class="fa-solid fa-text-height"></i></button>
-        <button class="round-btn" id="themeToggle" title="Badili mandhari"><i class="fa-solid fa-moon"></i></button>
-        <button class="language" title="Lugha">SW <i class="fa-solid fa-chevron-down"></i></button>
+        <button class="round-btn text-size" id="textSize" data-i18n-title="text_size" title="Change text size"><i class="fa-solid fa-text-height"></i></button>
+        <button class="round-btn" id="themeToggle" data-i18n-title="theme" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+        <div class="lang-wrap">
+          <button class="language" id="langBtn" type="button" aria-haspopup="listbox" aria-expanded="false" title="Language">EN <i class="fa-solid fa-chevron-down"></i></button>
+          <ul class="lang-menu" id="langMenu" role="listbox">
+            <li><button type="button" data-lang="en">English</button></li>
+            <li><button type="button" data-lang="sw">Kiswahili</button></li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -134,29 +141,29 @@
       <div class="flag-line"><span></span><span></span><span></span><span></span></div>
     </div>
 
-    <nav class="main-nav" aria-label="Menu kuu">
+    <nav class="main-nav" aria-label="Main menu">
       <div class="container nav-row">
         <ul class="nav-list" id="navList">
-          <li class="nav-item"><a class="nav-link" href="#hero">Mwanzo</a></li>
+          <li class="nav-item"><a class="nav-link" href="#hero" data-i18n="nav_home">Home</a></li>
           <li class="nav-item">
-            <button class="nav-link submenu-toggle" type="button">Kuhusu <i class="fa-solid fa-chevron-down"></i></button>
+            <button class="nav-link submenu-toggle" type="button"><span data-i18n="nav_about">About</span> <i class="fa-solid fa-chevron-down"></i></button>
             <ul class="dropdown">
-              <li><a href="#about">Historia</a></li>
-              <li><a href="#dira">Dira</a></li>
+              <li><a href="#about" data-i18n="nav_history">History</a></li>
+              <li><a href="#dira" data-i18n="nav_vision">Vision</a></li>
             </ul>
           </li>
-          <li class="nav-item"><a class="nav-link" href="#skills">Stadi</a></li>
-          <li class="nav-item"><a class="nav-link" href="#projects">Miradi</a></li>
-          <li class="nav-item"><a class="nav-link" href="#qualifications">Sifa</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Mawasiliano</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills" data-i18n="nav_skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects" data-i18n="nav_projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#qualifications" data-i18n="nav_qualifications">Qualifications</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact" data-i18n="nav_contact">Contact</a></li>
         </ul>
-        <button class="menu-btn" id="menuBtn" aria-label="Fungua menu"><i class="fa-solid fa-bars"></i></button>
+        <button class="menu-btn" id="menuBtn" data-i18n-aria="menu_open" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
       </div>
     </nav>
   </header>
 
   <main>
-    <section class="hero" id="hero" aria-label="Habari kuu">
+    <section class="hero" id="hero" aria-label="Featured">
       <div class="slides">
         <div class="slide active"><img src="images/hero-bg.jpg" alt="Steven Makarious — Full Stack Developer"></div>
         <div class="slide"><img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1900&q=85" alt="Software development"></div>
@@ -164,18 +171,18 @@
       </div>
       <div class="container hero-content">
         <div class="hero-copy">
-          <span class="hero-label"><i class="fa-solid fa-code"></i> Full Stack · Tanzania</span>
-          <h2 id="heroTitle">Kujenga mifumo inayowezesha biashara Tanzania</h2>
-          <p id="heroText">Ninaunda tovuti, mifumo ya usimamizi na programu za wingu — kutoka interface hadi database, backend na deployment.</p>
-          <a href="#projects" class="primary-btn">Tazama miradi <i class="fa-solid fa-arrow-right"></i></a>
+          <span class="hero-label"><i class="fa-solid fa-code"></i> <span data-i18n="hero_label">Full Stack · Tanzania</span></span>
+          <h2 id="heroTitle">Building systems that power businesses in Tanzania</h2>
+          <p id="heroText">I build websites, management systems, and cloud apps — from interface to database, backend, and deployment.</p>
+          <a href="#projects" class="primary-btn"><span data-i18n="hero_cta">View projects</span> <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
-      <button class="hero-arrow prev" aria-label="Picha iliyopita"><i class="fa-solid fa-chevron-left"></i></button>
-      <button class="hero-arrow next" aria-label="Picha inayofuata"><i class="fa-solid fa-chevron-right"></i></button>
+      <button class="hero-arrow prev" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="hero-arrow next" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
       <div class="hero-controls">
-        <button class="dot active" aria-label="Picha 1"></button>
-        <button class="dot" aria-label="Picha 2"></button>
-        <button class="dot" aria-label="Picha 3"></button>
+        <button class="dot active" aria-label="Slide 1"></button>
+        <button class="dot" aria-label="Slide 2"></button>
+        <button class="dot" aria-label="Slide 3"></button>
       </div>
     </section>
 
@@ -192,7 +199,7 @@
           <img class="logo-leader" src="images/DIGITAL%20MATRIX%20TECHNOLOGY.png" alt="Digital Matrix Technology">
           <div>
             <h3>Digital Matrix Technology</h3>
-            <p>Brand · Systems &amp; Web Solutions</p>
+            <p data-i18n="brand_line">Brand · Systems &amp; Web Solutions</p>
           </div>
         </article>
       </div>
@@ -202,18 +209,18 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <div class="eyebrow">Kuhusu</div>
-            <h2 class="section-title">Historia na Dira</h2>
+            <div class="eyebrow" data-i18n="about_eyebrow">About</div>
+            <h2 class="section-title" data-i18n="about_title">History &amp; Vision</h2>
           </div>
         </div>
         <div class="about-grid">
           <article class="about-card" id="historia">
-            <h3>Historia</h3>
-            <p>Steven Makarious ni Full Stack Developer nchini Tanzania anayejenga tovuti, mifumo ya usimamizi, na programu za wingu kwa biashara na taasisi. Kupitia Digital Matrix Technology, anatoa suluhisho kamili — kutoka design na databases hadi backend, ripoti, na live deployment.</p>
+            <h3 data-i18n="about_history">History</h3>
+            <p data-i18n="about_history_p">Steven Makarious is a Full Stack Developer in Tanzania who builds websites, management systems, and cloud applications for businesses and institutions. Through Digital Matrix Technology, he delivers end-to-end solutions — from design and databases to backend, reporting, and live deployment.</p>
           </article>
           <article class="about-card" id="dira">
-            <h3>Dira</h3>
-            <p>Kuwaendeleza wateja wa Tanzania kwa mifumo ya kidijitali yenye uaminifu, rahisi kutumia, na inayoweza kukua — ili kuendesha shughuli, kuhudumia wateja mtandaoni, na kuongeza ufanisi wa kazi.</p>
+            <h3 data-i18n="about_vision">Vision</h3>
+            <p data-i18n="about_vision_p">To empower Tanzanian clients with reliable, easy-to-use digital systems that can grow — so they can run operations, serve customers online, and improve workplace efficiency.</p>
           </article>
         </div>
       </div>
@@ -223,17 +230,17 @@
       <div class="container">
         <div class="hub-layout">
           <div class="hub-col hub-news">
-            <h2 class="hub-title">Habari</h2>
+            <h2 class="hub-title" data-i18n="news_title">News</h2>
             <div class="news-list">
               <article class="news-row">
                 <a class="news-thumb" href="http://reacris.co.tz/" target="_blank" rel="noopener">
                   <img src="images/reacris.png" alt="REACRIS LTD">
                 </a>
                 <div class="news-body">
-                  <h3><a href="http://reacris.co.tz/" target="_blank" rel="noopener">REACRIS LTD — jukwaa la e-commerce la luxury spirits</a></h3>
+                  <h3><a href="http://reacris.co.tz/" target="_blank" rel="noopener" data-i18n="news_1_title">REACRIS LTD — luxury spirits e-commerce platform</a></h3>
                   <div class="posted"><i class="fa-regular fa-calendar"></i> Posted On: 08 Sep 2026</div>
-                  <p>Tovuti ya biashara ya REACRIS LTD imeundwa na kuwekwa live — mauzo mtandaoni, orodha ya bidhaa, na mawasiliano kwa wateja Tanzania.</p>
-                  <a class="soma-zaidi" href="http://reacris.co.tz/" target="_blank" rel="noopener">soma zaidi</a>
+                  <p data-i18n="news_1_p">The REACRIS LTD business website is live — online sales, product listings, and customer contact for Tanzania.</p>
+                  <a class="soma-zaidi" href="http://reacris.co.tz/" target="_blank" rel="noopener" data-i18n="read_more">read more</a>
                 </div>
               </article>
               <article class="news-row">
@@ -241,10 +248,10 @@
                   <img src="images/g4elevate.png" alt="G4 Elevate">
                 </a>
                 <div class="news-body">
-                  <h3><a href="http://g4elevate.co.tz/" target="_blank" rel="noopener">G4 Elevate Travel &amp; Tours — tovuti mpya ya usafiri</a></h3>
+                  <h3><a href="http://g4elevate.co.tz/" target="_blank" rel="noopener" data-i18n="news_2_title">G4 Elevate Travel &amp; Tours — new travel website</a></h3>
                   <div class="posted"><i class="fa-regular fa-calendar"></i> Posted On: 05 Sep 2026</div>
-                  <p>Kampuni ya usafiri na utalii sasa ina tovuti ya kisasa kwa flights, safaris, na bookings kwa wateja wa ndani na nje.</p>
-                  <a class="soma-zaidi" href="http://g4elevate.co.tz/" target="_blank" rel="noopener">soma zaidi</a>
+                  <p data-i18n="news_2_p">The travel and tourism company now has a modern site for flights, safaris, and bookings for local and international clients.</p>
+                  <a class="soma-zaidi" href="http://g4elevate.co.tz/" target="_blank" rel="noopener" data-i18n="read_more">read more</a>
                 </div>
               </article>
               <article class="news-row">
@@ -252,10 +259,10 @@
                   <img src="images/buhalahala.png" alt="Buhalahala Secondary School">
                 </a>
                 <div class="news-body">
-                  <h3><a href="http://buhalahalasecondaryschool.com/" target="_blank" rel="noopener">Buhalahala Secondary School — portal ya uandikishaji</a></h3>
+                  <h3><a href="http://buhalahalasecondaryschool.com/" target="_blank" rel="noopener" data-i18n="news_3_title">Buhalahala Secondary School — admissions portal</a></h3>
                   <div class="posted"><i class="fa-regular fa-calendar"></i> Posted On: 01 Sep 2026</div>
-                  <p>Shule ya sekondari Geita sasa ina tovuti na mfumo wa maombi ya kujiunga mtandaoni kwa wazazi na wanafunzi.</p>
-                  <a class="soma-zaidi" href="http://buhalahalasecondaryschool.com/" target="_blank" rel="noopener">soma zaidi</a>
+                  <p data-i18n="news_3_p">The Geita secondary school now has a website and online application system for parents and students.</p>
+                  <a class="soma-zaidi" href="http://buhalahalasecondaryschool.com/" target="_blank" rel="noopener" data-i18n="read_more">read more</a>
                 </div>
               </article>
               <article class="news-row">
@@ -263,22 +270,38 @@
                   <img src="images/agridata-smart.png" alt="AGRIDATA SMART">
                 </a>
                 <div class="news-body">
-                  <h3><a href="https://agridata.co.tz" target="_blank" rel="noopener">AGRIDATA SMART — jukwaa la kilimo smart</a></h3>
-                  <div class="posted"><i class="fa-regular fa-calendar"></i> Posted On: 20 Ago 2026</div>
-                  <p>Mfumo wa data na huduma za kilimo smart kwa wakulima na wadau wa sekta ya kilimo nchini Tanzania.</p>
-                  <a class="soma-zaidi" href="https://agridata.co.tz" target="_blank" rel="noopener">soma zaidi</a>
+                  <h3><a href="https://agridata.co.tz" target="_blank" rel="noopener" data-i18n="news_4_title">AGRIDATA SMART — smart agriculture platform</a></h3>
+                  <div class="posted"><i class="fa-regular fa-calendar"></i> Posted On: 20 Aug 2026</div>
+                  <p data-i18n="news_4_p">A data and smart farming platform for farmers and agriculture stakeholders in Tanzania.</p>
+                  <a class="soma-zaidi" href="https://agridata.co.tz" target="_blank" rel="noopener" data-i18n="read_more">read more</a>
                 </div>
               </article>
             </div>
           </div>
 
           <div class="hub-col hub-projects" id="projects">
-            <h2 class="hub-title">Miradi</h2>
+            <h2 class="hub-title" data-i18n="projects_title">Projects</h2>
+            <div class="project-icons-scroll" aria-label="Project logos">
+              <div class="project-icons-track">
+                <a href="http://reacris.co.tz/" target="_blank" rel="noopener" title="REACRIS LTD"><img src="images/reacris.png" alt="REACRIS"><span class="mini-new">N</span></a>
+                <a href="http://g4elevate.co.tz/" target="_blank" rel="noopener" title="G4 Elevate"><img src="images/g4elevate.png" alt="G4 Elevate"><span class="mini-new">N</span></a>
+                <a href="http://buhalahalasecondaryschool.com/" target="_blank" rel="noopener" title="Buhalahala"><img src="images/buhalahala.png" alt="Buhalahala"><span class="mini-new">N</span></a>
+                <a href="https://agridata.co.tz" target="_blank" rel="noopener" title="AGRIDATA"><img src="images/agridata-smart.png" alt="AGRIDATA"></a>
+                <a href="https://miracletechgroup.com" target="_blank" rel="noopener" title="Miracle Tech"><img src="images/miracletech.png" alt="Miracle Tech"></a>
+                <a href="https://whitelakeschoolportal.co.tz" target="_blank" rel="noopener" title="White Lake"><img src="images/DIGITAL%20MATRIX%20TECHNOLOGY.png" alt="White Lake"></a>
+                <a href="http://reacris.co.tz/" target="_blank" rel="noopener" title="REACRIS LTD" aria-hidden="true"><img src="images/reacris.png" alt=""><span class="mini-new">N</span></a>
+                <a href="http://g4elevate.co.tz/" target="_blank" rel="noopener" title="G4 Elevate" aria-hidden="true"><img src="images/g4elevate.png" alt=""><span class="mini-new">N</span></a>
+                <a href="http://buhalahalasecondaryschool.com/" target="_blank" rel="noopener" title="Buhalahala" aria-hidden="true"><img src="images/buhalahala.png" alt=""><span class="mini-new">N</span></a>
+                <a href="https://agridata.co.tz" target="_blank" rel="noopener" title="AGRIDATA" aria-hidden="true"><img src="images/agridata-smart.png" alt=""></a>
+                <a href="https://miracletechgroup.com" target="_blank" rel="noopener" title="Miracle Tech" aria-hidden="true"><img src="images/miracletech.png" alt=""></a>
+                <a href="https://whitelakeschoolportal.co.tz" target="_blank" rel="noopener" title="White Lake" aria-hidden="true"><img src="images/DIGITAL%20MATRIX%20TECHNOLOGY.png" alt=""></a>
+              </div>
+            </div>
             <ul class="project-list">
               <li class="project-row is-new">
                 <a href="http://reacris.co.tz/" target="_blank" rel="noopener">
                   <span class="project-logo" aria-hidden="true"><img src="images/reacris.png" alt=""></span>
-                  <span class="new-sticker" aria-label="Mradi mpya">NEW</span>
+                  <span class="new-sticker" data-i18n-aria="new_project" aria-label="New project">NEW</span>
                   <span class="project-text">
                     <strong>REACRIS LTD</strong>
                     <span class="posted">Posted On: 08 Sep 2026</span>
@@ -288,7 +311,7 @@
               <li class="project-row is-new">
                 <a href="http://g4elevate.co.tz/" target="_blank" rel="noopener">
                   <span class="project-logo" aria-hidden="true"><img src="images/g4elevate.png" alt=""></span>
-                  <span class="new-sticker" aria-label="Mradi mpya">NEW</span>
+                  <span class="new-sticker" data-i18n-aria="new_project" aria-label="New project">NEW</span>
                   <span class="project-text">
                     <strong>G4 ELEVATE TRAVEL &amp; TOURS</strong>
                     <span class="posted">Posted On: 05 Sep 2026</span>
@@ -298,7 +321,7 @@
               <li class="project-row is-new">
                 <a href="http://buhalahalasecondaryschool.com/" target="_blank" rel="noopener">
                   <span class="project-logo" aria-hidden="true"><img src="images/buhalahala.png" alt=""></span>
-                  <span class="new-sticker" aria-label="Mradi mpya">NEW</span>
+                  <span class="new-sticker" data-i18n-aria="new_project" aria-label="New project">NEW</span>
                   <span class="project-text">
                     <strong>BUHALAHALA SECONDARY SCHOOL</strong>
                     <span class="posted">Posted On: 01 Sep 2026</span>
@@ -310,7 +333,7 @@
                   <span class="project-logo" aria-hidden="true"><img src="images/agridata-smart.png" alt=""></span>
                   <span class="project-text">
                     <strong>AGRIDATA SMART</strong>
-                    <span class="posted">Posted On: 20 Ago 2026</span>
+                    <span class="posted">Posted On: 20 Aug 2026</span>
                   </span>
                 </a>
               </li>
@@ -333,7 +356,7 @@
                 </a>
               </li>
             </ul>
-            <a class="hub-more" href="#contact">Tazama Zote / Omba Mradi</a>
+            <a class="hub-more" href="#contact" data-i18n="view_all_projects">View all / Request a project</a>
           </div>
         </div>
       </div>
@@ -342,48 +365,48 @@
     <section id="announcements">
       <div class="container panels">
         <div class="panel">
-          <h2 class="panel-title">Matangazo</h2>
+          <h2 class="panel-title" data-i18n="ann_title">Announcements</h2>
           <ul class="notice-list">
             <li>
               <div class="date-box"><strong>08</strong><span>SEP</span></div>
-              <a href="#contact">Fungua mradi mpya — wasiliana kwa quote ya mfumo au tovuti</a>
+              <a href="#contact" data-i18n="ann_1">Start a new project — contact us for a system or website quote</a>
             </li>
             <li>
               <div class="date-box"><strong>01</strong><span>SEP</span></div>
-              <a href="#projects">Miradi mipya imeongezwa kwenye portfolio (REACRIS, G4 Elevate)</a>
+              <a href="#projects" data-i18n="ann_2">New projects added to the portfolio (REACRIS, G4 Elevate)</a>
             </li>
             <li>
-              <div class="date-box"><strong>15</strong><span>AGO</span></div>
-              <a href="#skills">Huduma: Full stack development, hosting &amp; cloud deployment</a>
+              <div class="date-box"><strong>15</strong><span>AUG</span></div>
+              <a href="#skills" data-i18n="ann_3">Services: Full stack development, hosting &amp; cloud deployment</a>
             </li>
             <li>
-              <div class="date-box"><strong>01</strong><span>AGO</span></div>
-              <a href="https://wa.me/255715296092" target="_blank" rel="noopener">Support kupitia WhatsApp: +255 715 296 092</a>
+              <div class="date-box"><strong>01</strong><span>AUG</span></div>
+              <a href="https://wa.me/255715296092" target="_blank" rel="noopener" data-i18n="ann_4">Support via WhatsApp: +255 715 296 092</a>
             </li>
           </ul>
-          <div class="panel-footer"><a class="more" href="#contact">Wasiliana <i class="fa-solid fa-arrow-right"></i></a></div>
+          <div class="panel-footer"><a class="more" href="#contact"><span data-i18n="contact_link">Contact</span> <i class="fa-solid fa-arrow-right"></i></a></div>
         </div>
         <div class="panel">
-          <h2 class="panel-title">Huduma Muhimu</h2>
+          <h2 class="panel-title" data-i18n="services_title">Key Services</h2>
           <ul class="notice-list">
             <li>
               <div class="date-box"><strong>01</strong><span>NEW</span></div>
-              <a href="#projects">Website development kwa biashara na taasisi</a>
+              <a href="#projects" data-i18n="svc_1">Website development for businesses and institutions</a>
             </li>
             <li>
               <div class="date-box"><strong>02</strong><span>SYS</span></div>
-              <a href="#projects">Management systems (shule, ofisi, admissions)</a>
+              <a href="#projects" data-i18n="svc_2">Management systems (schools, offices, admissions)</a>
             </li>
             <li>
               <div class="date-box"><strong>03</strong><span>API</span></div>
-              <a href="#skills">Backend PHP / Yii2 / MySQL &amp; REST APIs</a>
+              <a href="#skills" data-i18n="svc_3">Backend PHP / Yii2 / MySQL &amp; REST APIs</a>
             </li>
             <li>
               <div class="date-box"><strong>04</strong><span>CLD</span></div>
-              <a href="#qualifications">Cloud deployment — Vercel, Render, shared hosting</a>
+              <a href="#qualifications" data-i18n="svc_4">Cloud deployment — Vercel, Render, shared hosting</a>
             </li>
           </ul>
-          <div class="panel-footer"><a class="more" href="#skills">Stadi <i class="fa-solid fa-arrow-right"></i></a></div>
+          <div class="panel-footer"><a class="more" href="#skills"><span data-i18n="skills_link">Skills</span> <i class="fa-solid fa-arrow-right"></i></a></div>
         </div>
       </div>
     </section>
@@ -392,28 +415,28 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <div class="eyebrow">Rasilimali</div>
-            <h2 class="section-title">Nyaraka na Viungo</h2>
+            <div class="eyebrow" data-i18n="docs_eyebrow">Resources</div>
+            <h2 class="section-title" data-i18n="docs_title">Documents &amp; Links</h2>
           </div>
         </div>
         <form class="document-search" onsubmit="event.preventDefault(); document.getElementById('openSearch').click();">
-          <input type="search" placeholder="Tafuta mradi au stadi..." aria-label="Tafuta">
-          <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Tafuta</button>
+          <input type="search" data-i18n="docs_search" placeholder="Search a project or skill..." aria-label="Search">
+          <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="search_btn">Search</span></button>
         </form>
         <div class="document-grid">
           <a href="#projects" class="card doc-box">
             <div class="doc-icon"><i class="fa-solid fa-diagram-project"></i></div>
             <div>
-              <h3>Miradi Hai</h3>
-              <p>Orodha ya mifumo na tovuti zilizotengenezwa.</p>
+              <h3 data-i18n="live_projects">Live Projects</h3>
+              <p data-i18n="live_projects_p">List of systems and websites already delivered.</p>
             </div>
             <i class="fa-solid fa-chevron-right"></i>
           </a>
           <a href="#contact" class="card doc-box">
             <div class="doc-icon"><i class="fa-solid fa-file-signature"></i></div>
             <div>
-              <h3>Ombi la Huduma</h3>
-              <p>Wasilisha maelezo ya mradi kupitia fomu ya mawasiliano.</p>
+              <h3 data-i18n="service_request">Service Request</h3>
+              <p data-i18n="service_request_p">Submit project details through the contact form.</p>
             </div>
             <i class="fa-solid fa-chevron-right"></i>
           </a>
@@ -425,10 +448,10 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <div class="eyebrow">Tazama</div>
-            <h2 class="section-title">Video &amp; Showcase</h2>
+            <div class="eyebrow" data-i18n="video_eyebrow">Watch</div>
+            <h2 class="section-title" data-i18n="video_title">Video &amp; Showcase</h2>
           </div>
-          <a class="more" href="#projects">Miradi <i class="fa-solid fa-arrow-right"></i></a>
+          <a class="more" href="#projects"><span data-i18n="nav_projects">Projects</span> <i class="fa-solid fa-arrow-right"></i></a>
         </div>
         <div class="video-grid">
           <a href="http://reacris.co.tz/" target="_blank" rel="noopener" class="card video-card">
@@ -467,8 +490,8 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <div class="eyebrow">Ujuzi</div>
-            <h2 class="section-title">Stadi</h2>
+            <div class="eyebrow" data-i18n="skills_eyebrow">Expertise</div>
+            <h2 class="section-title" data-i18n="skills_title">Skills</h2>
           </div>
         </div>
         <div class="skills-grid">
@@ -488,8 +511,8 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <div class="eyebrow">Elimu na Uzoefu</div>
-            <h2 class="section-title">Sifa</h2>
+            <div class="eyebrow" data-i18n="qual_eyebrow">Education &amp; Experience</div>
+            <h2 class="section-title" data-i18n="qual_title">Qualifications</h2>
           </div>
         </div>
         <div class="qual-grid">
@@ -531,8 +554,8 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <div class="eyebrow" style="color:#7dd3fc">Kwa Muhtasari</div>
-            <h2 class="section-title">Takwimu Muhimu</h2>
+            <div class="eyebrow" style="color:#7dd3fc" data-i18n="stats_eyebrow">At a Glance</div>
+            <h2 class="section-title" data-i18n="stats_title">Key Stats</h2>
           </div>
         </div>
         <div class="stats-grid">
@@ -548,8 +571,8 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <div class="eyebrow">Viungo vya Haraka</div>
-            <h2 class="section-title">Mifumo &amp; Washirika</h2>
+            <div class="eyebrow" data-i18n="partners_eyebrow">Quick Links</div>
+            <h2 class="section-title" data-i18n="partners_title">Systems &amp; Partners</h2>
           </div>
         </div>
         <div class="institutions">
@@ -565,13 +588,13 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <div class="eyebrow">Wasiliana</div>
-            <h2 class="section-title">Mawasiliano</h2>
+            <div class="eyebrow" data-i18n="contact_eyebrow">Get in touch</div>
+            <h2 class="section-title" data-i18n="contact_title">Contact</h2>
           </div>
         </div>
         <div class="contact-layout">
           <aside class="contact-info-card">
-            <h3>Maelezo ya Mawasiliano</h3>
+            <h3 data-i18n="contact_details">Contact Details</h3>
             <div class="contact-line"><i class="fa-solid fa-envelope"></i><span><a href="mailto:stevenabalwambo@gmail.com">stevenabalwambo@gmail.com</a></span></div>
             <div class="contact-line"><i class="fa-solid fa-phone"></i><span><a href="tel:+255715296092">+255 715 296 092</a></span></div>
             <div class="contact-line"><i class="fa-brands fa-whatsapp"></i><span><a href="https://wa.me/255715296092" target="_blank" rel="noopener">WhatsApp</a></span></div>
@@ -579,20 +602,20 @@
           </aside>
           <form class="php-email-form" novalidate>
             <div class="form-row">
-              <input type="text" name="name" placeholder="Jina kamili" required>
-              <input type="email" name="email" placeholder="Barua pepe" required>
+              <input type="text" name="name" data-i18n="ph_name" placeholder="Full name" required>
+              <input type="email" name="email" data-i18n="ph_email" placeholder="Email" required>
             </div>
             <div class="form-row full">
-              <input type="text" name="subject" placeholder="Mada" required>
+              <input type="text" name="subject" data-i18n="ph_subject" placeholder="Subject" required>
             </div>
             <div class="form-row full">
-              <textarea name="message" placeholder="Ujumbe" required></textarea>
+              <textarea name="message" data-i18n="ph_message" placeholder="Message" required></textarea>
             </div>
             <div class="form-actions">
               <div class="loading">Loading</div>
               <div class="error-message"></div>
               <div class="sent-message">Your message has been sent. Thank you!</div>
-              <button type="submit">Tuma Ujumbe</button>
+              <button type="submit" data-i18n="send_message">Send Message</button>
             </div>
           </form>
         </div>
@@ -603,26 +626,30 @@
   <footer id="footer">
     <div class="container footer-top">
       <div class="footer-col">
-        <h3>Kituo cha Huduma kwa Wateja</h3>
+        <h3 data-i18n="footer_support">Customer Support Centre</h3>
         <div class="contact-line"><i class="fa-solid fa-phone"></i><span>+255 715 296 092</span></div>
-        <p>Wasiliana kwa miradi, support, au ushauri wa mifumo.</p>
+        <p data-i18n="footer_support_p">Reach out for projects, support, or systems advice.</p>
         <div class="socials">
           <a href="https://wa.me/255715296092" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
           <a href="mailto:stevenabalwambo@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
         </div>
+        <div class="footer-qr">
+          <img src="images/portfolio-qr.png" width="120" height="120" alt="QR code to open Steven Makarious portfolio">
+          <span class="footer-qr-caption" data-i18n="qr_caption">Scan to open this portfolio</span>
+        </div>
       </div>
       <div class="footer-col">
-        <h3>Viungo</h3>
+        <h3 data-i18n="footer_links">Links</h3>
         <ul>
-          <li><a href="#hero">› Mwanzo</a></li>
-          <li><a href="#about">› Kuhusu</a></li>
-          <li><a href="#skills">› Stadi</a></li>
-          <li><a href="#projects">› Miradi</a></li>
-          <li><a href="#qualifications">› Sifa</a></li>
+          <li><a href="#hero">› <span data-i18n="nav_home">Home</span></a></li>
+          <li><a href="#about">› <span data-i18n="nav_about">About</span></a></li>
+          <li><a href="#skills">› <span data-i18n="nav_skills">Skills</span></a></li>
+          <li><a href="#projects">› <span data-i18n="nav_projects">Projects</span></a></li>
+          <li><a href="#qualifications">› <span data-i18n="nav_qualifications">Qualifications</span></a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h3>Miradi Hai</h3>
+        <h3 data-i18n="footer_live">Live Projects</h3>
         <ul>
           <li><a href="http://reacris.co.tz/" target="_blank" rel="noopener">› REACRIS</a></li>
           <li><a href="http://g4elevate.co.tz/" target="_blank" rel="noopener">› G4 Elevate</a></li>
@@ -632,7 +659,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h3>Wasiliana Nasi</h3>
+        <h3 data-i18n="footer_contact">Contact Us</h3>
         <div class="contact-line"><i class="fa-solid fa-location-dot"></i><span>Digital Matrix Technology<br>Tanzania</span></div>
         <div class="contact-line"><i class="fa-solid fa-envelope"></i><span>stevenabalwambo@gmail.com</span></div>
         <div class="contact-line"><i class="fa-brands fa-whatsapp"></i><span>+255 715 296 092</span></div>
@@ -640,11 +667,11 @@
     </div>
     <div class="footer-bottom">
       <div class="container footer-bottom-row">
-        <p>© <span id="year"></span> Steven Makarious · Digital Matrix Technology. Haki zote zimehifadhiwa.</p>
+        <p>© <span id="year"></span> <span data-i18n="footer_copy">Steven Makarious · Digital Matrix Technology. All rights reserved.</span></p>
         <div class="footer-bottom-links">
-          <a href="#about">Kuhusu</a>
-          <a href="#contact">Mawasiliano</a>
-          <a href="#footer">Ramani</a>
+          <a href="#about" data-i18n="footer_about">About</a>
+          <a href="#contact" data-i18n="footer_contact_link">Contact</a>
+          <a href="#footer" data-i18n="footer_map">Sitemap</a>
         </div>
       </div>
     </div>
@@ -653,20 +680,21 @@
   <div class="modal" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
     <div class="search-dialog">
       <div class="search-dialog-head">
-        <h3 id="searchTitle">Tafuta kwenye tovuti</h3>
-        <button class="close-search" id="closeSearch" aria-label="Funga"><i class="fa-solid fa-xmark"></i></button>
+        <h3 id="searchTitle" data-i18n="search_title">Search this site</h3>
+        <button class="close-search" id="closeSearch" data-i18n-aria="search_close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form class="search-field" onsubmit="event.preventDefault(); var q=document.getElementById('siteSearchInput').value.toLowerCase(); if(q.indexOf('mradi')>-1||q.indexOf('project')>-1)location.hash='projects'; else if(q.indexOf('stadi')>-1||q.indexOf('skill')>-1)location.hash='skills'; else if(q.indexOf('contact')>-1||q.indexOf('wasiliana')>-1)location.hash='contact'; else location.hash='about'; document.getElementById('closeSearch').click();">
-        <input id="siteSearchInput" type="search" placeholder="Andika unachotafuta...">
+        <input id="siteSearchInput" type="search" data-i18n="search_input" placeholder="Type what you are looking for...">
         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
       </form>
     </div>
   </div>
-  <button class="to-top" id="toTop" aria-label="Rudi juu"><i class="fa-solid fa-arrow-up"></i></button>
+  <button class="to-top" id="toTop" data-i18n-aria="to_top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
   <script src="js/config.js"></script>
   <script src="js/contact-form.js"></script>
   <script src="js/api-portfolio.js"></script>
   <script src="js/gov-theme.js"></script>
+  <script src="js/i18n.js"></script>
 </body>
 </html>
