@@ -1,0 +1,22 @@
+DirectoryIndex index.html
+
+# Apache host (makarious.legitconsult.co.tz) does not have Vercel cleanUrls.
+# Map /about -> about.html so Google sitemap URLs return 200, not 404.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType application/xml .xml
+  AddType text/plain .txt
+  AddType application/manifest+json .webmanifest
+  AddType image/x-icon .ico
+</IfModule>

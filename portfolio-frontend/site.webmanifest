@@ -1,0 +1,21 @@
+{
+  "name": "Digital Matrix Technology",
+  "short_name": "DMT",
+  "description": "Websites, management systems, and cloud apps in Tanzania.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#20659f",
+  "icons": [
+    {
+      "src": "images/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

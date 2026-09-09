@@ -1,11 +1,28 @@
 // Mobile menu
 const menuBtn = document.getElementById('menuBtn');
 const navList = document.getElementById('navList');
-menuBtn.addEventListener('click', () => {
-  navList.classList.toggle('open');
-  const open = navList.classList.contains('open');
-  menuBtn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
-});
+if (menuBtn && navList) {
+  menuBtn.addEventListener('click', () => {
+    navList.classList.toggle('open');
+    const open = navList.classList.contains('open');
+    menuBtn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+  });
+}
+
+(function markActiveNav() {
+  const raw = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const file = raw.replace(/\.html$/i, '') || 'index';
+  const current = file === 'index' || file === '' ? 'index.html' : file + '.html';
+  document.querySelectorAll('.nav-list a[href]').forEach((link) => {
+    const href = (link.getAttribute('href') || '').split('#')[0];
+    if (href === current || (current === 'index.html' && (href === './' || href === '/' || href === 'index.html'))) {
+      link.classList.add('active');
+      const item = link.closest('.nav-item');
+      const top = item && item.querySelector(':scope > a.nav-link, :scope > .submenu-toggle');
+      if (top) top.classList.add('active');
+    }
+  });
+})();
 document.querySelectorAll('.submenu-toggle').forEach(button => button.addEventListener('click', () => {
   if (innerWidth <= 1180) button.parentElement.classList.toggle('mobile-open');
 }));
@@ -20,48 +37,61 @@ window.__heroContent = window.__heroContent || [
 ];
 let current = 0, sliderTimer;
 function showSlide(index) {
+  if (!slides.length) return;
   current = (index + slides.length) % slides.length;
   slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
   dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
   const copy = window.__heroContent[current];
-  if (copy) {
-    document.getElementById('heroTitle').textContent = copy[0];
-    document.getElementById('heroText').textContent = copy[1];
-  }
+  const titleEl = document.getElementById('heroTitle');
+  const textEl = document.getElementById('heroText');
+  if (copy && titleEl) titleEl.textContent = copy[0];
+  if (copy && textEl) textEl.textContent = copy[1];
 }
 window.__refreshHeroCopy = () => showSlide(current);
-function autoPlay() { clearInterval(sliderTimer); sliderTimer = setInterval(() => showSlide(current + 1), 6000); }
-document.querySelector('.hero-arrow.next').onclick = () => { showSlide(current + 1); autoPlay(); };
-document.querySelector('.hero-arrow.prev').onclick = () => { showSlide(current - 1); autoPlay(); };
+function autoPlay() {
+  if (!slides.length) return;
+  clearInterval(sliderTimer);
+  sliderTimer = setInterval(() => showSlide(current + 1), 6000);
+}
+const nextArrow = document.querySelector('.hero-arrow.next');
+const prevArrow = document.querySelector('.hero-arrow.prev');
+if (nextArrow) nextArrow.onclick = () => { showSlide(current + 1); autoPlay(); };
+if (prevArrow) prevArrow.onclick = () => { showSlide(current - 1); autoPlay(); };
 dots.forEach((dot, i) => dot.onclick = () => { showSlide(i); autoPlay(); });
 autoPlay();
 
 // Dark/light theme
 const themeToggle = document.getElementById('themeToggle');
-themeToggle.addEventListener('click', () => {
-  document.documentElement.classList.toggle('dark');
-  const dark = document.documentElement.classList.contains('dark');
-  themeToggle.innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-  localStorage.setItem('site-theme', dark ? 'dark' : 'light');
-});
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    const dark = document.documentElement.classList.contains('dark');
+    themeToggle.innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    localStorage.setItem('site-theme', dark ? 'dark' : 'light');
+  });
+}
 if (localStorage.getItem('site-theme') === 'dark') {
   document.documentElement.classList.add('dark');
-  themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  if (themeToggle) themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
 }
 
 // Text size
 const sizes = [16, 18, 20]; let sizeIndex = 0;
-document.getElementById('textSize').addEventListener('click', () => {
-  sizeIndex = (sizeIndex + 1) % sizes.length;
-  document.documentElement.style.fontSize = sizes[sizeIndex] + 'px';
-});
+const textSizeBtn = document.getElementById('textSize');
+if (textSizeBtn) {
+  textSizeBtn.addEventListener('click', () => {
+    sizeIndex = (sizeIndex + 1) % sizes.length;
+    document.documentElement.style.fontSize = sizes[sizeIndex] + 'px';
+  });
+}
 
 // Search modal
 const modal = document.getElementById('searchModal');
 function toggleSearch(open) {
+  if (!modal) return;
   modal.classList.toggle('open', open);
   document.body.classList.toggle('no-scroll', open);
-  if (open) setTimeout(() => document.getElementById('siteSearchInput').focus(), 50);
+  if (open) setTimeout(() => document.getElementById('siteSearchInput')?.focus(), 50);
 }
 const openSearchBtn = document.getElementById('openSearch');
 if (openSearchBtn) {
@@ -80,8 +110,11 @@ if (headerSearchForm) {
     toggleSearch(true);
   });
 }
-document.getElementById('closeSearch').onclick = () => toggleSearch(false);
-modal.addEventListener('click', e => { if (e.target === modal) toggleSearch(false); });
+const closeSearch = document.getElementById('closeSearch');
+if (closeSearch) closeSearch.onclick = () => toggleSearch(false);
+if (modal) {
+  modal.addEventListener('click', e => { if (e.target === modal) toggleSearch(false); });
+}
 document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSearch(false); });
 
 // Animated statistics
@@ -108,9 +141,12 @@ if (statsEl) {
 
 // Back to top and current year
 const toTop = document.getElementById('toTop');
-window.addEventListener('scroll', () => toTop.classList.toggle('show', scrollY > 550));
-toTop.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
-document.getElementById('year').textContent = new Date().getFullYear();
+if (toTop) {
+  window.addEventListener('scroll', () => toTop.classList.toggle('show', scrollY > 550));
+  toTop.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
+}
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // Showcase auto-scroll — continuous loop right → left (transform, no scrollbar)
 (function () {

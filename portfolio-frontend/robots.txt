@@ -1,8 +1,20 @@
 User-agent: *
 Allow: /
 
-# Private / non-public areas (none currently on this static portfolio)
+# Do not index private or authenticated areas (none are public on this site)
+Disallow: /admin
+Disallow: /admin/
+Disallow: /teacher
+Disallow: /teacher/
+Disallow: /student
+Disallow: /student/
+Disallow: /bursar
+Disallow: /bursar/
+Disallow: /parent
+Disallow: /parent/
+Disallow: /my/
 Disallow: /backend/
+Disallow: /api/
 Disallow: /*.json$
 
-Sitemap: https://portfolio-nu-taupe-017y2cafli.vercel.app/sitemap.xml
+Sitemap: https://makarious.legitconsult.co.tz/sitemap.xml

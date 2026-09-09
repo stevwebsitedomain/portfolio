@@ -1,5 +1,5 @@
 (function () {
-  const SITE_URL = 'https://portfolio-nu-taupe-017y2cafli.vercel.app/';
+  const SITE_URL = 'https://makarious.legitconsult.co.tz/';
 
   const dict = {
     en: {
@@ -26,6 +26,9 @@
       nav_vision: 'Vision',
       nav_skills: 'Skills',
       nav_projects: 'Projects',
+      nav_services: 'Services',
+      nav_news: 'News',
+      nav_gallery: 'Gallery',
       nav_qualifications: 'Qualifications',
       nav_contact: 'Contact',
       menu_open: 'Open menu',
@@ -143,6 +146,9 @@
       nav_vision: 'Dira',
       nav_skills: 'Stadi',
       nav_projects: 'Miradi',
+      nav_services: 'Huduma',
+      nav_news: 'Habari',
+      nav_gallery: 'Picha',
       nav_qualifications: 'Sifa',
       nav_contact: 'Mawasiliano',
       menu_open: 'Fungua menu',
