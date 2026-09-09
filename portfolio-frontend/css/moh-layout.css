@@ -157,41 +157,76 @@ body {
   background: #fff;
 }
 
-/* Branding banner */
+/* Branding banner — white center, photos on the sides */
 .identity.brand-header,
 .brand-header,
 .identity {
   position: relative;
-  min-height: 128px;
-  height: 128px;
+  min-height: 142px;
+  height: 142px;
   overflow: hidden;
-  background: #f4f7f9;
+  background: #fff;
 }
 
 .identity::after {
   display: none;
 }
 
-.brand-header::before {
+.brand-header::before,
+.brand-header::after {
+  display: none;
+}
+
+.brand-side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 27%;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.brand-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.brand-side-left {
+  left: 0;
+}
+
+.brand-side-left::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.72) 34%, rgba(255, 255, 255, 0.42) 58%, rgba(255, 255, 255, 0.08) 100%),
-    url("../assets/images/brand-programming.jpg") center 40% / cover no-repeat;
-  filter: saturate(0.8);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.55) 55%, #fff 100%);
 }
 
-.brand-header::after {
+.brand-side-right {
+  right: 0;
+}
+
+.brand-side-right::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.45) 48%, #fff 100%);
+}
+
+.brand-side-right::before {
   content: "";
   position: absolute;
   right: 0;
   top: 0;
-  width: 20%;
+  width: 42%;
   height: 100%;
+  z-index: 2;
   background: linear-gradient(145deg, transparent 0 24%, rgba(30, 181, 58, 0.76) 25% 44%, rgba(252, 209, 22, 0.85) 45% 49%, rgba(0, 0, 0, 0.73) 50% 66%, rgba(0, 163, 221, 0.72) 67% 100%);
   mix-blend-mode: multiply;
-  opacity: 0.68;
+  opacity: 0.62;
 }
 
 .identity .flag-line {
@@ -202,17 +237,17 @@ body {
 .identity-row {
   position: relative;
   z-index: 2;
-  min-height: 128px;
-  height: 128px;
+  min-height: 142px;
+  height: 142px;
   display: grid;
-  grid-template-columns: 110px 1fr 110px;
+  grid-template-columns: 120px 1fr 120px;
   align-items: center;
   gap: 12px;
 }
 
 .brand-header .logo-wrap,
 .identity .logo-wrap {
-  width: 96px;
+  width: 110px;
   flex: none;
   padding: 0;
   display: grid;
@@ -222,8 +257,8 @@ body {
 .brand-header .emblem,
 .brand-header .logo-wrap img,
 .identity .logo-wrap img {
-  width: 88px;
-  height: 104px;
+  width: 96px;
+  height: 114px;
   object-fit: contain;
   margin: auto;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
@@ -236,13 +271,14 @@ body {
   color: #111;
   font-family: "Source Sans 3", Arial, sans-serif;
   text-shadow: none;
-  padding: 0;
+  padding: 8px 16px;
+  background: #fff;
 }
 
 .brand-copy .republic,
 .brand-copy.titles p,
 .identity .titles p {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 600;
   letter-spacing: 0.01em;
   margin-bottom: 6px;
@@ -254,10 +290,10 @@ body {
 .brand-copy.titles h1,
 .identity .titles h1 {
   color: var(--title-blue);
-  font-size: 34px;
+  font-size: 42px;
   font-weight: 800;
   letter-spacing: 0;
-  line-height: 1.15;
+  line-height: 1.1;
   text-transform: none;
 }
 
@@ -1029,13 +1065,13 @@ html.dark .service-link {
   .brand-copy .republic,
   .brand-copy.titles p,
   .identity .titles p {
-    font-size: 1.05rem;
+    font-size: 20px;
   }
 
   .brand-copy h1,
   .brand-copy.titles h1,
   .identity .titles h1 {
-    font-size: 1.55rem;
+    font-size: 32px;
   }
 }
 
@@ -1078,8 +1114,12 @@ html.dark .service-link {
   .identity,
   .brand-row,
   .identity-row {
-    min-height: 88px;
-    height: 88px;
+    min-height: 110px;
+    height: 110px;
+  }
+
+  .brand-side {
+    width: 22%;
   }
 
   .brand-row,
@@ -1098,14 +1138,14 @@ html.dark .service-link {
   .brand-copy .republic,
   .brand-copy.titles p,
   .identity .titles p {
-    font-size: 0.92rem;
+    font-size: 16px;
     margin-bottom: 2px;
   }
 
   .brand-copy h1,
   .brand-copy.titles h1,
   .identity .titles h1 {
-    font-size: 1.3rem;
+    font-size: 24px;
   }
 
   .hero {
@@ -1199,13 +1239,12 @@ html.dark .service-link {
   .identity,
   .brand-row,
   .identity-row {
-    min-height: 78px;
-    height: 78px;
+    min-height: 92px;
+    height: 92px;
   }
 
-  .brand-header::after {
-    width: 16%;
-    opacity: 0.5;
+  .brand-side {
+    width: 18%;
   }
 
   .brand-row,
@@ -1224,13 +1263,13 @@ html.dark .service-link {
   .brand-copy h1,
   .brand-copy.titles h1,
   .identity .titles h1 {
-    font-size: 1.08rem;
+    font-size: 20px;
   }
 
   .brand-copy .republic,
   .brand-copy.titles p,
   .identity .titles p {
-    font-size: 0.72rem;
+    font-size: 13px;
     letter-spacing: 0;
     margin-bottom: 2px;
   }
