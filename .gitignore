@@ -11,3 +11,5 @@ Thumbs.db
 # Env secrets
 .env
 .env.*
+
+sync_config.jsonc
