@@ -19,7 +19,6 @@
   --body-moh: #526675;
   --line-moh: #dce7ed;
   --pale: #f3f8fb;
-  --header-max: 1770px;
 }
 
 .sr-only {
@@ -44,17 +43,27 @@ body {
 }
 
 /* ========== HEADER (MOH screenshot) ========== */
+.site-header,
+.utility.topbar,
+.topbar,
+.identity.brand-header,
+.brand-header,
+.main-nav {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .site-header {
-  max-width: var(--header-max);
-  margin: 0 auto;
   background: #fff;
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.14);
 }
 
-.header-container {
-  width: calc(100% - 72px);
-  max-width: 1680px;
-  margin: auto;
+.header-container:not(.brand-row) {
+  width: calc(100% - 32px);
+  max-width: none;
+  margin: 0 auto;
 }
 
 .utility.topbar,
@@ -157,7 +166,7 @@ body {
   background: #fff;
 }
 
-/* Branding banner — white center, photos on the sides */
+/* Branding banner — full-bleed photos fading into a white center */
 .identity.brand-header,
 .brand-header,
 .identity {
@@ -168,46 +177,20 @@ body {
   background: #fff;
 }
 
-.identity::after {
-  display: none;
-}
-
-/* Branding banner — solid white center, faded photos only on the edges */
-.identity.brand-header,
-.brand-header,
-.identity {
-  position: relative;
-  min-height: 142px;
-  height: 142px;
-  overflow: hidden;
-  background: #fff;
-}
-
-.identity::after {
-  display: none;
-}
-
+.identity::after,
 .brand-header::after {
   display: none;
 }
 
 .brand-header::before {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 14%;
-  right: 14%;
-  top: 0;
-  bottom: 0;
-  background: #fff;
-  z-index: 1;
+  display: none;
 }
 
 .brand-side {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 20%;
+  width: 28%;
   overflow: hidden;
   z-index: 0;
   pointer-events: none;
@@ -217,31 +200,42 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  opacity: 0.72;
-  filter: grayscale(0.15) saturate(0.75);
+  opacity: 1;
+  filter: none;
 }
 
 .brand-side-left {
   left: 0;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 58%, transparent 100%);
+}
+
+.brand-side-left img {
+  object-position: left center;
 }
 
 .brand-side-left::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.4) 40%, #fff 78%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0 55%, rgba(255, 255, 255, 0.55) 78%, #fff 100%);
 }
 
 .brand-side-right {
   right: 0;
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(270deg, #000 0%, #000 58%, transparent 100%);
+}
+
+.brand-side-right img {
+  object-position: right center;
 }
 
 .brand-side-right::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(270deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.38) 42%, #fff 80%);
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0 55%, rgba(255, 255, 255, 0.55) 78%, #fff 100%);
 }
 
 .brand-side-right::before {
@@ -249,28 +243,32 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  width: 46%;
+  width: 38%;
   height: 100%;
   z-index: 2;
-  background: linear-gradient(145deg, transparent 0 24%, rgba(30, 181, 58, 0.76) 25% 44%, rgba(252, 209, 22, 0.85) 45% 49%, rgba(0, 0, 0, 0.73) 50% 66%, rgba(0, 163, 221, 0.72) 67% 100%);
+  background: linear-gradient(145deg, transparent 0 22%, rgba(30, 181, 58, 0.78) 23% 42%, rgba(252, 209, 22, 0.86) 43% 48%, rgba(0, 0, 0, 0.74) 49% 64%, rgba(0, 163, 221, 0.74) 65% 100%);
   mix-blend-mode: multiply;
-  opacity: 0.55;
+  opacity: 0.62;
 }
 
 .identity .flag-line {
   display: none;
 }
 
+.brand-header > .header-container.brand-row,
 .brand-row,
 .identity-row {
   position: relative;
   z-index: 2;
+  width: 100%;
+  max-width: none;
   min-height: 142px;
   height: 142px;
   display: grid;
-  grid-template-columns: 120px 1fr 120px;
+  grid-template-columns: 118px minmax(0, 1fr) 118px;
   align-items: center;
   gap: 12px;
+  padding-inline: 22px 28px;
 }
 
 .brand-header .logo-wrap,
@@ -299,8 +297,8 @@ body {
   color: #111;
   font-family: "Source Sans 3", Arial, sans-serif;
   text-shadow: none;
-  padding: 10px 28px;
-  background: #fff;
+  padding: 8px 4%;
+  background: transparent;
 }
 
 .brand-copy .republic,
@@ -991,8 +989,8 @@ html.dark .service-link {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 1280px) {
-  .header-container {
-    width: calc(100% - 44px);
+  .header-container:not(.brand-row) {
+    width: calc(100% - 36px);
   }
 
   .topbar-row {
@@ -1108,8 +1106,8 @@ html.dark .service-link {
     margin-top: 0;
   }
 
-  .header-container {
-    width: calc(100% - 28px);
+  .header-container:not(.brand-row) {
+    width: calc(100% - 20px);
   }
 
   .utility.topbar,
@@ -1147,7 +1145,7 @@ html.dark .service-link {
   }
 
   .brand-side {
-    width: 22%;
+    width: 32%;
   }
 
   .brand-row,
@@ -1242,8 +1240,8 @@ html.dark .service-link {
 }
 
 @media (max-width: 560px) {
-  .header-container {
-    width: calc(100% - 20px);
+  .header-container:not(.brand-row) {
+    width: calc(100% - 16px);
   }
 
   .topbar-row {
@@ -1272,7 +1270,7 @@ html.dark .service-link {
   }
 
   .brand-side {
-    width: 18%;
+    width: 30%;
   }
 
   .brand-row,
