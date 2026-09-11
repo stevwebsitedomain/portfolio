@@ -16,7 +16,7 @@ HEAD_ASSETS = """  <link rel="icon" href="favicon.ico" sizes="any">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="css/gov-theme.css?v=6">
-  <link rel="stylesheet" href="css/moh-layout.css?v=10">
+  <link rel="stylesheet" href="css/moh-layout.css?v=18">
   <script>try{var __l=localStorage.getItem('site-lang');if(__l==='sw'||__l==='en')document.documentElement.lang=__l;else document.documentElement.lang='en';}catch(e){}</script>
 """
 
@@ -147,9 +147,9 @@ CHROME_BOTTOM = """  <footer id="footer">
   </div>
   <button class="to-top" id="toTop" data-i18n-aria="to_top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
   <script src="js/config.js"></script>
-  <script src="js/contact-form.js"></script>
+  <script src="js/contact-form.js?v=8"></script>
   <script src="js/gov-theme.js?v=6"></script>
-  <script src="js/i18n.js?v=6"></script>
+  <script src="js/i18n.js?v=7"></script>
 </body>
 </html>
 """
@@ -504,28 +504,50 @@ PAGES.append(
         <div class="contact-layout">
           <aside class="contact-info-card">
             <h2>Digital Matrix Technology</h2>
+            <p class="contact-note" data-i18n="contact_note">I receive form messages on WhatsApp and SMS. Choose how you want your request delivered.</p>
             <div class="contact-line"><i class="fa-solid fa-user"></i><span>Steven Makarious</span></div>
             <div class="contact-line"><i class="fa-solid fa-envelope"></i><span><a href="mailto:stevenabalwambo@gmail.com">stevenabalwambo@gmail.com</a></span></div>
-            <div class="contact-line"><i class="fa-solid fa-phone"></i><span><a href="tel:+255715296092">+255 715 296 092</a></span></div>
-            <div class="contact-line"><i class="fa-brands fa-whatsapp"></i><span><a href="https://wa.me/255715296092" target="_blank" rel="noopener">WhatsApp</a></span></div>
+            <div class="contact-line"><i class="fa-brands fa-whatsapp"></i><span><a href="https://wa.me/255715296092" target="_blank" rel="noopener">WhatsApp +255 715 296 092</a></span></div>
+            <div class="contact-line"><i class="fa-solid fa-comment-sms"></i><span><a href="sms:+255622045972">SMS +255 622 045 972</a></span></div>
+            <div class="contact-line"><i class="fa-solid fa-phone"></i><span><a href="tel:+255715296092">Call +255 715 296 092</a></span></div>
             <div class="contact-line"><i class="fa-solid fa-location-dot"></i><span>Tanzania</span></div>
+            <a class="wa-direct" href="https://wa.me/255715296092" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="chat_whatsapp">Chat on WhatsApp</span></a>
           </aside>
           <form class="php-email-form" novalidate>
+            <p class="form-lead" data-i18n="form_lead">Fill the form below. Your message will be delivered to Steven on WhatsApp, SMS, or both.</p>
+            <div class="channel-row" role="radiogroup" aria-label="Send via">
+              <label class="channel-pick">
+                <input type="radio" name="channel" value="whatsapp">
+                <span><i class="fa-brands fa-whatsapp"></i> <em data-i18n="via_whatsapp">WhatsApp</em></span>
+              </label>
+              <label class="channel-pick">
+                <input type="radio" name="channel" value="sms">
+                <span><i class="fa-solid fa-comment-sms"></i> <em data-i18n="via_sms">SMS</em></span>
+              </label>
+              <label class="channel-pick">
+                <input type="radio" name="channel" value="both" checked>
+                <span><i class="fa-solid fa-paper-plane"></i> <em data-i18n="via_both">Both</em></span>
+              </label>
+            </div>
+            <div class="hp-field" aria-hidden="true">
+              <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
             <div class="form-row">
-              <input type="text" name="name" data-i18n="ph_name" placeholder="Full name" required>
-              <input type="email" name="email" data-i18n="ph_email" placeholder="Email" required>
+              <label class="field"><span data-i18n="ph_name">Full name</span><input type="text" name="name" data-i18n="ph_name" placeholder="Full name" required></label>
+              <label class="field"><span data-i18n="ph_email">Email</span><input type="email" name="email" data-i18n="ph_email" placeholder="Email" required></label>
+            </div>
+            <div class="form-row">
+              <label class="field"><span data-i18n="ph_phone">Phone (optional)</span><input type="tel" name="phone" data-i18n="ph_phone" placeholder="Phone (optional)"></label>
+              <label class="field"><span data-i18n="ph_subject">Subject</span><input type="text" name="subject" data-i18n="ph_subject" placeholder="Subject" required></label>
             </div>
             <div class="form-row full">
-              <input type="text" name="subject" data-i18n="ph_subject" placeholder="Subject" required>
-            </div>
-            <div class="form-row full">
-              <textarea name="message" data-i18n="ph_message" placeholder="Message" required></textarea>
+              <label class="field"><span data-i18n="ph_message">Message</span><textarea name="message" data-i18n="ph_message" placeholder="Message" required></textarea></label>
             </div>
             <div class="form-actions">
-              <div class="loading">Loading</div>
+              <div class="loading" data-i18n="form_sending">Sending…</div>
               <div class="error-message"></div>
-              <div class="sent-message">Opening WhatsApp… Complete send there. Thank you!</div>
-              <button type="submit" data-i18n="send_message">Send Message</button>
+              <div class="sent-message" data-i18n="form_sent">Thank you. Your message has been sent.</div>
+              <button type="submit"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="send_message">Send Message</span></button>
             </div>
           </form>
         </div>

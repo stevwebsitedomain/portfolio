@@ -1,0 +1,119 @@
+{
+  "profile": {
+    "name": "Steven Makarious",
+    "title": "Full Stack Developer | Website Developer | Systems Developer",
+    "organization": "LEGIT BUSINESS CONSULT LTD",
+    "location": "Tanzania",
+    "summary": "Professional developer focused on web-based management systems, institutional platforms, and business websites."
+  },
+  "skills": [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "Bootstrap",
+    "PHP",
+    "MySQL",
+    "Git & GitHub",
+    "Cloud Deployment",
+    "API Integration",
+    "Responsive Design",
+    "Problem Solving",
+    "Teamwork",
+    "Communication",
+    "Creativity"
+  ],
+  "qualifications": [
+    "Cloud Computing (Current)",
+    "Website Development",
+    "Backend Development (PHP, MySQL, REST APIs)",
+    "Frontend Development (HTML, CSS, JavaScript, Bootstrap)",
+    "Hosting & Deployment (Vercel, Render)",
+    "Database Management"
+  ],
+  "projects": [
+    {
+      "name": "Tanzania Revenue Authority (TRA)",
+      "year": "2025 + 2026",
+      "url": "https://dda-tra.free.nf",
+      "description": "Web system that scrapes business names online to help TRA identify taxpayers from online businesses.",
+      "tags": ["Web Scraping", "Tax System", "PHP", "Database"]
+    },
+    {
+      "name": "Plustax Associates",
+      "year": "2025 + 2026",
+      "url": "https://audit.plustax.co.tz/",
+      "description": "Office management system for document storage and staff communication.",
+      "tags": ["Office System", "Document Management", "Communication", "Audit"]
+    },
+    {
+      "name": "Aquinas Secondary School",
+      "year": "2026",
+      "url": "https://aoa.aquinasschool.sc.tz",
+      "description": "Online admission application system for students and parents.",
+      "tags": ["Online Application", "Education", "Admission System", "Web App"]
+    },
+    {
+      "name": "Miracle Tech Company",
+      "year": "2026",
+      "url": "https://miracletechgroup.com",
+      "description": "Official company website with modern responsive design.",
+      "tags": ["Company Website", "Web Design", "Responsive", "Branding"]
+    },
+    {
+      "name": "White Lake High School",
+      "year": "2026",
+      "url": "https://whitelakeschoolportal.co.tz",
+      "description": "Student results management system for teachers and parents.",
+      "tags": ["Results System", "Education", "School Management", "Web App"]
+    },
+    {
+      "name": "EASTC",
+      "year": "2026",
+      "url": null,
+      "description": "Web-based institutional management system.",
+      "tags": ["Management System", "Web Development", "Database", "Institution"]
+    },
+    {
+      "name": "AGRIDATA SMART",
+      "year": "2026",
+      "url": "https://agridata.co.tz",
+      "description": "Data-driven smart farming platform for crop monitoring, farm records, weather insights, and agricultural analytics.",
+      "tags": ["Smart Farming", "Agriculture", "Data Analytics", "AgriTech"]
+    },
+    {
+      "name": "REACRIS LTD",
+      "year": "2026",
+      "url": "http://reacris.co.tz/",
+      "description": "Luxury spirits e-commerce website with curated collections, cask valuation, vault allocations, and concierge checkout.",
+      "tags": ["E-Commerce", "Luxury Retail", "Web Design", "Responsive"]
+    },
+    {
+      "name": "G4 Elevate Travel & Tours",
+      "year": "2026",
+      "url": "http://g4elevate.co.tz/",
+      "description": "Travel agency website for flights, hotels, safaris, transfers, visa assistance, and holiday package enquiries.",
+      "tags": ["Travel Website", "Bookings", "Web Design", "Responsive"]
+    },
+    {
+      "name": "Buhalahala Secondary School",
+      "year": "2026",
+      "url": "http://buhalahalasecondaryschool.com/",
+      "description": "School website and admissions platform with applications, portals, results, fees, news, and announcements.",
+      "tags": ["School Website", "Online Admission", "Education", "Web App"]
+    },
+    {
+      "name": "Portfolio Website",
+      "year": "2026",
+      "url": "https://makarious.legitconsult.co.tz",
+      "description": "Cloud Computing assignment — static frontend on Vercel, API on Render.",
+      "tags": ["Portfolio", "Vercel", "Render", "REST API"]
+    }
+  ],
+  "contact": {
+    "email": "stevenabalwambo@gmail.com",
+    "phone": "+255 715 296 092",
+    "whatsapp": "https://wa.me/255715296092",
+    "github": null,
+    "linkedin": null
+  }
+}

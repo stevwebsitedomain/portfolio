@@ -1,0 +1,18 @@
+# NDANI YA public/ — faili hili linakaa ndani ya My-PortiFolio/public/
+# Usiweke kwenye public_html kuu wala kwenye My-PortiFolio/ (juu).
+
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . index.php [L]
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType application/xml .xml
+    AddType text/plain .txt
+    AddType application/manifest+json .webmanifest
+    AddType image/x-icon .ico
+</IfModule>

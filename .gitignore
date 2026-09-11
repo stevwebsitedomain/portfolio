@@ -1,15 +1,41 @@
-# Dependencies
+# phpstorm project files
+.idea
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+# sublime text project / workspace files
+*.sublime-project
+*.sublime-workspace
+
+# windows thumbnail cache
+Thumbs.db
+
+# Mac DS_Store Files
+.DS_Store
+
+# composer vendor dir
 /vendor
 /backend/vendor
 
-# OS / IDE
-.DS_Store
-Thumbs.db
-.idea
-.vscode
+# Codeception C3
+c3.php
 
-# Env secrets
+# Local environment configuration
 .env
 .env.*
+!.env.example
 
+# FTP / deploy secrets
 sync_config.jsonc
+
+# Yii runtime
+/runtime/*
+!/runtime/.gitignore
+/public/assets-runtime/*
+!/public/assets-runtime/.gitignore

@@ -1,0 +1,57 @@
+# NJE YA FOLDER — weka faili hili kwenye public_html kuu
+# (pale palipo butra, OnlineStock, My-PortiFolio).
+#
+# Folda nyingine (butra, OnlineStock, ...) zinaendelea kufanya kazi.
+# / na kurasa kama /about zinaenda kwenye Yii ndani ya My-PortiFolio.
+#
+# Kama domain kuu ina site yake tayari, USIBADILISHE .htaccess ya huko —
+# tumia toleo la ndani tu: My-PortiFolio/.htaccess
+
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Usifungue folda za framework ndani ya My-PortiFolio
+    RewriteRule ^My-PortiFolio/(src|config|vendor|runtime|data|tests|docker)(/|$) - [F,L]
+    RewriteRule ^My-PortiFolio/\.env - [F,L]
+
+    # Tayari iko ndani ya public/
+    RewriteRule ^My-PortiFolio/public/ - [L]
+
+    # URL /My-PortiFolio/... → public/
+    RewriteRule ^My-PortiFolio/(.*)$ My-PortiFolio/public/$1 [L]
+
+    # Apps nyingine kwenye public_html (butra, OnlineStock, ...) — usiziguse
+    RewriteCond %{REQUEST_URI} !^/My-PortiFolio(?:/|$)
+    RewriteCond %{DOCUMENT_ROOT}/$1 -d
+    RewriteRule ^([^/]+) - [L]
+
+    # Faili zilizopo hapa (index.php ya nje)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Domain kuu: CSS, JS, kurasa za Yii
+    RewriteRule ^(.*)$ My-PortiFolio/public/$1 [L]
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType application/xml .xml
+    AddType text/plain .txt
+    AddType application/manifest+json .webmanifest
+    AddType image/x-icon .ico
+</IfModule>
+
+<IfModule mod_authz_core.c>
+    <FilesMatch "^\.env">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    <FilesMatch "^\.env">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>

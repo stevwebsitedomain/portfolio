@@ -1,0 +1,41 @@
+# NDANI YA FOLDER — nakala ya My-PortiFolio/.htaccess
+# Weka hii ndani ya My-PortiFolio (sio kwenye public_html kuu).
+
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Usifungue folda za framework
+    RewriteRule ^(src|config|vendor|runtime|data|tests|docker)/ - [F,L]
+
+    # Tayari iko ndani ya public/ — acha Apache iendelee
+    RewriteRule ^public/ - [L]
+
+    # Faili/folda zilizopo hapa (index.php)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # CSS, JS, picha, kurasa → folder public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType application/xml .xml
+    AddType text/plain .txt
+    AddType application/manifest+json .webmanifest
+    AddType image/x-icon .ico
+</IfModule>
+
+<IfModule mod_authz_core.c>
+    <FilesMatch "^\.env">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    <FilesMatch "^\.env">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>

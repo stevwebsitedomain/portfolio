@@ -1,12 +1,14 @@
-.git
-.github
-.idea
-.vscode
-node_modules
-portfolio-frontend
-**/vendor
-backend/vendor
-*.md
-!backend/README.md
-.env
-.env.*
+# Ignore everything
+*
+
+# except:
+
+!/docker/**/Caddyfile
+!/config
+!/public
+!/src
+!autoload.php
+!yii
+!composer.json
+!composer.lock
+!.env*
