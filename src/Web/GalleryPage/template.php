@@ -28,7 +28,7 @@ $baseUrl = $baseUrl ?? '';
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="<?= $baseUrl ?>/css/gov-theme.css?v=14">
-  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=52">
+  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=53">
   <script>try{var __l=localStorage.getItem('site-lang');if(__l==='sw'||__l==='en')document.documentElement.lang=__l;else document.documentElement.lang='en';}catch(e){}</script>
 
   <script type="application/ld+json">
@@ -130,7 +130,7 @@ $baseUrl = $baseUrl ?? '';
           <p>Logos and work samples from public client systems. Office photos can be added for Google Business Profile.</p>
         </header>
         <div class="gallery-grid">
-          <figure><img src="<?= $baseUrl ?>/images/profile.png" alt="Steven Makarious, Full Stack Developer"><figcaption>Steven Makarious</figcaption></figure>
+          <figure><img src="<?= $baseUrl ?>/images/steven-makarious.jpg?v=2" alt="Steven Makarious, Full Stack Developer"><figcaption>Steven Makarious</figcaption></figure>
           <figure><img src="<?= $baseUrl ?>/images/DIGITAL MATRIX TECHNOLOGY.png" alt="Digital Matrix Technology brand mark"><figcaption>Digital Matrix Technology</figcaption></figure>
           <a href="https://whitelakeschoolportal.co.tz" target="_blank" rel="noopener"><figure><img src="<?= $baseUrl ?>/images/whitelake.png" alt="White Lake High School portal"><figcaption>White Lake</figcaption></figure></a>
           <a href="https://aoa.aquinasschool.sc.tz" target="_blank" rel="noopener"><figure><img src="<?= $baseUrl ?>/images/aquinas.png" alt="Aquinas Secondary School admissions"><figcaption>Aquinas</figcaption></figure></a>

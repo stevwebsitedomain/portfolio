@@ -203,17 +203,17 @@ def page_head(title, description, path, extra_ld):
 """
 
 
-def banner(crumbs, h1, lead):
+def banner(crumbs, h1, lead=""):
     crumb_html = " ".join(
         f'<a href="{href}">{label}</a> <span aria-hidden="true">/</span>' if href else f"<span>{label}</span>"
         for label, href in crumbs[:-1]
     )
     last = crumbs[-1][0]
+    lead_html = f"\n        <p>{lead}</p>" if lead else ""
     return f"""    <section class="page-banner">
       <div class="container">
         <nav class="breadcrumbs" aria-label="Breadcrumb">{crumb_html} {last}</nav>
-        <h1>{h1}</h1>
-        <p>{lead}</p>
+        <h1>{h1}</h1>{lead_html}
       </div>
     </section>
 """
@@ -497,7 +497,7 @@ PAGES.append(
         + banner(
             [("Home", "index.html"), ("Contact", None)],
             "Contact",
-            "Same name, phone, and email as the public listing — Digital Matrix Technology, Tanzania.",
+            "",
         )
         + """    <main class="page-content">
       <div class="container">

@@ -58,31 +58,37 @@ final readonly class Action
             return $this->json($response, 422, ['ok' => false, 'message' => 'One of the fields is too long.']);
         }
 
-        $apiKey = Env::get('MESEJI_API_KEY', 'zs_70c4072ea92318931582f47a96b9e73c2a363e09f5a80039');
-        if ($apiKey === '') {
-            return $this->json($response, 503, ['ok' => false, 'message' => 'Messaging is not configured (MESEJI_API_KEY).']);
+        $apiKey = Env::get('KILAKONA_API_KEY');
+        $apiSecret = Env::get('KILAKONA_API_SECRET');
+        if ($apiKey === '' || $apiSecret === '') {
+            return $this->json($response, 503, [
+                'ok' => false,
+                'message' => 'Messaging is not configured. Add KILAKONA_API_KEY and KILAKONA_API_SECRET in .env.',
+            ]);
         }
 
         $text = "Portfolio contact\nName: {$name}\nEmail: {$email}\n"
             . ($phone !== '' ? "Phone: {$phone}\n" : '')
             . "Subject: {$subject}\n\n{$message}";
 
-        $client = new MesejiClient(
+        $client = new KilakonaClient(
             $apiKey,
-            Env::get('MESEJI_SENDER', 'NOTICE'),
-            Env::get('MESEJI_WHATSAPP_TOKEN'),
+            $apiSecret,
+            Env::get('KILAKONA_SENDER', 'TAARIFA'),
+            Env::get('KILAKONA_DELIVERY_URL'),
         );
         $sent = [];
         $errors = [];
         $whatsappUrl = null;
-        $waTo = Env::get('MESEJI_WHATSAPP_TO', '255715296092');
+        $waTo = Env::get('KILAKONA_WHATSAPP_TO', Env::get('MESEJI_WHATSAPP_TO', '255715296092'));
 
         if ($channel === 'whatsapp') {
             $whatsappUrl = 'https://wa.me/' . rawurlencode($waTo) . '?text=' . rawurlencode($text);
             $sent[] = 'WhatsApp';
         }
         if ($channel === 'sms' || $channel === 'both') {
-            $sms = $client->sendSms(Env::get('MESEJI_SMS_TO', '255622045972'), $text);
+            $smsTo = Env::get('KILAKONA_SMS_TO', Env::get('MESEJI_SMS_TO', '255622045972'));
+            $sms = $client->sendSms($smsTo, $text);
             if ($sms['ok']) {
                 $sent[] = 'SMS';
             } else {

@@ -1,0 +1,34 @@
+---
+description: UI/layout rules — MOH design tokens and anti-generic-AI visuals
+globs: "**/*.{css,php,js,html}"
+alwaysApply: false
+---
+
+# UI design (this portfolio)
+
+## Design tokens — use existing CSS variables
+
+From `public/css/moh-layout.css` — do not invent a new palette:
+
+- `--navy`, `--blue`, `--sky-moh`, `--green-moh`, `--gold`
+- `--ink`, `--body-moh`, `--pale`, `--line-moh`, `--header-blue`
+
+Extend tokens in that file when needed; reuse classes/patterns already there.
+
+## Layout
+
+- Hero: brand + one headline + one short sentence + CTA; full-bleed; no cards/badges overlays on hero
+- Cards only when they wrap a real interaction; otherwise open layout
+- One section = one job + one headline + one short supporting line
+- Mobile-first; readable on phone
+- Motion: 2–3 intentional transitions (hover/reveal), not animation noise
+
+## Avoid (generic AI look)
+
+- Purple/indigo gradients, cream + terracotta cliché, dark neon glow
+- Pill clusters, stat strips, floating promo badges on hero
+- New competing themes that ignore MOH colors
+
+## Reuse
+
+Prefer shared pieces under `src/Web/Shared/` and existing `moh-layout.css` over duplicating styles.

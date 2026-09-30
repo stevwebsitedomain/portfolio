@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="G4 Elevate Travel & Tours customer portal for travel enquiries, bookings and account access.">
+  <title>G4 Elevate Travel & Tours</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d5798'/%3E%3Cpath d='M7 43h50v8H7z' fill='%23d7a83f'/%3E%3Cpath d='M40 13l15 8-15 8 3-6H20v-4h23z' fill='white'/%3E%3Ctext x='8' y='38' font-family='Arial' font-size='25' font-weight='700' fill='white'%3EG4%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --blue:#105995;
+      --blue-dark:#093f70;
+      --blue-soft:#dcecff;
+      --ink:#141e31;
+      --muted:#5f6b7b;
+      --line:#d9dfe7;
+      --gold:#d5a440;
+      --green:#06804e;
+      --page:#f7f8fa;
+      --white:#fff;
+      --shadow:0 7px 22px rgba(21,43,68,.12);
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      min-width:320px;
+      color:var(--ink);
+      background:var(--page);
+      font-family:"Segoe UI",Arial,sans-serif;
+      font-size:16px;
+      overflow-x:hidden;
+    }
+    button,input { font:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    button { cursor:pointer; }
+    a { color:inherit; text-decoration:none; }
+    [hidden] { display:none !important; }
+
+    .icon {
+      width:23px;
+      height:23px;
+      flex:0 0 23px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.8;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    .svg-sprite { position:absolute; width:0; height:0; overflow:hidden; }
+
+    .flag-banner {
+      min-height:178px;
+      display:grid;
+      grid-template-columns:minmax(290px,1fr) 2fr minmax(130px,.72fr);
+      align-items:center;
+      gap:24px;
+      padding:12px 30px;
+      position:relative;
+      overflow:hidden;
+      color:#fff;
+      border-top:7px solid #074066;
+      background-image:
+        linear-gradient(90deg,rgba(3,30,46,.28),rgba(2,40,62,.58) 48%,rgba(2,31,48,.26)),
+        url("https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1000&q=86"),
+        url("https://images.unsplash.com/photo-1523805009345-7448845a9e53?auto=format&fit=crop&w=1200&q=86"),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=86");
+      background-size:100% 100%,35% 100%,42% 100%,35% 100%;
+      background-position:center,left center,center,right center;
+      background-repeat:no-repeat;
+      box-shadow:inset 0 0 65px rgba(0,0,0,.45);
+      animation:bannerDrift 16s ease-in-out infinite alternate;
+    }
+    .flag-banner::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(163deg,transparent 0 38%,rgba(245,207,20,.82) 38.3% 40%,rgba(5,20,31,.82) 40.3% 43%,transparent 43.3%),
+        linear-gradient(90deg,rgba(0,111,67,.46),transparent 30%,transparent 72%,rgba(16,121,180,.32));
+      pointer-events:none;
+    }
+    .flag-banner::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent);
+      transform:translateX(-100%);
+      animation:shine 8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes shine { 55%,100% { transform:translateX(100%); } }
+    @keyframes bannerDrift {
+      from { background-position:center,left center,center,right center; }
+      to { background-position:center,3% center,49% center,97% center; }
+    }
+    .brand,.banner-copy,.tour-stamp { position:relative; z-index:1; }
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:15px;
+      min-width:0;
+      padding:13px 16px;
+      border:1px solid rgba(255,255,255,.26);
+      background:rgba(4,29,45,.48);
+      box-shadow:0 8px 24px rgba(0,0,0,.13);
+      backdrop-filter:blur(3px);
+    }
+    .brand-mark {
+      width:74px;
+      height:74px;
+      flex:0 0 74px;
+      display:grid;
+      place-items:center;
+      border:3px solid #fff;
+      border-radius:50%;
+      color:#ffd66b;
+      background:linear-gradient(145deg,#09253e,#0e66a9);
+      box-shadow:0 5px 18px rgba(0,0,0,.25);
+      font:700 31px Georgia,serif;
+    }
+    .brand-text strong {
+      display:block;
+      font:700 29px Georgia,serif;
+      letter-spacing:.08em;
+      white-space:nowrap;
+    }
+    .brand-text span {
+      display:block;
+      margin-top:5px;
+      color:#ffdf7d;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.20em;
+    }
+    .banner-copy {
+      justify-self:center;
+      width:min(720px,100%);
+      padding:18px 25px;
+      border-top:1px solid rgba(255,255,255,.3);
+      border-bottom:1px solid rgba(255,255,255,.3);
+      background:rgba(4,31,49,.48);
+      box-shadow:0 8px 30px rgba(0,0,0,.14);
+      backdrop-filter:blur(4px);
+      text-align:center;
+      text-shadow:0 2px 4px rgba(0,0,0,.55);
+    }
+    .banner-copy strong { display:block; font-size:clamp(19px,1.65vw,29px); line-height:1.08; }
+    .banner-copy span { display:block; margin-top:5px; font-size:clamp(13px,1.05vw,18px); font-weight:800; letter-spacing:.05em; }
+    .tour-stamp {
+      justify-self:end;
+      width:91px;
+      height:91px;
+      display:grid;
+      place-items:center;
+      border:5px double #d8e4ed;
+      border-radius:50%;
+      color:#17344f;
+      background:rgba(250,252,253,.96);
+      box-shadow:0 6px 20px rgba(0,0,0,.25);
+      transform:rotate(-7deg);
+      text-align:center;
+      font-size:11px;
+      font-weight:900;
+      line-height:1.05;
+    }
+    .tour-stamp .icon { width:29px; height:29px; margin:0 auto 2px; }
+
+    .main-nav {
+      min-height:72px;
+      display:flex;
+      align-items:stretch;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:50;
+      padding:0 clamp(28px,7vw,145px);
+      background:
+        linear-gradient(90deg,rgba(227,242,252,.96),rgba(255,255,255,.98) 44%,#fff),
+        repeating-linear-gradient(135deg,transparent 0 18px,rgba(16,89,149,.04) 18px 20px);
+      box-shadow:0 3px 12px rgba(31,47,65,.15);
+    }
+    .nav-identity {
+      min-width:260px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:#244967;
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.13em;
+      white-space:nowrap;
+    }
+    .nav-identity-mark {
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      color:#f5c44e;
+      background:var(--blue-dark);
+      box-shadow:0 4px 10px rgba(9,63,112,.20);
+      font:700 15px Georgia,serif;
+    }
+    .nav-identity span:last-child::after {
+      content:"";
+      display:block;
+      width:72px;
+      height:2px;
+      margin-top:6px;
+      background:linear-gradient(90deg,var(--gold),transparent);
+    }
+    .nav-toggle {
+      display:none;
+      align-self:center;
+      width:46px;
+      height:46px;
+      margin-right:auto;
+      border:0;
+      background:#e9f3fc;
+      color:var(--blue);
+    }
+    .nav-links { display:flex; align-items:stretch; }
+    .nav-link {
+      min-width:145px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:0 20px;
+      border:0;
+      border-left:1px solid transparent;
+      background:#fff;
+      color:#222b38;
+      font-size:17px;
+    }
+    .nav-link:hover,.nav-link.active { color:#fff; background:linear-gradient(135deg,var(--blue),#0b487b); }
+    .nav-link.login-link { border-left-color:#e0e4e8; }
+
+    .view { display:none; min-height:calc(100vh - 250px); }
+    .view.active { display:block; animation:viewIn .28s ease; }
+    @keyframes viewIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+    .hero {
+      min-height:485px;
+      display:grid;
+      place-items:center;
+      padding:70px 24px 55px;
+      position:relative;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 12% 74%,rgba(32,116,176,.25),transparent 34%),
+        radial-gradient(circle at 88% 48%,rgba(101,211,114,.18),transparent 26%),
+        linear-gradient(90deg,#f4faff 0%,#fff 50%,#f8fff8 100%);
+      border-bottom:1px solid #cde2f3;
+    }
+    .hero::after {
+      content:"";
+      position:absolute;
+      left:-3%;
+      right:-3%;
+      bottom:18px;
+      height:52px;
+      background:#f7fbff;
+      transform:rotate(.6deg);
+      opacity:.92;
+    }
+    .hero-content { width:min(1050px,100%); position:relative; z-index:1; text-align:center; }
+    .accent-bars { display:flex; justify-content:center; gap:4px; margin-bottom:27px; }
+    .accent-bars i { width:8px; height:55px; border-radius:5px; background:#13b75a; }
+    .accent-bars i:nth-child(2) { background:#ffd219; }
+    .accent-bars i:nth-child(3) { background:#111; }
+    .accent-bars i:nth-child(4) { background:#13a6e8; }
+    .hero h1 { margin:0; font-size:clamp(46px,5vw,77px); line-height:1.05; letter-spacing:-.04em; font-weight:650; }
+    .hero h1 span { color:var(--blue); }
+    .hero p { max-width:920px; margin:22px auto 0; color:#596577; font-size:clamp(18px,1.7vw,27px); line-height:1.48; }
+    .hero-actions { display:flex; justify-content:center; gap:30px; margin-top:53px; }
+    .button {
+      min-width:278px;
+      min-height:72px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:13px;
+      padding:14px 28px;
+      border:2px solid var(--blue);
+      border-radius:10px;
+      background:var(--blue);
+      color:#fff;
+      box-shadow:0 6px 12px rgba(16,89,149,.17);
+      font-size:19px;
+      font-weight:700;
+    }
+    .button:hover { background:var(--blue-dark); border-color:var(--blue-dark); }
+    .button.outline { color:var(--blue); background:#fff; box-shadow:none; font-weight:500; }
+    .button.outline:hover { background:#eef6ff; }
+
+    .home-section {
+      padding:34px clamp(28px,6vw,120px) 42px;
+      background:#fff;
+      border-bottom:1px solid #cde2f3;
+    }
+    .tips-section {
+      background:
+        linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.92)),
+        repeating-linear-gradient(45deg,#edf2f7 0,#edf2f7 2px,transparent 2px,transparent 36px);
+    }
+    .section-title { margin:0 0 28px; text-align:center; font-size:31px; font-weight:650; letter-spacing:.01em; }
+    .tips-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .tip-card {
+      min-height:183px;
+      padding:22px;
+      border-radius:10px;
+      background:#deecff;
+      box-shadow:0 3px 9px rgba(27,63,102,.09);
+    }
+    .tip-title { display:flex; align-items:center; gap:11px; font-size:18px; }
+    .step {
+      width:35px;
+      height:35px;
+      flex:0 0 35px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:var(--blue);
+      color:#fff;
+      font-weight:800;
+    }
+    .tip-body { display:flex; align-items:flex-start; gap:13px; margin:18px 0 0 43px; color:#4d5a6e; font-size:17px; line-height:1.55; }
+    .tip-body .icon { color:var(--blue); }
+    .feedback-line { display:flex; align-items:center; gap:10px; margin:22px 0 0; color:#445066; }
+    .feedback-line .icon,.feedback-line a { color:var(--blue); }
+
+    .categories-wrap { max-width:1640px; margin:auto; padding:0 12px; }
+    .categories-box { padding:16px; border-radius:10px; background:#dfedff; }
+    .category-search {
+      width:100%;
+      min-height:43px;
+      padding:10px 16px 10px 43px;
+      border:1px solid #bac5d1;
+      outline:none;
+      background:#fff;
+      color:#263348;
+      font-size:16px;
+    }
+    .search-wrap { position:relative; margin-bottom:11px; }
+    .search-wrap .icon { position:absolute; left:14px; top:10px; width:20px; height:20px; color:#91a0b2; }
+    .categories-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:11px; }
+    .category {
+      min-width:0;
+      min-height:55px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid #d3dbe5;
+      border-radius:7px;
+      background:#fff;
+      color:#1d2939;
+      text-align:left;
+      font-size:16px;
+    }
+    .category:hover { border-color:var(--blue); color:var(--blue); }
+    .category span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .count {
+      min-width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:var(--blue);
+      color:#fff;
+      font-weight:700;
+    }
+    .no-results { display:none; padding:30px; text-align:center; color:var(--muted); }
+
+    .auth-view { background:#f8f9fb; }
+    .auth-shell { min-height:calc(100vh - 197px); display:grid; place-items:start center; padding:28px 18px 45px; }
+    .auth-card {
+      width:min(605px,100%);
+      padding:34px 28px 28px;
+      border:1px solid #d8dde4;
+      border-radius:11px;
+      background:#fff;
+      box-shadow:0 8px 22px rgba(31,47,65,.08);
+    }
+    .auth-logo { text-align:center; }
+    .mini-mark {
+      width:79px;
+      height:79px;
+      margin:0 auto 8px;
+      display:grid;
+      place-items:center;
+      border:3px solid #e9eef4;
+      border-radius:50%;
+      color:#e1ac3a;
+      background:linear-gradient(145deg,#08263f,#0d66aa);
+      font:700 29px Georgia,serif;
+    }
+    .mini-bars { display:flex; justify-content:center; gap:4px; }
+    .mini-bars i { width:9px; height:5px; border-radius:3px; background:#17b85e; }
+    .mini-bars i:nth-child(2) { background:#f3cf16; }
+    .mini-bars i:nth-child(3) { background:#111; }
+    .mini-bars i:nth-child(4) { background:#19a8e7; }
+    .auth-card h1 { margin:11px 0 0; text-align:center; font-size:27px; font-weight:650; }
+    .auth-subtitle { margin:10px 0 80px; text-align:center; color:#5e6879; font-size:17px; }
+    .form-group { margin-bottom:17px; }
+    .form-group label { display:block; margin-bottom:8px; color:#354154; font-size:16px; }
+    .input-box { position:relative; }
+    .input-box>.icon { position:absolute; left:13px; top:14px; width:22px; height:22px; color:#5c6b7a; }
+    .input-box input {
+      width:100%;
+      min-height:53px;
+      padding:12px 48px;
+      border:1px solid #bfc6cf;
+      outline:none;
+      color:#263348;
+      background:#fff;
+      font-size:16px;
+    }
+    .input-box input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(16,89,149,.10); }
+    .password-toggle {
+      width:43px;
+      height:51px;
+      display:grid;
+      place-items:center;
+      position:absolute;
+      top:1px;
+      right:1px;
+      border:0;
+      background:transparent;
+      color:#65758a;
+    }
+    .password-toggle .icon { width:22px; height:22px; }
+    .auth-help { display:flex; justify-content:flex-end; margin:4px 0 20px; }
+    .auth-help a,.auth-switch button { border:0; padding:0; background:transparent; color:var(--blue); }
+    .submit-button {
+      width:100%;
+      min-height:51px;
+      border:0;
+      background:#8cafd0;
+      color:#fff;
+      font-size:17px;
+      font-weight:700;
+    }
+    .submit-button:hover { background:var(--blue); }
+    .auth-switch { margin:22px 0 0; text-align:center; color:#5f6877; }
+    .form-message { min-height:20px; margin:12px 0 0; color:#a23745; text-align:center; font-size:14px; }
+
+    .chat-button {
+      position:fixed;
+      right:27px;
+      bottom:25px;
+      z-index:80;
+      width:72px;
+      height:72px;
+      display:grid;
+      place-items:center;
+      border:0;
+      border-radius:50%;
+      background:var(--blue);
+      color:#fff;
+      box-shadow:0 0 0 20px rgba(16,89,149,.10),0 8px 22px rgba(0,0,0,.18);
+    }
+    .chat-button .icon { width:31px; height:31px; }
+    .toast {
+      position:fixed;
+      left:50%;
+      bottom:25px;
+      z-index:100;
+      max-width:calc(100vw - 34px);
+      padding:14px 18px;
+      border-radius:7px;
+      background:#102d47;
+      color:#fff;
+      box-shadow:0 8px 25px rgba(0,0,0,.23);
+      opacity:0;
+      pointer-events:none;
+      transform:translate(-50%,70px);
+      transition:.22s ease;
+    }
+    .toast.show { opacity:1; transform:translate(-50%,0); }
+
+    @media (max-width:1180px) {
+      .nav-identity { display:none; }
+      .main-nav { justify-content:flex-end; padding-inline:24px; }
+      .nav-link { min-width:125px; padding-inline:13px; }
+    }
+
+    @media (max-width:980px) {
+      .flag-banner { grid-template-columns:1fr 1.4fr 90px; padding-inline:18px; }
+      .brand-mark { width:62px; height:62px; flex-basis:62px; font-size:25px; }
+      .brand-text strong { font-size:21px; }
+      .brand-text span { font-size:10px; }
+      .tour-stamp { width:75px; height:75px; }
+      .main-nav { padding-inline:20px; }
+      .nav-link { min-width:118px; padding-inline:12px; }
+      .categories-grid { grid-template-columns:repeat(2,1fr); }
+    }
+
+    @media (max-width:720px) {
+      .flag-banner { min-height:112px; grid-template-columns:1fr 1fr; background-size:100% 100%,55% 100%,70% 100%,55% 100%; }
+      .tour-stamp { display:none; }
+      .banner-copy strong { font-size:15px; }
+      .banner-copy span { font-size:11px; }
+      .main-nav { min-height:64px; padding:0 12px; align-items:center; }
+      .nav-identity { display:flex; min-width:0; margin-left:auto; font-size:11px; letter-spacing:.08em; }
+      .nav-identity-mark { width:34px; height:34px; }
+      .nav-identity span:last-child { display:none; }
+      .nav-toggle { display:grid; place-items:center; }
+      .nav-links {
+        display:none;
+        position:absolute;
+        left:0;
+        right:0;
+        top:64px;
+        padding:8px;
+        background:#fff;
+        box-shadow:0 8px 18px rgba(20,42,65,.16);
+      }
+      .nav-links.open { display:grid; }
+      .nav-link { min-height:52px; justify-content:flex-start; border-left:0; }
+      .view { min-height:calc(100vh - 176px); }
+      .hero { min-height:430px; padding:48px 18px 42px; }
+      .accent-bars { margin-bottom:21px; }
+      .accent-bars i { height:43px; width:7px; }
+      .hero h1 { font-size:clamp(38px,12vw,54px); }
+      .hero p { font-size:18px; line-height:1.5; }
+      .hero-actions { flex-direction:column; align-items:center; gap:13px; margin-top:35px; }
+      .button { width:min(360px,100%); min-width:0; min-height:59px; }
+      .home-section { padding:31px 16px 38px; }
+      .section-title { font-size:25px; }
+      .tips-grid { grid-template-columns:1fr; }
+      .tip-card { min-height:0; }
+      .tip-body { margin-left:0; }
+      .categories-grid { grid-template-columns:1fr; }
+      .auth-shell { min-height:calc(100vh - 176px); padding-top:20px; }
+      .auth-card { padding:26px 18px 24px; }
+      .auth-subtitle { margin-bottom:42px; }
+      .chat-button { width:58px; height:58px; right:18px; bottom:18px; box-shadow:0 0 0 10px rgba(16,89,149,.10),0 8px 22px rgba(0,0,0,.18); }
+    }
+
+    @media (max-width:480px) {
+      .flag-banner { grid-template-columns:1fr; min-height:101px; padding:10px 13px; }
+      .banner-copy { display:none; }
+      .brand-mark { width:56px; height:56px; flex-basis:56px; font-size:23px; }
+      .brand-text strong { font-size:19px; }
+      .brand-text span { font-size:9px; }
+      .hero h1 { font-size:39px; }
+      .hero p { font-size:16px; }
+      .section-title { font-size:23px; }
+      .tip-card { padding:18px; }
+      .feedback-line { align-items:flex-start; font-size:14px; }
+      .auth-card { border-radius:7px; }
+      .auth-card h1 { font-size:24px; }
+      .auth-subtitle { margin-bottom:35px; font-size:15px; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation:none !important; scroll-behavior:auto !important; transition:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8"/><path d="M5 10v11h14V10M9 21v-7h6v7"/></symbol>
+    <symbol id="i-services" viewBox="0 0 24 24"><path d="M4 4h16v14H4zM8 22h8M12 18v4"/><path d="M8 9h8M8 13h5"/></symbol>
+    <symbol id="i-feedback" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8M8 13h5"/></symbol>
+    <symbol id="i-login" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h6a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="m2 16 20-8-8 14-3-7zM11 15l3-3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></symbol>
+    <symbol id="i-form" viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h3"/><path d="m14 17 2 2 4-5"/></symbol>
+  </svg>
+
+  <header class="flag-banner">
+    <div class="brand">
+      <div class="brand-mark">G4</div>
+      <div class="brand-text"><strong>ELEVATE</strong><span>TRAVEL &amp; TOURS</span></div>
+    </div>
+    <div class="banner-copy">
+      <strong>G4 ELEVATE TRAVEL &amp; TOURS</strong>
+      <span>TOURISM • TRAVEL • BUSINESS WORK PLATFORM</span>
+    </div>
+    <div class="tour-stamp"><div><svg class="icon" aria-hidden="true"><use href="#i-plane"></use></svg>TRAVEL<br>PORTAL</div></div>
+  </header>
+
+  <nav class="main-nav" aria-label="Main navigation">
+    <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg></button>
+    <div class="nav-identity" aria-label="G4 Elevate"><span class="nav-identity-mark">G4</span><span>BOOK • TRAVEL • EXPLORE</span></div>
+    <div class="nav-links" id="navLinks">
+      <button class="nav-link active" data-view="home"><svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg>HOME</button>
+      <button class="nav-link" data-scroll="categories"><svg class="icon" aria-hidden="true"><use href="#i-services"></use></svg>SERVICES</button>
+      <a class="nav-link" href="https://g4elevate.co.tz/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-plane"></use></svg>WEBSITE</a>
+      <button class="nav-link" data-feedback><svg class="icon" aria-hidden="true"><use href="#i-feedback"></use></svg>FEEDBACK</button>
+      <button class="nav-link login-link" data-view="login"><svg class="icon" aria-hidden="true"><use href="#i-login"></use></svg>LOGIN</button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="view active" id="homeView" data-page="home">
+      <section class="hero">
+        <div class="hero-content">
+          <div class="accent-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <h1>Welcome to <span>G4 Elevate</span></h1>
+          <p>Plan and manage seamless journeys across Tanzania, Africa, the Middle East, Europe and beyond.</p>
+          <div class="hero-actions">
+            <button class="button" data-scroll="categories"><svg class="icon" aria-hidden="true"><use href="#i-services"></use></svg>Browse Services</button>
+            <button class="button outline" data-view="register"><svg class="icon" aria-hidden="true"><use href="#i-form"></use></svg>Create Account</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="home-section tips-section">
+        <h2 class="section-title">BOOKING TIPS</h2>
+        <div class="tips-grid">
+          <article class="tip-card">
+            <div class="tip-title"><span class="step">1</span><strong>Complete your Profile</strong></div>
+            <p class="tip-body"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg><span>After logging into your account, complete all required personal and travel preference details.</span></p>
+          </article>
+          <article class="tip-card">
+            <div class="tip-title"><span class="step">2</span><strong>Send a travel request online</strong></div>
+            <p class="tip-body"><svg class="icon" aria-hidden="true"><use href="#i-form"></use></svg><span>Select a service, provide your destination and travel dates, then submit the request for quotation.</span></p>
+          </article>
+        </div>
+        <p class="feedback-line"><svg class="icon" aria-hidden="true"><use href="#i-feedback"></use></svg><span>If you experience any problem, please send us feedback <a href="mailto:g4elevate@gmail.com">here</a>.</span></p>
+      </section>
+
+      <section class="home-section" id="categories">
+        <h2 class="section-title">TRAVEL SERVICE CATEGORIES</h2>
+        <div class="categories-wrap">
+          <div class="categories-box">
+            <div class="search-wrap"><svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg><input class="category-search" id="categorySearch" type="search" placeholder="Search services..." aria-label="Search travel services"></div>
+            <div class="categories-grid" id="categoriesGrid">
+              <button class="category"><span>Air Ticketing</span><span class="count">12</span></button>
+              <button class="category"><span>Hotel Booking</span><span class="count">18</span></button>
+              <button class="category"><span>Airport Transfers</span><span class="count">9</span></button>
+              <button class="category"><span>Safari Packages</span><span class="count">16</span></button>
+              <button class="category"><span>Zanzibar Holidays</span><span class="count">11</span></button>
+              <button class="category"><span>Visa Assistance</span><span class="count">7</span></button>
+              <button class="category"><span>Corporate Travel</span><span class="count">8</span></button>
+              <button class="category"><span>Travel Insurance</span><span class="count">5</span></button>
+              <button class="category"><span>Honeymoon Packages</span><span class="count">6</span></button>
+              <button class="category"><span>Group Tours</span><span class="count">4</span></button>
+              <button class="category"><span>Meetings &amp; Events</span><span class="count">3</span></button>
+              <button class="category"><span>Car Hire</span><span class="count">10</span></button>
+              <button class="category"><span>Beach Holidays</span><span class="count">7</span></button>
+              <button class="category"><span>Mountain Adventures</span><span class="count">6</span></button>
+              <button class="category"><span>Travel Consultation</span><span class="count">14</span></button>
+            </div>
+            <div class="no-results" id="noResults">No service category matches your search.</div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="view auth-view" id="loginView" data-page="login">
+      <div class="auth-shell">
+        <form class="auth-card" id="loginForm" action="https://g4elevate.co.tz/api/tourism/auth/login" method="post">
+          <div class="auth-logo"><div class="mini-mark">G4</div><div class="mini-bars"><i></i><i></i><i></i><i></i></div></div>
+          <h1>Login</h1>
+          <p class="auth-subtitle">Provide your email and password to login</p>
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <div class="input-box"><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg><input id="loginEmail" name="email" type="email" placeholder="Enter your email" autocomplete="email" required></div>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <div class="input-box"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg><input id="loginPassword" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required><button class="password-toggle" type="button" data-password="loginPassword" aria-label="Show password"><svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg></button></div>
+          </div>
+          <div class="auth-help"><a href="https://g4elevate.co.tz/forgot-password">Forgot Password?</a></div>
+          <button class="submit-button" type="submit">Login</button>
+          <p class="auth-switch">Don't have an account? <button type="button" data-view="register">Register Now</button></p>
+          <p class="form-message" id="loginMessage" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="view auth-view" id="registerView" data-page="register">
+      <div class="auth-shell">
+        <form class="auth-card" id="registerForm" action="https://g4elevate.co.tz/api/tourism/auth/register" method="post">
+          <div class="auth-logo"><div class="mini-mark">G4</div><div class="mini-bars"><i></i><i></i><i></i><i></i></div></div>
+          <h1>Create Account</h1>
+          <p class="auth-subtitle">Provide your email and password to register</p>
+          <div class="form-group">
+            <label for="registerEmail">Email Address</label>
+            <div class="input-box"><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg><input id="registerEmail" name="email" type="email" placeholder="Enter your email" autocomplete="email" required></div>
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">Password</label>
+            <div class="input-box"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg><input id="registerPassword" name="password" type="password" placeholder="Create a password" minlength="8" autocomplete="new-password" required><button class="password-toggle" type="button" data-password="registerPassword" aria-label="Show password"><svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg></button></div>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-box"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg><input id="confirmPassword" name="password_confirmation" type="password" placeholder="Confirm your password" minlength="8" autocomplete="new-password" required><button class="password-toggle" type="button" data-password="confirmPassword" aria-label="Show password"><svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg></button></div>
+          </div>
+          <button class="submit-button" type="submit">Create Account</button>
+          <p class="auth-switch">Already have an account? <button type="button" data-view="login">Login</button></p>
+          <p class="form-message" id="registerMessage" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <button class="chat-button" id="chatButton" aria-label="Contact G4 Elevate support"><svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg></button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const API_BASE_URL = "https://g4elevate.co.tz/api/tourism";
+    const views = document.querySelectorAll(".view");
+    const navLinks = document.querySelectorAll(".nav-link[data-view]");
+    const navMenu = document.getElementById("navLinks");
+    const navToggle = document.getElementById("navToggle");
+
+    function openView(name, updateHash = true) {
+      const target = document.getElementById(name + "View");
+      if (!target) return;
+      views.forEach(view => view.classList.toggle("active", view === target));
+      navLinks.forEach(link => link.classList.toggle("active", link.dataset.view === name));
+      navMenu.classList.remove("open");
+      navToggle.setAttribute("aria-expanded", "false");
+      if (updateHash) history.replaceState(null, "", name === "home" ? "#home" : "#" + name);
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    document.addEventListener("click", event => {
+      const viewButton = event.target.closest("[data-view]");
+      if (viewButton) openView(viewButton.dataset.view);
+
+      const scrollButton = event.target.closest("[data-scroll]");
+      if (scrollButton) {
+        openView("home");
+        setTimeout(() => document.getElementById(scrollButton.dataset.scroll)?.scrollIntoView({behavior:"smooth"}), 80);
+      }
+
+      if (event.target.closest("[data-feedback]")) window.location.href = "mailto:g4elevate@gmail.com?subject=G4%20Elevate%20Portal%20Feedback";
+
+      const category = event.target.closest(".category");
+      if (category) showToast(category.querySelector("span").textContent + " selected. Login or create an account to continue.");
+    });
+
+    navToggle.addEventListener("click", () => {
+      const isOpen = navMenu.classList.toggle("open");
+      navToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    document.querySelectorAll("[data-password]").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.password);
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        button.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      });
+    });
+
+    document.getElementById("categorySearch").addEventListener("input", event => {
+      const query = event.target.value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll(".category").forEach(item => {
+        const matches = item.textContent.toLowerCase().includes(query);
+        item.hidden = !matches;
+        if (matches) visible++;
+      });
+      document.getElementById("noResults").style.display = visible ? "none" : "block";
+    });
+
+    document.getElementById("registerForm").addEventListener("submit", event => {
+      const password = document.getElementById("registerPassword").value;
+      const confirmation = document.getElementById("confirmPassword").value;
+      if (password !== confirmation) {
+        event.preventDefault();
+        document.getElementById("registerMessage").textContent = "Passwords do not match.";
+      }
+    });
+
+    document.getElementById("chatButton").addEventListener("click", () => {
+      window.open("https://wa.me/255754711767?text=Hello%20G4%20Elevate%2C%20I%20need%20help%20with%20the%20travel%20portal.", "_blank", "noopener");
+    });
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    const initialView = location.hash.replace("#", "");
+    openView(["login","register"].includes(initialView) ? initialView : "home", false);
+    console.info("G4 Elevate API base:", API_BASE_URL);
+  </script>
+</body>
+</html>

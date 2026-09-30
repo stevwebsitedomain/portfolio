@@ -28,7 +28,7 @@ $baseUrl = $baseUrl ?? '';
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="<?= $baseUrl ?>/css/gov-theme.css?v=14">
-  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=52">
+  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=59">
   <script>try{var __l=localStorage.getItem('site-lang');if(__l==='sw'||__l==='en')document.documentElement.lang=__l;else document.documentElement.lang='en';}catch(e){}</script>
 
   <script type="application/ld+json">
@@ -155,6 +155,7 @@ $baseUrl = $baseUrl ?? '';
           <p class="moh-fn" data-i18n="about_fn_2">To provide hosting, backups, and go-live support so clients can run operations online;</p>
           <p class="moh-fn" data-i18n="about_fn_3">To deliver e-commerce, travel, agriculture, and institutional platforms that staff and customers can use day to day; and</p>
           <p class="moh-fn" data-i18n="about_fn_4">To offer practical advice and WhatsApp support for new project briefs, timelines, and quotes.</p>
+          <?php require dirname(__DIR__) . '/Shared/cv-block.php'; ?>
           <p style="margin-top:22px"><a class="primary-btn" href="<?= $baseUrl ?>/contact" data-i18n="about_cta">Contact the team</a></p>
         </div>
         <?php
@@ -163,6 +164,7 @@ $baseUrl = $baseUrl ?? '';
         $sidebarLinks = [
             ['href' => $baseUrl . '/about#historia', 'label' => 'History', 'i18n' => 'about_history'],
             ['href' => $baseUrl . '/about#dira', 'label' => 'Vision', 'i18n' => 'about_vision'],
+            ['href' => $baseUrl . '/about#cv', 'label' => 'Download CV', 'i18n' => 'cv_download'],
             ['href' => $baseUrl . '/services', 'label' => 'Services', 'i18n' => 'nav_services'],
             ['href' => $baseUrl . '/projects', 'label' => 'Projects', 'i18n' => 'nav_projects'],
             ['href' => $baseUrl . '/qualifications', 'label' => 'Qualifications', 'i18n' => 'nav_qualifications'],
@@ -191,6 +193,6 @@ $baseUrl = $baseUrl ?? '';
   <script src="<?= $baseUrl ?>/js/config.js"></script>
   <script src="<?= $baseUrl ?>/js/contact-form.js"></script>
   <script src="<?= $baseUrl ?>/js/gov-theme.js?v=6"></script>
-  <script src="<?= $baseUrl ?>/js/i18n.js?v=13"></script>
+  <script src="<?= $baseUrl ?>/js/i18n.js?v=16"></script>
 </body>
 </html>

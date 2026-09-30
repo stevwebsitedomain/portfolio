@@ -3,13 +3,15 @@
 $baseUrl = $baseUrl ?? '';
 ?>
 <section class="events-board" id="events">
-  <div class="container events-board-grid">
+  <div class="container">
+    <h2 class="events-board-title" data-i18n="events_title">Events</h2>
+    <?php require __DIR__ . '/event-videos.php'; ?>
+    <div class="events-board-grid">
     <div class="events-col">
-      <h2 class="events-board-title" data-i18n="events_title">Events</h2>
 
       <article class="event-row">
-        <a class="event-thumb" href="<?= $baseUrl ?>/events">
-          <img src="<?= $baseUrl ?>/images/steven-makarious.jpg" alt="Digital Matrix Technology client systems workshop" loading="lazy">
+        <a class="event-thumb event-thumb-photo" href="<?= $baseUrl ?>/events">
+          <img src="<?= $baseUrl ?>/images/event-portrait.jpg?v=1" alt="Steven Makarious, Digital Matrix Technology" loading="lazy">
         </a>
         <div class="event-body">
           <a class="event-title" href="<?= $baseUrl ?>/events" data-i18n="event_1_title">THE DIGITAL MATRIX TECHNOLOGY CLIENT SYSTEMS WORKSHOP 2026</a>
@@ -105,6 +107,7 @@ $baseUrl = $baseUrl ?? '';
         </div>
         <span class="news-date-title" data-i18n="news_3_title">Office, audit &amp; admissions systems built for teams</span>
       </a>
+    </div>
     </div>
   </div>
 </section>

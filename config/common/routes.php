@@ -33,6 +33,9 @@ return [
             Route::get('/events')
                 ->action(Web\EventsPage\Action::class)
                 ->name('events'),
+            Route::get('/events/')
+                ->action(Web\EventsPage\Action::class)
+                ->name('events.slash'),
             Route::get('/services')
                 ->action(Web\ServicesPage\Action::class)
                 ->name('services'),

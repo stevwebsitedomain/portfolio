@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Contact form SMS via meseji.co.tz (sender NOTICE). WhatsApp is opened in the browser.
+ * Contact form SMS via Kilakona (sender TAARIFA). WhatsApp is opened in the browser.
  */
 header('Content-Type: application/json; charset=UTF-8');
 header('X-Content-Type-Options: nosniff');
@@ -75,10 +75,14 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-$apiKey = $envGet('MESEJI_API_KEY', 'zs_70c4072ea92318931582f47a96b9e73c2a363e09f5a80039');
-if ($apiKey === '') {
+$apiKey = $envGet('KILAKONA_API_KEY');
+$apiSecret = $envGet('KILAKONA_API_SECRET');
+if ($apiKey === '' || $apiSecret === '') {
     http_response_code(503);
-    echo json_encode(['ok' => false, 'message' => 'Messaging is not configured.']);
+    echo json_encode([
+        'ok' => false,
+        'message' => 'Messaging is not configured. Add KILAKONA_API_KEY and KILAKONA_API_SECRET in .env.',
+    ]);
     exit;
 }
 
@@ -86,23 +90,31 @@ $text = "Portfolio contact\nName: {$name}\nEmail: {$email}\n"
     . ($phone !== '' ? "Phone: {$phone}\n" : '')
     . "Subject: {$subject}\n\n{$message}";
 
-$smsTo = $envGet('MESEJI_SMS_TO', '255622045972');
-$sender = $envGet('MESEJI_SENDER', 'NOTICE');
+$smsTo = $envGet('KILAKONA_SMS_TO', $envGet('MESEJI_SMS_TO', '255622045972'));
+$sender = $envGet('KILAKONA_SENDER', 'TAARIFA');
+$deliveryUrl = $envGet('KILAKONA_DELIVERY_URL');
 
-$ch = curl_init('https://meseji.co.tz/api/v1/sms/send');
+$payload = [
+    'senderId' => $sender,
+    'messageType' => 'text',
+    'message' => $text,
+    'contacts' => $smsTo,
+];
+if ($deliveryUrl !== '') {
+    $payload['deliveryReportUrl'] = $deliveryUrl;
+}
+
+$ch = curl_init('https://messaging.kilakona.co.tz/api/v1/vendor/message/send');
 curl_setopt_array($ch, [
     CURLOPT_POST => true,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => [
         'Accept: application/json',
         'Content-Type: application/json',
-        'X-API-Key: ' . $apiKey,
+        'api_key: ' . $apiKey,
+        'api_secret: ' . $apiSecret,
     ],
-    CURLOPT_POSTFIELDS => json_encode([
-        'sender_id' => $sender,
-        'message' => $text,
-        'contacts' => $smsTo,
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+    CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
     CURLOPT_TIMEOUT => 25,
     CURLOPT_CONNECTTIMEOUT => 12,
 ]);

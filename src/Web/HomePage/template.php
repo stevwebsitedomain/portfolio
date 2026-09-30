@@ -32,7 +32,7 @@ $baseUrl = $baseUrl ?? '';
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="<?= $baseUrl ?>/css/gov-theme.css?v=14">
-  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=52">
+  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=62">
   <script>try{var __l=localStorage.getItem('site-lang');if(__l==='sw'||__l==='en')document.documentElement.lang=__l;else document.documentElement.lang='en';}catch(e){}</script>
 
   <script type="application/ld+json">
@@ -221,7 +221,7 @@ $baseUrl = $baseUrl ?? '';
       <div class="container hero-shell">
         <aside class="officials-column" aria-label="Profile">
           <article class="official-card">
-            <img src="<?= $baseUrl ?>/images/profile.png" alt="Steven Makarious, Full Stack Developer at Digital Matrix Technology">
+            <img src="<?= $baseUrl ?>/images/steven-makarious.jpg?v=2" alt="Steven Makarious, Full Stack Developer at Digital Matrix Technology">
             <div class="official-info">
               <h3>Steven Makarious</h3>
               <p>Full Stack Developer</p>
@@ -452,6 +452,12 @@ $baseUrl = $baseUrl ?? '';
             <p data-i18n="about_vision_p">To empower Tanzanian clients with reliable, easy-to-use digital systems that can grow — so they can run operations, serve customers online, and improve workplace efficiency.</p>
           </article>
         </div>
+      </div>
+    </section>
+
+    <section class="cv-band">
+      <div class="container">
+        <?php require dirname(__DIR__) . '/Shared/cv-block.php'; ?>
       </div>
     </section>
 
@@ -751,6 +757,7 @@ $baseUrl = $baseUrl ?? '';
   <script src="<?= $baseUrl ?>/js/contact-form.js?v=11"></script>
   <script src="<?= $baseUrl ?>/js/api-portfolio.js"></script>
   <script src="<?= $baseUrl ?>/js/gov-theme.js?v=8"></script>
-  <script src="<?= $baseUrl ?>/js/i18n.js?v=14"></script>
+  <script src="<?= $baseUrl ?>/js/event-videos.js?v=1"></script>
+  <script src="<?= $baseUrl ?>/js/i18n.js?v=17"></script>
 </body>
 </html>

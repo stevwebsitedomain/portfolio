@@ -28,7 +28,7 @@ $baseUrl = $baseUrl ?? '';
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="<?= $baseUrl ?>/css/gov-theme.css?v=14">
-  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=52">
+  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=54">
   <script>try{var __l=localStorage.getItem('site-lang');if(__l==='sw'||__l==='en')document.documentElement.lang=__l;else document.documentElement.lang='en';}catch(e){}</script>
 
   <script type="application/ld+json">
@@ -127,8 +127,6 @@ $baseUrl = $baseUrl ?? '';
       <div class="container moh-split">
         <div class="moh-doc">
           <h2 class="moh-doc-title" data-i18n="qual_title">Qualifications</h2>
-          <h3 data-i18n="doc_objective">Objective</h3>
-          <p data-i18n="qual_objective_p">To apply education and delivery skills so Digital Matrix Technology can build, host, and support live systems for clients in Tanzania.</p>
           <h3 data-i18n="doc_functions">Functions</h3>
           <?php require dirname(__DIR__) . '/Shared/qual-cards.php'; ?>
         </div>

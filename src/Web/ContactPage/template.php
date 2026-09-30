@@ -28,7 +28,7 @@ $baseUrl = $baseUrl ?? '';
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="<?= $baseUrl ?>/css/gov-theme.css?v=14">
-  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=52">
+  <link rel="stylesheet" href="<?= $baseUrl ?>/css/moh-layout.css?v=54">
   <script>try{var __l=localStorage.getItem('site-lang');if(__l==='sw'||__l==='en')document.documentElement.lang=__l;else document.documentElement.lang='en';}catch(e){}</script>
 
   <script type="application/ld+json">
@@ -125,9 +125,8 @@ $baseUrl = $baseUrl ?? '';
   </header>
     <main class="page-content necta-contact">
       <div class="container">
-        <header class="page-intro">
+        <header class="page-intro page-intro--center">
           <h1>Contact</h1>
-          <p>Same name, phone, and email as the public listing — Digital Matrix Technology, Tanzania.</p>
         </header>
         <div class="contact-layout">
           <?php require dirname(__DIR__) . '/Shared/contact-block.php'; ?>

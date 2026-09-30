@@ -1,0 +1,26 @@
+---
+description: Portfolio stack — PHP templates, moh-layout CSS, i18n conventions
+alwaysApply: true
+---
+
+# Project conventions
+
+## Stack
+
+- PHP web templates under `src/Web/*/template.php`
+- Primary styles: `public/css/moh-layout.css`
+- Shared partials: `src/Web/Shared/`
+- Public assets: `public/` (css, js, images, media)
+
+## Do
+
+- Extend existing page templates and shared includes
+- Keep routes in `config/common/routes.php` when adding pages
+- Use i18n via `public/js/i18n.js` for user-facing copy that must switch language
+- Match existing naming and MOH layout structure
+
+## Do not
+
+- Introduce React, Vue, Tailwind, or a new CSS framework unless the user explicitly asks
+- Rewrite nav/footer structure without being asked
+- Duplicate styles that already exist in `moh-layout.css`
